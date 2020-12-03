@@ -1,38 +1,92 @@
-.App {
+body{
+  background-image: url("./background.png");
+}
+
+/* SignIn */
+
+input{
+  margin: 10px auto;
+  border-radius: 28px;
+  text-align: left;
+  background-color: white;
+  /* opacity: 0.5; */
+  width:280px;
+  position: static;
+  display: block;
+  border-color:white;
+  color:black;
+  padding-left:17px;
+}
+
+.signup-button{
+  width:280px;
+  margin: 10px auto;
+  border-radius: 28px;
+  background-color: #4CD964;
+  border-color: #4CD964;
+  position: static;
+  display: block;
+  color:black;
+  font-weight: bold;
+}
+
+.forgot-password{
   text-align: center;
+  position: static;
+  display: block;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.moveto-signup{
+  margin-top:30px;
+  margin-left:3px;
+  padding-left: 10px;
+  padding-right: 7px;
+  color:white;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.my-form{
+  text-align: center;
+  margin: 150px auto;
+  background-color:#000000ba;
+  width: 350px;
+  padding: 10px;
+  border-radius: 20px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+/* Navbar */
+
+.logo{
+  width:50px;
+  margin: auto 7px;
 }
 
-.App-link {
-  color: #61dafb;
+.logo2{
+  width: 90px;
+  margin: 7px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.navbar{
+  background-color: black;
 }
+
+.nav-link{
+  font-size: 1.2rem;
+  margin: auto 30px;
+}
+
+.portal-div{
+  background-color: white;
+  border-radius: 28px;
+  height:40px;
+  margin-top:3px;
+}
+
+.portal-link{
+  position:relative;
+  color:red;
+  font-size: 1.2rem;
+  font-weight: bold;
+  bottom: 3px;
+}
+
+
