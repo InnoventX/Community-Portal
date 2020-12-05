@@ -48,7 +48,6 @@ function PortalHome(){
     function nowPostAns(event,index){
         event.preventDefault();
         setQuestions((prevValues) => {
-            console.log(prevValues.length);
             return (
                 prevValues.map((que,i) => {
                 if(i===index){
@@ -68,27 +67,8 @@ function PortalHome(){
                 }
             })
             )
-            // for(var i=0;i<prevValues.length;i++){
-            //     if(i===index){
-            //         return{
-            //             studentName:prevValues[i].studentName,
-            //             title:prevValues[i].title,
-            //             question:prevValues[i].question,
-            //             answers:[...prevValues[i].answers,postAns]
-            //         }
-            //     }
-            //     else{
-            //         return{
-            //             studentName:prevValues[i].studentName,
-            //             title:prevValues[i].title,
-            //             question:prevValues[i].question,
-            //             answers:[...prevValues[i].answers]
-            //         }
-            //     }
-            // }
-            console.log(questions);
         })
-        console.log(postAns);
+        showAnswers(index)
     }
 
     var allQuestions = questions.map((ques,index) => {
