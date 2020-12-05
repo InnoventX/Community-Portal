@@ -38,8 +38,8 @@ function SignIn(){
         <div className="my-form">
             <img className="logo2" src={logo}/>
             <form onSubmit={handleSubmit}>
-                <input name="Email" type="email" placeholder="Email" autoComplete="off" value={signIn.email} onChange={handleSignIn}/>
-                <input name="Password" type="password" placeholder="Password" autoComplete="off" value={signIn.password} onChange={handleSignIn}/>
+                <input className="sign-in" name="Email" type="email" placeholder="Email" autoComplete="off" value={signIn.email} onChange={handleSignIn}/>
+                <input className="sign-in" name="Password" type="password" placeholder="Password" autoComplete="off" value={signIn.password} onChange={handleSignIn}/>
                 <button className="signup-button" type="submit">Sign In</button>
                 <a className="forgot-password"href="#">Forgot password?</a>
                 <label className="moveto-signup">Don't have an account?</label>
