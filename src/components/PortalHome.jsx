@@ -4,7 +4,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import myQuestions from "./questions";
 
 function PortalHome(){
-    const [categories,setCategorite]=useState(["Arduino","RPA","RPI","Augmented Reality","Virtual reality","ROS","Dron Tech"])
+    const [categories,setCategorite]=useState(["Arduino","RPA","RPI","Augmented Reality","Virtual reality","ROS","Dron Tech","my tech"])
     
     const [postAns,setPostAns] = useState("");
 
@@ -68,7 +68,8 @@ function PortalHome(){
             })
             )
         })
-        showAnswers(index)
+        setPostAns("");
+        showAnswers(index);
     }
 
     var allQuestions = questions.map((ques,index) => {

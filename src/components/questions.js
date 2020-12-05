@@ -39,6 +39,16 @@ const myQuestions = [
             "JD Rocks",
             "Ohh Yeah"
         ]
+    },
+    {
+        studentName:"Ishan Joshi",
+        title:"What is best Arduino or RPY",
+        question:"Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
+        answers:[
+            "JD Knows the answer",
+            "JD Rocks",
+            "Ohh Yeah"
+        ]
     }
 ];
 
