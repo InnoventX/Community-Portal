@@ -115,7 +115,7 @@ body{
   margin: 0.8% auto;
 }
 
-#post-ans-div{
+.post-ans-div{
   position: relative;
   display:none;
   text-align: right;
