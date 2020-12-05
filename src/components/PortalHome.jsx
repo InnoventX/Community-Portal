@@ -62,17 +62,21 @@ function PortalHome(){
                 <button className="answers-btn" onClick={showAnswers}>Answers</button>
                 <button className="give-ans-btn" onClick={showPostSection}>Give Answer</button>
                 <div id="answers-div">
-                    <hr size="3" noshade />
                     {
                         ques.answers.map((ans) => {
-                            return <p className="answers">{ans}</p>
+                            return (
+                                <React.Fragment>
+                                    <p className="answers">{ans}</p>
+                                    <hr style={{width:"95%",margin:"0 auto"}}/>
+                                </React.Fragment>
+                            )
                         })
                     }
                 </div>
                 <div id="post-ans-div">
                     <hr />
                     <form onSubmit={nowPostAns}>
-                        <textarea className="post-ans-text" rows="3" cols="100" value={postAns} onChange={handlePostAns}/>
+                        <textarea className="post-ans-text" rows="3" value={postAns} onChange={handlePostAns}/>
                         <button type="submit" className="post-btn">Post</button>
                     </form>
                 </div>
