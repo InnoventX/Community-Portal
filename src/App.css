@@ -100,7 +100,7 @@ body{
 
 }
 
-#answers-div{
+.answers-div{
   background-color: white;
   border-radius: 20px;
   display:none;

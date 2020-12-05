@@ -19,8 +19,12 @@ function PortalHome(){
         question:"",
     }]);
 
-    function showAnswers(){
-        var ans = document.getElementById("answers-div");
+    function showAnswers(index){
+        console.log(index);
+        var myId = `#i_${index}.answers-div`;
+        console.log(myId);
+        var ans = document.querySelector(`#i_${index}.answers-div`);
+        console.log(ans);
         var post = document.getElementById("post-ans-div");
         post.style.display = "none";
         if(ans.style.display === "none"){
@@ -52,18 +56,20 @@ function PortalHome(){
         alert(postAns);
     }
 
-    var allQuestions = myQuestions.map((ques) => {
+    var allQuestions = myQuestions.map((ques,index) => {
         return(
             <div className="question-container">
                 <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
                 <h6 className="student-name">{ques.studentName}</h6>
                 <h4 className="question-title">{ques.title}</h4>
                 <p>{ques.question}</p>
-                <button className="answers-btn" onClick={showAnswers}>Answers</button>
+                <button className="answers-btn" onClick={() => {
+                    showAnswers(index);
+                }}>Answers</button>
                 <button className="give-ans-btn" onClick={showPostSection}>Give Answer</button>
-                <div id="answers-div">
+                <div id={`i_${index}`} className="answers-div">
                     {
-                        ques.answers.map((ans) => {
+                        ques.answers.map((ans,index) => {
                             return (
                                 <React.Fragment>
                                     <p className="answers">{ans}</p>
