@@ -1,22 +1,8 @@
-import React,{useState} from 'react';
-import logo from '../logo.png';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import React from 'react';
+import logo from '../../photos/logo.png';
+import "./Navbar.css";
 
-function PortalNavbar(){
-
-    const [search,setSearch] = useState("");
-
-    function handleSearch(event){
-        const ipValue = event.target.value;
-        setSearch(ipValue);
-    }
-
-    function handleClick(){
-        alert("Search: " + search);
-        setSearch("");
-    }
-
+function Navbar(){
     return(
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark">
@@ -33,24 +19,24 @@ function PortalNavbar(){
                             <a className="nav-link" href="#">About</a>
                         </li>
                         <li className="nav-item">
-                            <form className="form-inline my-2 my-lg-0">
-                                <div className="button-in">
-                                    <input  className="search" type="search" placeholder="Search" aria-label="Search" value={search} onChange={handleSearch}/>
-                                    <button className="search-btn" onClick={handleClick}><SearchIcon style={{color:"white"}}/></button>
-                                </div>
-                            </form>
+                            <a className="nav-link" href="#">Services</a>
                         </li>
                         <li className="nav-item">
-                            <button className="ask-div">ASK</button>
+                            <a className="nav-link" href="#">TimeLine</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#"><AccountCircleIcon style={{color:"#4CD9D9",fontSize:"2.3rem",marginLeft:"0"}} /></a>
+                            <a className="nav-link" href="#">Contact</a>
+                        </li>
+                        <li className="nav-item">
+                            <div className="portal-div">
+                                <a className="nav-link" href="#"><p className="portal-link">Portal</p></a>
+                            </div>
                         </li>
                     </ul>
                 </div>
             </nav>
         </div>
-    )
+  )
 }
 
-export default PortalNavbar;
+export default Navbar;

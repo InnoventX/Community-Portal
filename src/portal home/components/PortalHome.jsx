@@ -3,8 +3,11 @@ import React,{useState} from 'react';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import myQuestions from "./questions";
 
+import "./PortalHome.css";
+
+
 function PortalHome(){
-    const [categories,setCategorite]=useState(["Arduino","RPA","RPI","Augmented Reality","Virtual reality","ROS","Dron Tech","my tech"])
+    const [categories,setCategorite]=useState(["Arduino","RPI","Augmented Reality","Virtual reality","ROS","Dron Tech","my tech"])
     
     const [postAns,setPostAns] = useState("");
 
