@@ -10,7 +10,8 @@ const CatQuestions = ( ) =>  {
 
     const catQuestions = myQuestions.filter((ques) => {
         return ques.category === cat;
-    })
+    });
+    
     return(
         <React.Fragment>
             <h1>{cat}</h1>

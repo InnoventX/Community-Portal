@@ -15,7 +15,11 @@ const QuesPage = () => {
     });
 
     const [question,setQuestion] = useState(myQuestion);
-    const [ansGiven, setAnsGiven] = useState();
+    const [ansGiven, setAnsGiven] = useState({
+        givenBy:'',
+        rating:'',
+        ans:''
+    });
 
 
     if(!question){
@@ -57,10 +61,6 @@ const QuesPage = () => {
         console.log("AnssGiven",ansGiven);
         console.log(question.answers);
         showPostSection();
-        setAnsGiven({
-            qivenBy:'',
-            
-        });
     }
 
 
