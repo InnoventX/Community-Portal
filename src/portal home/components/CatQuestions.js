@@ -14,8 +14,6 @@ const CatQuestions = ( ) =>  {
     
     return(
         <React.Fragment>
-            <h1>{cat}</h1>
-            {console.log(cat)}
             <div className="home">
                 <div className="left">
                     <Categories />

@@ -1,8 +1,15 @@
-import React,{useState} from 'react';
+import React,{useState,useContext} from 'react';
+import {useHistory} from 'react-router-dom';
+
 import logo from '../../photos/logo.png';
 import './SignIn.css';
+import {AuthContext} from "../../shared/context/AuthContext";
 
 function SignIn(){
+
+    const auth = useContext(AuthContext);
+
+    const history = useHistory();
 
     const [signIn,setSignIn] = useState({
         email:"",
@@ -33,6 +40,9 @@ function SignIn(){
         event.preventDefault();
         alert("Email address is: "+signIn.email+" And password is: "+signIn.password);
         console.log("Email address is: "+signIn.email+" And password is: "+signIn.password); 
+
+        auth.login();
+        history.push("/");
     }
     
     return(

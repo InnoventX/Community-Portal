@@ -49,7 +49,7 @@ const Input = (props) =>  {
 
     useEffect(() =>{
         onInput(id,value,isValid)
-    },[id,value,isValid]);
+    },[id,value,isValid,onInput]);
 
     var element = ( props.element === "input") ? (
             <input 

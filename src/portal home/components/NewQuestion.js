@@ -1,42 +1,15 @@
-import React,{useReducer} from 'react';
+import React,{useCallback, useReducer} from 'react';
 import Input from '../../shared/components/Input';
 
 import {VALIDATOR_REQUIRE,VALIDATOR_MINLENGTH} from "../../shared/components/validators";
+import {useForm} from "../../shared/hoocks/form-hook";
 
-const formReducer = (state,action) => {
-    switch(action.type){
-        case 'INPUT-CHANGE':
-            let formIsValid=true;
-            for(const inputId in state.inputs){
-                if(inputId === action.inputId){
-                    formIsValid = formIsValid && action.isValid;
-                }
-                else{
-                    formIsValid = formIsValid && state.inputs[inputId].isValid;
-                }
-            }
-
-            return{
-                ...state,
-                inputs:{
-                    ...state.inptus,
-                    [action.inputId]:{
-                        value:action.value,
-                        isValid:action.isValid
-                    }
-                },
-                isValid:formIsValid
-            }
-
-        default :
-            return state
-    }
-}
 
 const NewQuestion = () => {
 
-    const [formState, dispatch] = useReducer(formReducer, {
-        inputs:{
+
+    const [formState, handleInput] = useForm(
+        {
             category:{
                 value:'',
                 isValid:false
@@ -45,25 +18,21 @@ const NewQuestion = () => {
                 value:'',
                 isValid:false
             },
-            question:{
+            wholeQuestion:{
                 value:'',
                 isValid:false
             }
         },
-        isValid:false
-    });
-
-    const handleInput = (id,value,isValid) => {
-        dispatch({
-            type:'INPUT-CHANGE',
-            inputId:id,
-            value:value,
-            isValid:isValid
-        });
+        false
+    )
+    
+    const submitHandler = (event) => {
+        event.preventDefault();
+        console.log(formState.inputs);
     }
 
     return(
-        <form>
+        <form onSubmit={submitHandler}>
             <Input 
                 id="category"
                 element="input"
@@ -83,7 +52,7 @@ const NewQuestion = () => {
                 onInput={handleInput}
             />
             <Input  
-                id="question"
+                id="wholeQuestion"
                 element="textarea"
                 rows={5}
                 label="Question"

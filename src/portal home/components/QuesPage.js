@@ -1,33 +1,45 @@
-import React,{useState} from 'react';
-import {useParams} from 'react-router-dom';
+import React,{useState, useContext} from 'react';
+import {useParams,Link} from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 
 import myQuestions from "./questions";
 import "./QuesPage.css";
+import {AuthContext} from "../../shared/context/AuthContext";
 
 
 const QuesPage = () => {
+
+    const auth = useContext(AuthContext);
+
+    const [deleteSection , setDeleteSection] = useState(false);
+
+    // For getting QuestionID
     const quesID = useParams().quesID;
 
+    // Finding That perticular Question with ID
     const myQuestion = myQuestions.find( (ques)=> {
         return ques.id === quesID
     });
 
+    // STATE of Question
     const [question,setQuestion] = useState(myQuestion);
+
+    // Answer STATE used after adding other ANSWER
     const [ansGiven, setAnsGiven] = useState({
         givenBy:'',
         rating:'',
         ans:''
     });
 
-
+    // Checking that the questionID is valid or not
     if(!question){
         return(
             <h1>Not A QUESTION</h1>
         );
     }
 
+    // Showing POST ANSWER block
     const showPostSection = () => {
         const postDiv = document.querySelector(".post-ans-div");
         if(postDiv.style.display === "none"){
@@ -38,6 +50,7 @@ const QuesPage = () => {
         }
     }
 
+    // Updating the new ANSWER
     const handleGivenAns = (event) => {
         const ans = {
             givenBy:'u10',
@@ -47,6 +60,7 @@ const QuesPage = () => {
         setAnsGiven(ans);
     }
 
+    // Posting the NEW ANSWER
     const nowPostAns = (event) => {
         event.preventDefault();
         setQuestion((question) => {
@@ -58,19 +72,54 @@ const QuesPage = () => {
                 answers:[...question.answers , ansGiven]
             }
         });
-        console.log("AnssGiven",ansGiven);
-        console.log(question.answers);
-        showPostSection();
+        showPostSection({
+            givenBy:'',
+            rating:'',
+            ans:''
+        });
+    }
+
+    const showDeleteSection = () => {
+        setDeleteSection(true);
+    }
+
+    const cancleShowDeleteSection = () => {
+        setDeleteSection(false);
+    }
+
+    const deleteTheQuestion = () => {
+        console.log("Deleted !!");
+        setDeleteSection(false);
     }
 
 
     return(
             <div className="question-container">
+                { deleteSection && <div className="show-delete-section">
+                    <h1>Are You Sure?</h1>
+                    <p>Do you want delete your?</p>
+                    <button onClick={deleteTheQuestion}>DELETE</button>
+                    <button onClick={cancleShowDeleteSection}>CANCLE</button>
+                </div>
+                }
                 <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
                 <h6 className="student-name">{question.studentName}</h6>
+
+                { auth.isLogedIn && (
+                    <React.Fragment>
+                        <Link to={`/${quesID}/update`}>
+                            <button className="update-btn" >UPDATE</button>
+                        </Link>
+
+                        <button className="delete-btn" onClick={showDeleteSection}>DELETE</button>
+                    </React.Fragment>
+                    )
+                }
+
                 <h4 className="question-title">{question.title}</h4>
-                <p>Category -> {question.category}</p>
+                <p>Category --> {question.category}</p>
                 <p>{question.wholeQuestion}</p>
+
                 <div className="answers-div">
                     {
                         question.answers.map((ans) => {
@@ -86,9 +135,13 @@ const QuesPage = () => {
                         })
                     }
                 </div>
-                <button className="give-ans-btn" onClick={() => {
-                    showPostSection()
-                }}>Give Answer</button>
+
+                { auth.isLogedIn && (
+                        <button className="give-ans-btn" onClick={() => {
+                        showPostSection()
+                    }}>Give Answer</button>
+                    )
+                }
 
                 <div className="post-ans-div">
                     <hr />

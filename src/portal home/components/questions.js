@@ -1,7 +1,7 @@
 const myQuestions = [
     {
         id:"1",
-        studentName:"Ishan Patel",
+        studentName:"Ishan",
         title:"Who Let The Dogs OUT?",
         wholeQuestion:"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
         answers:[
@@ -25,7 +25,7 @@ const myQuestions = [
     },
     {
         id:"2",
-        studentName:"Ujval Patel",
+        studentName:"Ujval",
         title:"Melody Ittni Chocolatey Kyu Haiiii?",
         wholeQuestion:"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
         answers:[
@@ -49,7 +49,7 @@ const myQuestions = [
     },
     {
         id:"3",
-        studentName:"Yash Patel",
+        studentName:"Yash",
         title:"What is best Arduino or RPY",
         wholeQuestion:"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
         answers:[
