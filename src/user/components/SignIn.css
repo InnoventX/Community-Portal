@@ -1,4 +1,7 @@
 /* SignIn */
+body{
+  /* background-image: url("../../photos/background.png"); */
+}
 
 input.sign-in{
     margin: 10px auto;

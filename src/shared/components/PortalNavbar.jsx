@@ -1,8 +1,9 @@
 import React,{useState} from 'react';
+import {NavLink} from 'react-router-dom';
+
 import logo from '../../photos/logo.png';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-
 import "./PortalNavbar.css";
 
 function PortalNavbar(){
@@ -29,10 +30,15 @@ function PortalNavbar(){
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ml-auto">
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Home</a>
+                            <NavLink to="/question" className="nav-link" style={{color:"white"}}>Home</NavLink>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">About</a>
+                            <div className="portal-div">
+                                <NavLink to="/signin" className="nav-link"><p className="portal-link">Login</p></NavLink>
+                            </div>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink to="/:userid/question" className="nav-link" style={{color:"white"}}>My Ques</NavLink>
                         </li>
                         <li className="nav-item">
                             <form className="form-inline my-2 my-lg-0">
@@ -43,10 +49,12 @@ function PortalNavbar(){
                             </form>
                         </li>
                         <li className="nav-item">
-                            <button className="ask-div">ASK</button>
+                            <NavLink to="/question/new">
+                                <button className="ask-div">ASK</button>
+                            </NavLink>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#"><AccountCircleIcon style={{color:"#4CD9D9",fontSize:"2.3rem",marginLeft:"0"}} /></a>
+                            <NavLink to="/" className="nav-link"><AccountCircleIcon style={{color:"#4CD9D9",fontSize:"2.3rem",marginLeft:"0"}} /></NavLink>
                         </li>
                     </ul>
                 </div>
@@ -56,3 +64,4 @@ function PortalNavbar(){
 }
 
 export default PortalNavbar;
+
