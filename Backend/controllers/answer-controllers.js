@@ -110,7 +110,7 @@ const deleteAnswer = async (req,res,next) => {
     }
 
     if(!answerFound){
-        next(new Http('Answer not found',500));
+        next(new HttpError('Answer not found',500));
     }else if(!answerFound.questionId){
         next(new HttpError("Question of this qnswer was not found",500));
     }
@@ -151,7 +151,27 @@ const deleteAnswer = async (req,res,next) => {
     res.json({message:'Deleted successfully'});
 }
 
+const getAnswersByQuestionId = async (req,res,next) => {
+
+    const questionId = req.params.questionId;
+
+    let questionFound;
+    try{
+        questionFound = await Question.findById(questionId).populate('answers');
+    }catch(err){
+        console.log(err);
+        next(new HttpError('Something went wrong',500));
+    }
+
+    if(!questionFound){
+        next(new HttpError("Question not found",500));
+    }
+
+    res.json({answers:questionFound.answers.map((ans) => ans.toObject({getters:true}))});
+    
+}
 
 exports.giveAnswer = giveAnswer;
 exports.updateAnswer = updateAnswer;
 exports.deleteAnswer = deleteAnswer;
+exports.getAnswersByQuestionId = getAnswersByQuestionId;

@@ -153,7 +153,7 @@ const deleteQuestion = async (req,res,next) => {
 
     let  questionFound;
     try{
-        questionFound = await Question.findById(questionId);
+        questionFound = await Question.findById(questionId).populate('answers');
     }catch(err){
         console.log(err);
         next(new HttpError('Something went wrong',500));
@@ -171,17 +171,11 @@ const deleteQuestion = async (req,res,next) => {
         next(new HttpError('Something went wrong',500));
     }
 
-    /* Answer removing is left
-    let answers;
-    answers = questionFound.answers;
-
-    console.log(answers);
-    if(answers && answers.length !== 0)
-    {
-        for(ans in answers){
-        
-            let answerFound;
+    // Removing all the answers of that question
+    questionFound.answers.forEach(async (ans) => {
+        let answerFound;
             try{
+                // Finding that answer and the user who has qiventhe answer of that question
                 answerFound = await Answer.findById(ans).populate('userId');
             }catch(err){
                 console.log(err);
@@ -192,9 +186,11 @@ const deleteQuestion = async (req,res,next) => {
                 const session = await mongoose.startSession();
                 session.startTransaction();
 
-                answerFound.userId.pull(answerFound);
+                // Removing an answerID from user
+                answerFound.userId.answers.pull(answerFound);
                 await answerFound.userId.save({ session:session });
 
+                // Removeing answer
                 await answerFound.remove({ session:session });
 
                 session.commitTransaction();
@@ -202,21 +198,20 @@ const deleteQuestion = async (req,res,next) => {
                 console.log(err);
                 next(new HttpError("Answers of that questions were not deleted",500));
             }
-        }
-    }
-    */
-    
+        
+    });
 
     try{
         const sess = await mongoose.startSession();
         sess.startTransaction();
 
+        // Removing the questionId from user
         creator.questions.pull(questionFound);
         await creator.save({ session : sess});
         
+        // Removing the question
         await questionFound.remove({session : sess});
 
-        // Still answers removal is panding
         sess.commitTransaction();
     }catch(err){
         console.log(err);

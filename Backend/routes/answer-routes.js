@@ -9,10 +9,13 @@ const Question = require('../models/question-model');
 const User = require("../models/user-model");
 const { Http } = require('@material-ui/icons');
 
+router.get("/:questionId/" , answerControllers.getAnswersByQuestionId);
+
 router.post("/:questionId/", answerControllers.giveAnswer);
 
 router.patch("/:answerId", answerControllers.updateAnswer);
 
 router.delete("/:answerId", answerControllers.deleteAnswer );
+
 
 module.exports = router;
