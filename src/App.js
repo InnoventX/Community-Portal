@@ -30,18 +30,22 @@ function App() {
   if(!isLogedIn){
     routes = (
       <Switch>
+          {/*  Home Page  */}
           <Route path="/" exact>
             <PortalHome />
           </Route>
 
+          {/*  User Authentication  */}
           <Route path="/authenticate" exact>      
             <SignIn />
           </Route>
 
+          {/*  Question ( Single Page )  */}
           <Route path="/ques/:quesID" exact>
             <QuesPage />
           </Route>
 
+          {/*  Questions According to the Category  */}
           <Route path="/questions/:catID" exact>
             <CatQuestions />
           </Route>
@@ -53,28 +57,35 @@ function App() {
   else{
     routes = (
       <Switch>
+
+          {/*  Home Page  */}
           <Route path="/" exact>
             <PortalHome />
           </Route>
 
+          {/*  Question ( Add New Question)  */}
           <Route path = "/question/new" exact>
             <NewQuestion />
           </Route>
 
+          {/*  Question ( Single Question Page )  */}
           <Route path="/ques/:quesID" exact>
             <QuesPage />
           </Route>
 
+          {/*  Question ( According to the Category )  */}
           <Route path="/questions/:catID" exact>
             <CatQuestions />
           </Route>
 
-          <Route path="/:userId/questions" exact>
-            <UserQuestions />
-          </Route>
-
+          {/*  Question ( Update Question )  */}
           <Route path="/:quesId/update" exact>
             <UpdateQues />
+          </Route>
+
+          {/*  User ( Questions asked By User )  */}
+          <Route path="/:userId/questions" exact>
+            <UserQuestions />
           </Route>
 
           <Redirect to="/" />
