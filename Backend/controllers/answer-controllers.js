@@ -4,10 +4,46 @@ const Question = require('../models/question-model');
 const User = require("../models/user-model");
 const mongoose = require('mongoose');
 
+const compare = (a , b) => {
+
+    // If B has higher rating then SORT
+    if( b.rating > a.rating ){
+        return 1;
+    }
+    else if( a.rating > b.rating ){
+        return -1;
+    }
+    return 0;
+}
+
+const getAnswersByQuestionId = async (req,res,next) => {
+
+    const questionId = req.params.questionId;
+
+    let questionFound;
+    try{
+        questionFound = await Question.findById(questionId).populate('answers');
+    }catch(err){
+        console.log(err);
+        next(new HttpError('Something went wrong',500));
+    }
+
+    if(!questionFound){
+        next(new HttpError("Question not found",500));
+    }else if (questionFound.answers.length===0){
+        return res.json({message:"No answers found of that question"});
+    }
+
+    questionFound.answers.sort(compare)
+
+    res.json({answers:questionFound.answers.map((ans) => ans.toObject({getters:true}))});
+    
+}
+
 const giveAnswer = async (req,res,next) => {
 
     const questionId = req.params.questionId;
-    const { userId, answer } = req.body;
+    const { userId, answer , rating } = req.body;
 
     // Finding question bu ID
     let questionFound;
@@ -25,7 +61,7 @@ const giveAnswer = async (req,res,next) => {
     const newAnswer = new Answer({
         userId,
         answer,
-        rating:0,
+        rating,
         questionId:questionId
     });
 
@@ -96,6 +132,33 @@ const updateAnswer = async (req,res,next) => {
     res.json({answer:answerFound.toObject({getters:true})});
 }
 
+const incrementRating = async (req,res,next) => {
+
+    const answerId = req.params.answerId;
+
+    let answerFound;
+    try{
+        answerFound = await Answer.findById(answerId);
+    }catch(err){
+        console.log(err);
+        next(new HttpError('Something went wrong',500));
+    }
+
+    if(!answerFound){
+        next(new HttpError("Answer not found",500));
+    }
+
+    answerFound.rating += 1;
+    try{
+        await answerFound.save();
+    }catch(err){
+        console.log(err);
+        next(new HttpError('Rating was not incremented',500));
+    }
+
+    res.json({answer:answerFound.toObject({getters:true})});
+}
+
 const deleteAnswer = async (req,res,next) => {
 
     const answerId = req.params.answerId;
@@ -151,27 +214,8 @@ const deleteAnswer = async (req,res,next) => {
     res.json({message:'Deleted successfully'});
 }
 
-const getAnswersByQuestionId = async (req,res,next) => {
-
-    const questionId = req.params.questionId;
-
-    let questionFound;
-    try{
-        questionFound = await Question.findById(questionId).populate('answers');
-    }catch(err){
-        console.log(err);
-        next(new HttpError('Something went wrong',500));
-    }
-
-    if(!questionFound){
-        next(new HttpError("Question not found",500));
-    }
-
-    res.json({answers:questionFound.answers.map((ans) => ans.toObject({getters:true}))});
-    
-}
-
 exports.giveAnswer = giveAnswer;
 exports.updateAnswer = updateAnswer;
 exports.deleteAnswer = deleteAnswer;
 exports.getAnswersByQuestionId = getAnswersByQuestionId;
+exports.incrementRating = incrementRating;
