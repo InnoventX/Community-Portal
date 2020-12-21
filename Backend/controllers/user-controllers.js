@@ -1,7 +1,16 @@
 const User = require("../models/user-model");
 const HttpError = require("../util/http-error-message");
+const { validationResult } = require('express-validator');
+const { Http } = require("@material-ui/icons");
 
 const signup = async (req,res,next) => {
+
+    const error = validationResult(req);
+
+    if(!error.isEmpty()){
+        console.log(error.message);
+        next(new HttpError('Invalid input.Please enter again',422));
+    }
     
     const newUser = new User({
         name: req.body.name,
@@ -22,6 +31,13 @@ const signup = async (req,res,next) => {
 }
 
 const login = async (req,res,next) => {
+
+    const error = validationResult(req);
+
+    if(!error.isEmpty()){
+        console.log(error.message);
+        next(new HttpError('Invalid input.Please enter again',422));
+    }
 
     const { email , password } = req.body;
 

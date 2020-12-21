@@ -1,5 +1,6 @@
 const { RestaurantOutlined } = require('@material-ui/icons');
 const mongoose = require('mongoose');
+const { validationResult } = require('express-validator');
 
 const Question = require('../models/question-model');
 const HttpError = require("../util/http-error-message");
@@ -74,6 +75,13 @@ const getQuestionsByCategory = async (req,res,next) => {
 
 const newQuestion = async (req,res,next) => {
 
+    const error = validationResult(req);
+
+    if(!error.isEmpty()){
+        console.log(error.message);
+        next(new HttpError('Invalid input.Please enter again',422));
+    }
+
     const {userId , title , category , wholeQuestion} = req.body;
     const newQuestion = new Question({
         userId,
@@ -113,6 +121,13 @@ const newQuestion = async (req,res,next) => {
 }
 
 const updateQuestion = async (req,res,next) => {
+
+    const error = validationResult(req);
+
+    if(!error.isEmpty()){
+        console.log(error.message);
+        next(new HttpError('Invalid input.Please enter again',422));
+    }
 
     const questionId = req.params.questionId;
 

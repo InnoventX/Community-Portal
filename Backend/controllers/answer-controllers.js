@@ -3,6 +3,8 @@ const Answer = require('../models/answer-model');
 const Question = require('../models/question-model');
 const User = require("../models/user-model");
 const mongoose = require('mongoose');
+const {validationResult} = require('express-validator');
+const { Http } = require('@material-ui/icons');
 
 const compare = (a , b) => {
 
@@ -42,6 +44,13 @@ const getAnswersByQuestionId = async (req,res,next) => {
 
 const giveAnswer = async (req,res,next) => {
 
+    const error = validationResult(req);
+
+    if(!error.isEmpty()){
+        console.log(error.message);
+        next(new HttpError('Invalid input.Please enter again',422));
+    }
+
     const questionId = req.params.questionId;
     const { userId, answer , rating } = req.body;
 
@@ -61,7 +70,7 @@ const giveAnswer = async (req,res,next) => {
     const newAnswer = new Answer({
         userId,
         answer,
-        rating,
+        rating:rating || 0,
         questionId:questionId
     });
 
@@ -104,6 +113,13 @@ const giveAnswer = async (req,res,next) => {
 }
 
 const updateAnswer = async (req,res,next) => {
+
+    const error = validationResult(req);
+
+    if(!error.isEmpty()){
+        console.log(error.message);
+        next(new HttpError('Invalid input.Please enter again',422));
+    }
 
     const answerId = req.params.answerId;
     const {answer} = req.body;
@@ -213,6 +229,7 @@ const deleteAnswer = async (req,res,next) => {
 
     res.json({message:'Deleted successfully'});
 }
+
 
 exports.giveAnswer = giveAnswer;
 exports.updateAnswer = updateAnswer;
