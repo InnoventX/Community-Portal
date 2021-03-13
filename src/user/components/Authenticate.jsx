@@ -11,7 +11,7 @@ import {useForm} from "../../shared/hoocks/form-hook";
 // This function will be called whenever we use "dispatch"
 const formReducer = ( state, action) => {
 
-    // Cjecks the action type
+    // Checks the action type
     switch( action.type ){
 
         case 'INPUT_CHANGE':
@@ -62,6 +62,12 @@ const formReducer = ( state, action) => {
 
 function Authenticate(){
 
+    // Using AuthContext for user login detalis(userId)  
+    const auth = useContext(AuthContext);
+
+    // State for submit button
+    const [onSubmit , setOnSubmit] = useState(false);
+
     // State which display Login form when set to true
     const [isLogin , setIsLogin] = useState(true);
 
@@ -100,14 +106,12 @@ function Authenticate(){
         })
     }
 
-    // Triggers when the form is submitted
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log(formState.inputs);
-    }
-
     // Triger when we click the "SWITCH" button
     const handleSwitch = (event) => {
+
+        // This prevents the form to get submitted
+        setOnSubmit(false);
+
         if(!isLogin){
             // Signup -> Login
             setData({
@@ -129,6 +133,75 @@ function Authenticate(){
             );
         }
         setIsLogin(prevMode => !prevMode);
+    }
+
+    // Triggers when the form is submitted
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if(onSubmit){
+            if(isLogin){
+                try{
+                    const response = await fetch("http://localhost:5000/api/user/login",{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email:formState.inputs.email.value,
+                            password:formState.inputs.password.value
+                        })
+                    });
+
+                    const responseData = await response.json();
+
+                    if(responseData.message){
+                        throw Error(responseData.message);
+                    }
+                    else{
+                        console.log(responseData);
+                    }
+
+                    auth.login(responseData.user.id);
+                }catch(err){
+                    console.log(err);
+                }
+            }else{
+                try{
+                    const response = await fetch("http://localhost:5000/api/user/signup",{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name:formState.inputs.name.value,
+                            email:formState.inputs.email.value,
+                            password:formState.inputs.password.value
+                        })
+                    });
+        
+                    const responseData = await response.json();
+        
+                    if(responseData.message){
+                        throw Error(responseData.message);
+                    }
+                    else{
+                        console.log(responseData);
+                    }
+        
+                    auth.login(responseData.user.id);
+                }catch(err){
+                    console.log(err);
+                }
+            }
+        }
+    }
+
+    // Triggered when the submit button is clicked
+    const haldleSubmitButton = (event) => {
+        event.preventDefault();
+        // The form shoul only be submitted now
+        setOnSubmit(true);
+        handleSubmit(event);
     }
 
     return(
@@ -178,7 +251,7 @@ function Authenticate(){
                     />
 
                     {/* This button will be disabled if the form is not valid */}
-                    <button disabled={!formState.isValid}>{ isLogin ? "Login" : "Signup" }</button>
+                    <button disabled={!formState.isValid} onClick={haldleSubmitButton}>{ isLogin ? "Login" : "Signup" }</button>
 
                     {/* Switching button */}
                     <button onClick={handleSwitch}>Switch to { isLogin ? "Signup" : "Login" }</button>

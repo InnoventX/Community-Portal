@@ -1,59 +1,105 @@
+// Using bcrypt for encrypting passwords
+const bcrypt = require('bcrypt');
+
+// Using Json Web Token
+const jwt = require('jsonwebtoken');
+
+// User Model
 const User = require("../models/user-model");
+// Own Error Class
 const HttpError = require("../util/http-error-message");
+// For validiting the inputs comming to the post api
 const { validationResult } = require('express-validator');
-const { Http } = require("@material-ui/icons");
+
+// Function for creating jwt token
+const createToken = (userId) => {
+    return jwt.sign(
+        {userId},                         // UserId as payload
+        "InnoventX's own secret",         // Secret
+        { expiresIn : 24*60*60 }          // Expiration time set to 1 day
+    );
+}
 
 const signup = async (req,res,next) => {
 
+    // Storing error if it is comming from the inputs of signup through validationResult
     const error = validationResult(req);
-
     if(!error.isEmpty()){
         console.log(error.message);
         next(new HttpError('Invalid input.Please enter again',422));
     }
     
+    // Generating salt to encrypting the password
+    const salt = await bcrypt.genSalt();
+
+    // Encripting the password
+    const password = await bcrypt.hash(req.body.password , salt);
+
+    // Creating the user
     const newUser = new User({
         name: req.body.name,
         email:req.body.email,
-        password:req.body.password,
+        password:password,
         questions:[],
         answers:[]
     });
 
     try{
-        await newUser.save();
+        // Saving the user
+        const user = await newUser.save();
+
+        // Getting jwt token
+        const token = createToken(user._id);
+        console.log(token);
+
+        // Wrapping jwt token in the cookie use " npm install cookie-parser"
+        res.cookie('jwt' , token);
+
     }catch(err){
         console.log(err);
+        // Sending the error message
         next(new HttpError('User not saved',500));
     }
 
+    // Sending user in Response
     res.json({user:newUser.toObject({getters:true})});
 }
 
 const login = async (req,res,next) => {
 
+    // Storing error if it is comming from the inputs of login through validationResult
     const error = validationResult(req);
-
     if(!error.isEmpty()){
         console.log(error.message);
         next(new HttpError('Invalid input.Please enter again',422));
     }
 
-    const { email , password } = req.body;
+    // Taking email from frontend 
+    const email = req.body.email;
 
     let userFound;
     try{
+        // Checking whether the user of that perticular email exists or not
         userFound = await User.findOne( { email } );
     }catch(err){
         console.log(err);
         next(new HttpError('Something went wrong',500));
     }
 
-    if(!userFound || userFound.password !== password){
+    // Throwing error if the user doesnot exists
+    if(!userFound){
         res.status(500);
-        res.json({message:'Login failed.Please try again'});
+        res.json({message:'User not found'});
+    }else{
+        // Comparing the hashed password using bcrypt
+        const auth = await bcrypt.compare(req.body.password , userFound.password);
+        if(!auth){
+            res.status(500);
+            res.json({message:'Wrong Password'});
+        }
     }
 
+    // Sending the user as Response
     res.json({user:userFound});
 }
 

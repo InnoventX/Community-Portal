@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState , useCallback} from 'react';
 import { BrowserRouter as Router, Switch , Route, Redirect} from 'react-router-dom';
 
 import './App.css';
@@ -14,16 +14,21 @@ import UpdateQues from "./portal home/components/UpdateQues";
 
 function App() {
 
+  // State for Login
   const [isLogedIn, setIsLogedIn] = useState(false);
-  // const [userId,setUserId] = useState(null);
 
-  const login = () => {
+  // Staate for userId comming from BACKEND
+  const [userId , setUserId] = useState(null);
+
+  const login = useCallback((userId) => {
     setIsLogedIn(true);
-  }
+    setUserId(userId);
+  },[]);
 
-  const logout = () => {
+  const logout = useCallback((userId) => {
     setIsLogedIn(false);
-  }
+    setUserId(null);
+  },[]);
 
   let routes;
 
