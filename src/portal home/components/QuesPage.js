@@ -117,7 +117,7 @@ const QuesPage = () => {
                 }
 
                 <h4 className="question-title">{question.title}</h4>
-                <p>Category --> {question.category}</p>
+                <p>Category -- {question.category}</p>
                 <p>{question.wholeQuestion}</p>
 
                 <div className="answers-div">

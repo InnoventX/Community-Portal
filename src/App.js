@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import { BrowserRouter as Router, Switch , Route, Redirect} from 'react-router-dom';
 
 import './App.css';
-import SignIn from "./user/components/SignIn";
+import Authenticate from "./user/components/Authenticate";
 import PortalNavbar from './shared/components/PortalNavbar';
 import PortalHome from "./portal home/pages/PortalHome";
 import QuesPage from "./portal home/components/QuesPage";
@@ -37,7 +37,7 @@ function App() {
 
           {/*  User Authentication  */}
           <Route path="/authenticate" exact>      
-            <SignIn />
+            <Authenticate />
           </Route>
 
           {/*  Question ( Single Page )  */}

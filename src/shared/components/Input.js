@@ -54,16 +54,19 @@ const Input = (props) =>  {
     var element = ( props.element === "input") ? (
             <input 
                 id={props.id}
+                name={props.name}
+                className={props.className}
                 type={props.type}
                 placeholder={props.placeholder}
                 value={inputState.value}
+                autoComplete="off"
                 onChange={handleChange}
                 onBlur={handleTouch}
             /> 
         ): (
             <textarea
                 id={props.id}
-                className="text-area"
+                className={props.className || "text-area"}
                 rows={props.rows || 1}
                 value={inputState.value}
                 onChange={handleChange}

@@ -7,7 +7,7 @@ const QuesList = (props) => {
     return(
         <React.Fragment>
             <h6 className="answers-heading">ANSWERS</h6>
-            <hr noshade/>
+            <hr/>
             {
                 props.allQuestions.map((question) => {
                     return (<Question 
