@@ -226,15 +226,20 @@ function Authenticate(){
         handleSubmit(event);
     }
 
+    // To handle error
     const errorHandler = () => {
         setError(null);
     }
 
     return(
         <React.Fragment>
+            {/* Showing error which comming from backend */}
             {error && <Backdrop onClick={errorHandler} />}
             {error && <h1>{error}</h1>} 
+
+            {/* Showing Loading Spinner till the data is arrived */}
             { isLoading && <LoadingSpinner asOverlay />}
+            
             <div className="my-form">
                 <img className="logo2" src={logo}/>
 
