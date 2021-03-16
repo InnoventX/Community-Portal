@@ -7,7 +7,8 @@ import {AuthContext} from "../../shared/context/AuthContext";
 import Input from "../../shared/components/Input";
 import {VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE} from "../../shared/components/validators";
 import {useForm} from "../../shared/hoocks/form-hook";
-
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import Backdrop from "../../shared/components/UIElements/Backdrop";
 // This function will be called whenever we use "dispatch"
 const formReducer = ( state, action) => {
 
@@ -86,6 +87,12 @@ function Authenticate(){
         isValid:false
     });
 
+    // State For Loading Spinner
+    const [isLoading , setIsLoading] = useState(false);
+    
+    // State for error modal or block
+    const [error, setError] = useState();
+
     // Trigers whenever input changes
     const handleInput = useCallback((id , value, isValid) => {
         dispatch({
@@ -138,9 +145,17 @@ function Authenticate(){
     // Triggers when the form is submitted
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        // If the submit button is clicked 
         if(onSubmit){
+
+            // If the user is Loggin in
             if(isLogin){
                 try{
+                    // Showing the Loaading spinney till the data is arrived
+                    setIsLoading(true);
+
+                    // Getting the data from api
                     const response = await fetch("http://localhost:5000/api/user/login",{
                         method: 'POST',
                         headers: {
@@ -152,21 +167,29 @@ function Authenticate(){
                         })
                     });
 
+                    // Converting the data into json format
                     const responseData = await response.json();
 
+                    // It the error is comming as a response
                     if(responseData.message){
                         throw Error(responseData.message);
                     }
-                    else{
-                        console.log(responseData);
-                    }
+                    console.log(responseData);
 
+                    // Getting userId in Frontend
                     auth.login(responseData.user.id);
                 }catch(err){
                     console.log(err);
+
+                    // Showing the Error modal in frontend
+                    setError(err.message || 'Something wentt wrong, please try again');
                 }
+
+                // After the data is arrived the remove the loading spinner
+                setIsLoading(false);
             }else{
                 try{
+                    setIsLoading(true);
                     const response = await fetch("http://localhost:5000/api/user/signup",{
                         method: 'POST',
                         headers: {
@@ -184,14 +207,13 @@ function Authenticate(){
                     if(responseData.message){
                         throw Error(responseData.message);
                     }
-                    else{
-                        console.log(responseData);
-                    }
-        
+                    console.log(responseData);
                     auth.login(responseData.user.id);
                 }catch(err){
                     console.log(err);
+                    setError(err.message || 'Something went wrong, please try again.');
                 }
+                setIsLoading(false);
             }
         }
     }
@@ -204,8 +226,15 @@ function Authenticate(){
         handleSubmit(event);
     }
 
+    const errorHandler = () => {
+        setError(null);
+    }
+
     return(
         <React.Fragment>
+            {error && <Backdrop onClick={errorHandler} />}
+            {error && <h1>{error}</h1>} 
+            { isLoading && <LoadingSpinner asOverlay />}
             <div className="my-form">
                 <img className="logo2" src={logo}/>
 

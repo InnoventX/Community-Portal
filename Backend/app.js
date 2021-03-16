@@ -9,8 +9,10 @@ const answerRoutes = require("./routes/answer-routes");
 const userRoutes = require("./routes/user-routes");
 const HttpError = require("./util/http-error-message");
 
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.json());
+
 
 app.use((req,res,next) => {
     // Header used to patch the backend with Frontend

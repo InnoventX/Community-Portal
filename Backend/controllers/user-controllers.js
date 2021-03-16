@@ -35,10 +35,25 @@ const signup = async (req,res,next) => {
     // Encripting the password
     const password = await bcrypt.hash(req.body.password , salt);
 
+    const email = req.body.email;
+
+    // Checking if the user already exists or not via email
+    let existingUser;
+    try{
+        existingUser = await User.findOne({email:email});
+    }catch(err){
+        console.log(err);
+        next(new HttpError('Something went wrong',500));
+    }
+
+    if(existingUser){
+        next(new HttpError('User already exists.Please Login!',500));
+    }
+
     // Creating the user
     const newUser = new User({
         name: req.body.name,
-        email:req.body.email,
+        email:email,
         password:password,
         questions:[],
         answers:[]
@@ -46,14 +61,13 @@ const signup = async (req,res,next) => {
 
     try{
         // Saving the user
-        const user = await newUser.save();
+        await newUser.save();
 
         // Getting jwt token
-        const token = createToken(user._id);
-        console.log(token);
+        // const token = createToken(user._id);
 
         // Wrapping jwt token in the cookie use " npm install cookie-parser"
-        res.cookie('jwt' , token);
+        // res.setHeader('Set-Cookie' , 'newUser=true');
 
     }catch(err){
         console.log(err);
