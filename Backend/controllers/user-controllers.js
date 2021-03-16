@@ -117,6 +117,22 @@ const login = async (req,res,next) => {
     res.json({user:userFound});
 }
 
+
+const getUserByUserId = async (req,res,next) => {
+
+    const userId = req.params.userId;
+
+    let userFound;
+    try{
+        userFound = await User.findById(userId);
+    }catch(err){
+        console.log(err);
+        next(new HttpError('User not found',500));
+    }
+
+    res.json({user:userFound.toObject({getters:true})});
+}
+
 const getQuestionByUserId = async (req,res,next) => {
 
     const userId = req.params.userId;
@@ -134,7 +150,7 @@ const getQuestionByUserId = async (req,res,next) => {
         next(new HttpError('User not found',500));
     }
     else if(userFound.questions.length === 0){
-        return res.json({message:"NO questions found"});
+        return res.json({message:"No questions found"});
     }
 
     res.json({questions : userFound.questions.map((ques) => ques.toObject({getters:true}))});
@@ -161,5 +177,7 @@ const getAnswersByUserId = async (req,res,next) => {
 
 exports.signup = signup;
 exports.login = login;
+exports.getUserByUserId = getUserByUserId;
 exports.getQuestionByUserId = getQuestionByUserId;
 exports.getAnswersByUserId = getAnswersByUserId;
+
