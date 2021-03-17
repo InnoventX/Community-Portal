@@ -6,6 +6,7 @@ import Question from "./Question";
 import "./QuesList.css"
 
 const QuesList = (props) => {
+
     return(
         <React.Fragment>
             <h6 className="answers-heading">QUESTIONS</h6>
@@ -14,7 +15,7 @@ const QuesList = (props) => {
                 props.allQuestions.map((question) => {
                     return (<Question 
                         id={question.id}
-                        studentName = {question.studentName}
+                        userId = {question.userId}
                         title = {question.title}
                         wholeQuestion = {question.wholeQuestion}
                         answers= {question.answers}

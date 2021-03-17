@@ -1,6 +1,5 @@
 import React,{useState , useEffect} from 'react';
 
-import myQues from "../components/questions";
 import "./PortalHome.css";
 import Categories from "../components/Categories";
 import QuesList from "../components/QuesList";
@@ -34,7 +33,14 @@ function PortalHome(){
                 const responseData = await response.json();
 
                 if(responseData.message){
-                    throw new Error(responseData.message);
+
+                    // Initially if there is no questions available then
+                    if(responseData.message === "No questions found"){
+                        setAllQuestions(null);
+                    }
+                    else{
+                        throw new Error(responseData.message);
+                    }
                 }
 
                 // Storing the response comming from backend into allQuestions State
@@ -58,7 +64,6 @@ function PortalHome(){
     const errorHandler = () => {
         setError(null);
     }
-    
 
     return(
         <React.Fragment>
@@ -77,7 +82,10 @@ function PortalHome(){
                 </div>
                 <div className="right">
                     {/* Questions will be only rendered if the data is arrived from the backend */}
-                    { !isLoading && allQuestions && <QuesList allQuestions={allQuestions} />}
+                    { !isLoading  && allQuestions && <QuesList allQuestions={allQuestions} />}
+
+                    {/* If there are no questions in the database */}
+                    { !isLoading && !allQuestions &&  <h1>No questios available</h1>}
                 </div>
             </div>
         </React.Fragment>
