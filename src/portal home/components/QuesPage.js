@@ -26,6 +26,10 @@ const QuesPage = () => {
     const [answers , setAnswers] = useState();
     const [error, setError] = useState();
     const [isLoading , setIsLoading] = useState(false);
+
+    // Answer STATE used after adding other ANSWER
+    const [ansGiven, setAnsGiven] = useState();
+
     
     // Using useEffect hoock because this should be rendered only once
     useEffect(() => {
@@ -73,12 +77,6 @@ const QuesPage = () => {
         sendRequest();
     },[])
 
-    // Answer STATE used after adding other ANSWER
-    const [ansGiven, setAnsGiven] = useState({
-        givenBy:'',
-        rating:'',
-        ans:''
-    });
 
     // Showing POST ANSWER block
     const showPostSection = () => {
@@ -93,31 +91,37 @@ const QuesPage = () => {
 
     // Updating the new ANSWER
     const handleGivenAns = (event) => {
-        const ans = {
-            givenBy:'u10',
-            rating:'0',
-            ans:event.target.value
-        }
+        const ans = event.target.value;
         setAnsGiven(ans);
     }
 
     // Posting the NEW ANSWER
-    const nowPostAns = (event) => {
+    const nowPostAns = async (event) => {
         event.preventDefault();
-        setQuestion((question) => {
-            return{
-                id:question.id,
-                studentName:question.studentName,
-                title:question.title,
-                wholeQuestion:question.wholeQuestion,
-                answers:[...question.answers , ansGiven]
+        try{
+            const response = await fetch(`http://localhost:5000/api/answer/${quesId}/`,{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({
+                    userId:auth.userId,
+                    answer:ansGiven
+                })
+            });
+            const responseData = await response.json();
+
+            if(responseData.message){
+                throw new Error(responseData.message);
             }
-        });
-        showPostSection({
-            givenBy:'',
-            rating:'',
-            ans:''
-        });
+
+
+        }catch(err){
+            console.log(err);
+            setError(err.message);
+        }
+
+        showPostSection();
     }
 
     const showDeleteSection = () => {
@@ -215,7 +219,7 @@ const QuesPage = () => {
                         <div className="post-ans-div">
                             <hr />
                             <form onSubmit={nowPostAns}>
-                                <textarea className="post-ans-text" rows="3" value={ansGiven.ans} onChange={handleGivenAns}/>
+                                <textarea className="post-ans-text" rows="3" value={ansGiven} onChange={handleGivenAns}/>
                                 <button type="submit" className="post-btn">Post</button>
                             </form>
                         </div>

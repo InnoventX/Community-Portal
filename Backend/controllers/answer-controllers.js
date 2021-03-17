@@ -54,7 +54,7 @@ const giveAnswer = async (req,res,next) => {
     const questionId = req.params.questionId;
     const { userId, answer , rating } = req.body;
 
-    // Finding question bu ID
+    // Finding question by ID
     let questionFound;
     try{
         questionFound = await Question.findById(questionId);
@@ -106,7 +106,7 @@ const giveAnswer = async (req,res,next) => {
         sess.commitTransaction();
     }catch(err){
         console.log(err);
-        next(new HttpError('Answer not saved',500));
+        next(new HttpError(err.message || 'Answer not saved',500));
     }
     
     res.json({answer:newAnswer.toObject({getters:true})});
