@@ -114,7 +114,7 @@ const login = async (req,res,next) => {
     }
 
     // Sending the user as Response
-    res.json({user:userFound});
+    res.json({user:userFound.toObject({getters:true})});
 }
 
 

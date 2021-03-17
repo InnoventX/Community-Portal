@@ -17,7 +17,7 @@ function PortalHome(){
     // State which renders all the questions
     const [allQuestions , setAllQuestions] = useState();
 
-    // Using useEffect hoock because this should be updated & re-rendered whenever the question is add 
+    // Using useEffect hoock because this should be rendered only once 
     useEffect(() => {
 
         // Making another function because we cannot write async in useEffect function

@@ -33,3 +33,4 @@ router.patch("/:questionId",
 router.delete("/:questionId", questionsController.deleteQuestion );
 
 module.exports = router;
+

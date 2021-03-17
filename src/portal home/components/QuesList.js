@@ -15,6 +15,7 @@ const QuesList = (props) => {
             {
                 props.allQuestions.map((question) => {
                     return (<Question 
+                        key={question.id}
                         id={question.id}
                         userId = {question.userId}
                         title = {question.title}

@@ -174,7 +174,6 @@ function Authenticate(){
                     if(responseData.message){
                         throw Error(responseData.message);
                     }
-                    console.log(responseData);
 
                     // Getting userId in Frontend
                     auth.login(responseData.user.id);
@@ -207,7 +206,7 @@ function Authenticate(){
                     if(responseData.message){
                         throw Error(responseData.message);
                     }
-                    console.log(responseData);
+
                     auth.login(responseData.user.id);
                 }catch(err){
                     console.log(err);

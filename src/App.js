@@ -17,15 +17,15 @@ function App() {
   // State for Login
   const [isLogedIn, setIsLogedIn] = useState(false);
 
-  // Staate for userId comming from BACKEND
+  // State for userId comming from BACKEND
   const [userId , setUserId] = useState(null);
 
-  const login = useCallback((userId) => {
+  const login = useCallback((uid) => {
     setIsLogedIn(true);
-    setUserId(userId);
+    setUserId(uid);
   },[]);
 
-  const logout = useCallback((userId) => {
+  const logout = useCallback((uid) => {
     setIsLogedIn(false);
     setUserId(null);
   },[]);
@@ -102,6 +102,7 @@ function App() {
   return (
     <AuthContext.Provider value={{
       isLogedIn:isLogedIn,
+      userId:userId,
       login:login,
       logout:logout
     }}>
