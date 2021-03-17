@@ -77,9 +77,11 @@ function PortalHome(){
 
             {/* Showing Home page */}
             <div className="home">
-                <div className="left">
-                    <Categories />
-                </div>
+                { !isLoading && allQuestions && (
+                    <div className="left">
+                        <Categories />
+                    </div>
+                )}
                 <div className="right">
                     {/* Questions will be only rendered if the data is arrived from the backend */}
                     { !isLoading  && allQuestions && <QuesList allQuestions={allQuestions} />}

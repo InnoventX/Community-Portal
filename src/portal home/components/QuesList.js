@@ -5,6 +5,7 @@ import React from 'react';
 import Question from "./Question";
 import "./QuesList.css"
 
+// Passing all the information of single question to "Question" component
 const QuesList = (props) => {
 
     return(

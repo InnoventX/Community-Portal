@@ -10,9 +10,11 @@ import "./Question.css";
 
 const Question = (props) => {
 
+    // State for storing the student's name who asked the questions
     const [studentName , setStudentName] = useState();
     const [isLoading , setIsLoading] = useState(false);
 
+    // Sending the fetch request to get the student's name
     useEffect(() => {
         const sendRequest = async () => {
             try{
@@ -24,8 +26,6 @@ const Question = (props) => {
                 if(responseData.message){
                     throw new Error(responseData.message);
                 }
-
-                console.log(responseData.user.name);
                 setStudentName(responseData.user.name);
 
             }catch(err){
@@ -39,20 +39,19 @@ const Question = (props) => {
 
     return(
         <React.Fragment>
-            {/* {isLoading && <LoadingSpinner asOverlay/>} */}
+
+            {/* Loading till we didn't receive the data */}
+            {isLoading && <LoadingSpinner asOverlay/>}
+            
+            {/* Rendering the question when we receive the data */}
             {!isLoading && studentName && (
                 <Link to={`/ques/${props.id}`} style={{textDecoration:"none"}}>
-                <div className="question-container">
-                {studentName && (
-                    <React.Fragment>
+                    <div className="question-container">
                     <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
                     <h6 className="student-name">{studentName}</h6>
-                    </React.Fragment>
-                )
-                }
                     <h4 className="question-title">{props.title}</h4>
                     <p>{props.wholeQuestion.substring(0,100) + '...'}</p>
-                </div>
+                    </div>
                 </Link>
             )}
             
