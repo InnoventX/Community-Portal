@@ -1,12 +1,13 @@
 import React,{useState,useContext,useReducer,useCallback} from 'react';
-import {useHistory} from 'react-router-dom';
+// import {useHistory} from 'react-router-dom';
 
+import "./Authenticate.css";
 import logo from '../../photos/logo.png';
 import './SignIn.css';
 import {AuthContext} from "../../shared/context/AuthContext";
 import Input from "../../shared/components/Input";
 import {VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE} from "../../shared/components/validators";
-import {useForm} from "../../shared/hoocks/form-hook";
+// import {useForm} from "../../shared/hoocks/form-hook";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
 // This function will be called whenever we use "dispatch"
@@ -232,9 +233,17 @@ function Authenticate(){
 
     return(
         <React.Fragment>
-            {/* Showing error which comming from backend */}
-            {error && <Backdrop onClick={errorHandler} />}
-            {error && <h1>{error}</h1>} 
+            
+            {/* Showing error if occured */}
+            {error && (
+                <React.Fragment>
+                    <Backdrop onClick={errorHandler} />
+                    <div className="show-error-section">
+                        <h1>Error Occured!</h1>
+                        <p>{error}</p>
+                    </div>
+                </React.Fragment>
+            )} 
 
             {/* Showing Loading Spinner till the data is arrived */}
             { isLoading && <LoadingSpinner asOverlay />}

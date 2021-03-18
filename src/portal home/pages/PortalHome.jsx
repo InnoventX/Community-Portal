@@ -67,11 +67,18 @@ function PortalHome(){
 
     return(
         <React.Fragment>
-
+        
             {/* Showing error if occured */}
-            {error && <Backdrop onClick={errorHandler} />}
-            {error && <h1>{error}</h1>}
-
+            {error && (
+                <React.Fragment>
+                    <Backdrop onClick={errorHandler} />
+                    <div className="show-error-section">
+                        <h1>Error Occured!</h1>
+                        <p>{error}</p>
+                    </div>
+                </React.Fragment>
+            )}
+                
             {/* Showing Loading spinner */}
             {isLoading && <LoadingSpinner asOverlay />}
 

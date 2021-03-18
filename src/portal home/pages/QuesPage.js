@@ -1,5 +1,5 @@
 import React,{useState, useContext, useEffect} from 'react';
-import {useParams, Link} from 'react-router-dom';
+import {useParams, Link , useHistory} from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 
@@ -10,6 +10,8 @@ import Backdrop from "../../shared/components/UIElements/Backdrop";
 
 
 const QuesPage = () => {
+
+    const history = useHistory();
 
     // For components which shoul be rendered when the user is authenticated
     const auth = useContext(AuthContext);
@@ -56,12 +58,6 @@ const QuesPage = () => {
 
     // Closing delete section
     const cancleShowDeleteSection = () => {
-        setDeleteSection(false);
-    }
-
-    // Deleating the question
-    const deleteTheQuestion = () => {
-        console.log("Deleted !!");
         setDeleteSection(false);
     }
 
@@ -148,12 +144,45 @@ const QuesPage = () => {
         setSubmitAnswer(true);
     }
 
+    // Deleating the question
+    const deleteTheQuestion = async () => {
+
+        // Sending Request to delete the question 
+        try{
+            const response = await fetch(`http://localhost:5000/api/question/${quesId}/`,{
+                method:'DELETE'
+            });
+            const responseData = await response.json();
+
+            // If the question is deleted then redirectign to the root route where all the questions are displayed
+            if(responseData.message === "Question deleted successfully"){
+                history.push("/");
+            }else{
+                // Throwing error if comming from backend
+                throw new Error(responseData.message);
+            }
+        }catch(err){
+            console.log(err);
+
+            // Setting error in frontend
+            setError(err.message);
+        }
+    }
+
+
     return(
             <div className="question-container">
 
                 {/* Showing error if occured */}
-                {error && <Backdrop onClick={errorHandler} />}
-                {error && <h1>{error}</h1>}
+                {error && (
+                    <React.Fragment>
+                        <Backdrop onClick={errorHandler} />
+                        <div className="show-delete-section">
+                            <h1>Error Occured!</h1>
+                            <p>{error}</p>
+                        </div>
+                    </React.Fragment>
+                )}
 
                 {/* Showing Loading spinner */}
                 {isLoading && <LoadingSpinner asOverlay />}
@@ -164,12 +193,15 @@ const QuesPage = () => {
 
                         {/* Showing Delet Section or Modal  */}
                         { deleteSection && (
-                            <div className="show-delete-section">
-                                <h1>Are You Sure?</h1>
-                                <p>Do you want delete your?</p>
-                                <button onClick={deleteTheQuestion}>DELETE</button>
-                                <button onClick={cancleShowDeleteSection}>CANCLE</button>
-                            </div>
+                            <React.Fragment>
+                                <Backdrop onClick={errorHandler} />
+                                <div className="show-delete-section">
+                                    <h1>Are You Sure?</h1>
+                                    <p>Do you want delete your?</p>
+                                    <button onClick={deleteTheQuestion}>DELETE</button>
+                                    <button onClick={cancleShowDeleteSection}>CANCLE</button>
+                                </div>
+                            </React.Fragment>
                         )}
 
                         {/* Showing the student's details who had asked the question */}
@@ -190,10 +222,12 @@ const QuesPage = () => {
                             ): null
                         }
 
+                        {/* Showing question's data */}
                         <h4 className="question-title">{question.title}</h4>
                         <p>Category -- {question.category}</p>
                         <p>{question.wholeQuestion}</p>
 
+                        {/* Showing all the answers of thaat question */}
                         {answers && (
                             <div className="answers-div">
                                 {   
@@ -212,13 +246,15 @@ const QuesPage = () => {
                             </div>
                         )}       
 
+                        {/* Allowing the user to give answer only if he is authenticated */}
                         { auth.isLogedIn && (
                                 <button className="give-ans-btn" onClick={() => {
-                                showPostSection()
-                            }}>Give Answer</button>
+                                    showPostSection()
+                                }}>Give Answer</button>
                             )
                         }
 
+                        {/* Showing the Give Answer block */}
                         <div className="post-ans-div">
                             <hr />
                             <form onSubmit={nowPostAns}>

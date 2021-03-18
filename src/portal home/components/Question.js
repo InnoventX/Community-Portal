@@ -3,10 +3,8 @@
 import React,{useEffect,useState} from 'react';
 import {Link} from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 
 import "./Question.css";
-
 
 const Question = (props) => {
     return(

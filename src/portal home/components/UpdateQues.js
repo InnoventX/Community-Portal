@@ -1,6 +1,7 @@
 import React,{useState,useReducer,useCallback, useEffect} from 'react';
 import {useParams, useHistory} from 'react-router-dom';
 
+import "./UpdateQues.css";
 import {VALIDATOR_REQUIRE,VALIDATOR_MINLENGTH} from "../../shared/components/validators";
 import Input from "../../shared/components/Input";
 import {useForm} from "../../shared/hoocks/form-hook";
@@ -127,14 +128,22 @@ const UpdateQues = (props) => {
         <React.Fragment>
 
             {/* Showing error if occured */}
-            {error && <Backdrop onClick={errorHandler} />}
-            {error && <h1>{error}</h1>}
+            {error && (
+                <React.Fragment>
+                    <Backdrop onClick={errorHandler} />
+                    <div className="show-error-section">
+                        <h1>Error Occured!</h1>
+                        <p>{error}</p>
+                    </div>
+                </React.Fragment>
+            )}
 
             {/* Showing Loading spinner */}
             {isLoading && <LoadingSpinner asOverlay />}
 
             { !isLoading && (
                 <form onSubmit={submitHandler}>
+                    {/* Taking category of question as input */}
                     <Input 
                         id="category"
                         element="input"
@@ -147,6 +156,8 @@ const UpdateQues = (props) => {
                         validators={[VALIDATOR_REQUIRE()]}
                         onInput={handleInput}
                     />
+
+                    {/* Taking title of question as input */}
                     <Input 
                         id="title"
                         element="textarea"
@@ -158,6 +169,8 @@ const UpdateQues = (props) => {
                         validators={[VALIDATOR_REQUIRE()]}
                         onInput={handleInput}
                     />
+
+                    {/* Taking wholeQuestion of question as input */}
                     <Input  
                         id="wholeQuestion"
                         element="textarea"
@@ -170,6 +183,8 @@ const UpdateQues = (props) => {
                         validators={[VALIDATOR_MINLENGTH(10)]}
                         onInput={handleInput}
                     />
+
+                    {/* This button should be disabled if the form in invalid */}
                     <button disabled={!formState.isValid}>
                         Submit
                     </button>

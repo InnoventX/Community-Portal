@@ -181,8 +181,10 @@ const updateQuestion = async (req,res,next) => {
 
 const deleteQuestion = async (req,res,next) => {
 
+    // Taking questionId from route
     const questionId = req.params.questionId;
 
+    // Finding the question which is to be deleted
     let  questionFound;
     try{
         questionFound = await Question.findById(questionId).populate('answers');
@@ -191,10 +193,12 @@ const deleteQuestion = async (req,res,next) => {
         next(new HttpError('Something went wrong',500));
     }
 
+    // Throwing error if question not found
     if(!questionFound){
         next(new HttpError('Question not found',500));
     }
 
+    // Finding the user who has asked this question  
     let creator;
     try{
         creator = await User.findById(questionFound.userId);
@@ -207,13 +211,14 @@ const deleteQuestion = async (req,res,next) => {
     questionFound.answers.forEach(async (ans) => {
         let answerFound;
             try{
-                // Finding that answer and the user who has qiventhe answer of that question
+                // Finding that answer and the user who has qiven the answer of that question
                 answerFound = await Answer.findById(ans).populate('userId');
             }catch(err){
                 console.log(err);
                 next(new HttpError("Something went wrong",500));
             }
     
+            // Removing the answer from the user data and deleting the answer itself
             try{
                 const session = await mongoose.startSession();
                 session.startTransaction();
@@ -233,6 +238,7 @@ const deleteQuestion = async (req,res,next) => {
         
     });
 
+    // Removing the question from user's data and the deleting the question itself
     try{
         const sess = await mongoose.startSession();
         sess.startTransaction();
