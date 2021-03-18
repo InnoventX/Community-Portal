@@ -1,5 +1,5 @@
 import React,{useState, useContext, useEffect} from 'react';
-import {useParams, Link, useHistory} from 'react-router-dom';
+import {useParams, Link} from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 
@@ -11,8 +11,6 @@ import Backdrop from "../../shared/components/UIElements/Backdrop";
 
 const QuesPage = () => {
 
-    const history = useHistory();
-
     // For components which shoul be rendered when the user is authenticated
     const auth = useContext(AuthContext);
 
@@ -23,7 +21,6 @@ const QuesPage = () => {
     const quesId = useParams().quesID;
 
     // State which are used in this page
-    const [studentName , setStudentName] = useState();
     const [question,setQuestion] = useState();
     const [answers , setAnswers] = useState();
     const [error, setError] = useState();
@@ -35,6 +32,8 @@ const QuesPage = () => {
  
     // Showing POST ANSWER block
     const showPostSection = () => {
+
+        // It will display the GiveAnswer block when we chick the button and hide when we again click it.
         const postDiv = document.querySelector(".post-ans-div");
         if(postDiv.style.display === "none"){
             postDiv.style.display = "block";
@@ -50,14 +49,17 @@ const QuesPage = () => {
         setAnsGiven(ans);
     }
 
+    // Showing delete section
     const showDeleteSection = () => {
         setDeleteSection(true);
     }
 
+    // Closing delete section
     const cancleShowDeleteSection = () => {
         setDeleteSection(false);
     }
 
+    // Deleating the question
     const deleteTheQuestion = () => {
         console.log("Deleted !!");
         setDeleteSection(false);
@@ -68,7 +70,7 @@ const QuesPage = () => {
         setError(null);
     }
 
-    // Using useEffect hoock because this should be rendered only once
+    // Using useEffect hoock which renders question and it's answers,this should only be rendered when submitAnswer changes.  
     useEffect(() => {
 
         // Making another function because we cannot write async in useEffect function
@@ -87,7 +89,6 @@ const QuesPage = () => {
                 }
 
                 // Assigning the backend responce to the frontend states
-                setStudentName(responseDataOfQuestion.userName);
                 setQuestion(responseDataOfQuestion.question);
 
                 // Getting all the answers of that perticular question
@@ -116,7 +117,10 @@ const QuesPage = () => {
 
     // Posting the NEW ANSWER
     const nowPostAns = async (event) => {
+        // Prevent the default when the button is clicked
         event.preventDefault();
+
+        // Posting the answer using backend api
         try{
             const response = await fetch(`http://localhost:5000/api/answer/${quesId}/`,{
                 method:'POST',
@@ -135,10 +139,12 @@ const QuesPage = () => {
             }
         }catch(err){
             console.log(err);
+            // beacause we are doing multiple operations in backend
             if(err.message !== "WriteConflict error: this operation conflicted with another operation. Please retry your operation or multi-document transaction."){
                 setError(err.message);
             }
         }
+        // Turning this state because we want to rerender the question with updation in answers array
         setSubmitAnswer(true);
     }
 
@@ -167,12 +173,10 @@ const QuesPage = () => {
                         )}
 
                         {/* Showing the student's details who had asked the question */}
-                        {studentName && (
-                            <React.Fragment>
-                                <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
-                                <h6 className="student-name">{studentName}</h6>
-                            </React.Fragment>
-                        )}
+                        <React.Fragment>
+                            <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
+                            <h6 className="student-name">{question.userName}</h6>
+                        </React.Fragment>
 
                         {/* Showing the update & delete button if the user is authenticated and have asked the question */}
                         { (auth.userId === question.userId) ? (
@@ -185,7 +189,6 @@ const QuesPage = () => {
                             </React.Fragment>
                             ): null
                         }
-
 
                         <h4 className="question-title">{question.title}</h4>
                         <p>Category -- {question.category}</p>

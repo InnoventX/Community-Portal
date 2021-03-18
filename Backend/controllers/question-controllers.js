@@ -9,6 +9,7 @@ const Answer = require('../models/answer-model');
 
 const getAllQuestions =async (req,res,next) => {
 
+    // Finding all the questions from the Question collection
     let questions;
     try{
         questions = await Question.find();
@@ -17,6 +18,7 @@ const getAllQuestions =async (req,res,next) => {
         next(new HttpError('Something went wrong',500));
     }
 
+    // If there are no question in out database
     if(!questions || questions.length === 0){
         return res.json({message:"No questions found"});
     }
@@ -27,8 +29,10 @@ const getAllQuestions =async (req,res,next) => {
 
 const getQuestionById = async (req,res,next) => {
 
+    // Getting the questionId from the route
     const questionId = req.params.questionId;
 
+    // Finding the question by it's Id
     let questionFound;
     try{
         questionFound = await Question.findById(questionId);
@@ -37,19 +41,12 @@ const getQuestionById = async (req,res,next) => {
         next(new HttpError('Something went wrong',500));
     }
 
+    // Throwing error if the question is not found
     if(!questionFound){
         next(new HttpError('Question not found',500));
     }
-
-    let userFound;
-    try{
-        userFound = await User.findById(questionFound.userId);
-    }catch(err){
-        console.log(err);
-        next(new HttpError('Something went wrong'));
-    }
     
-    res.json({userName:userFound.name , question:questionFound.toObject({getters:true})});
+    res.json({question:questionFound.toObject({getters:true})});
     
 }
 
@@ -136,17 +133,20 @@ const newQuestion = async (req,res,next) => {
 
 const updateQuestion = async (req,res,next) => {
 
+    // Validation input comming from the body
     const error = validationResult(req);
-
     if(!error.isEmpty()){
         console.log(error.message);
         next(new HttpError('Invalid input.Please enter again',422));
     }
 
+    // Taking questionId from the route
     const questionId = req.params.questionId;
 
+    // Taking the input from the body
     const { title , category , wholeQuestion } = req.body;
 
+    // Finding the question qhich is to be updated
     let questionFound;
     try{
         questionFound = await Question.findById(questionId);
@@ -155,16 +155,19 @@ const updateQuestion = async (req,res,next) => {
         next(new HttpError('Something went wrong',500));
     }
 
+    // Throwing the error if the question is not found
     if(!questionId){
         next(new HttpError('Question not found',500));
     }
 
+    // Updating the data to question
     questionFound.title = title;
     questionFound.category = category;
     questionFound.wholeQuestion = wholeQuestion;
     // Not perfet can be changed
     questionFound.answers = [];
 
+    // Saving the changes
     try{
         await questionFound.save();
     }catch(err){

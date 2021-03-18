@@ -30,3 +30,4 @@ router.patch("/rating/:answerId" , answerControllers.incrementRating);
 router.delete("/:answerId", answerControllers.deleteAnswer );
 
 module.exports = router;
+
