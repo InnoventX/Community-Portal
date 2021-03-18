@@ -4,6 +4,8 @@ const answerSchema = mongoose.Schema({
     
     userId:{ type:mongoose.Types.ObjectId , required:true , ref:'User' },
 
+    userName:{ type:String , require:true },
+
     answer:{ type:String , require:true },
     
     rating:{ type:Number , required:true },

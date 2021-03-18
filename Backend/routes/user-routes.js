@@ -7,8 +7,6 @@ const Question = require('../models/question-model');
 const HttpError = require("../util/http-error-message");
 const User = require("../models/user-model");
 
-router.get("/:userId" , userControllers.getUserByUserId);
-
 router.post("/signup",
             [
                 check('name').not().isEmpty(),

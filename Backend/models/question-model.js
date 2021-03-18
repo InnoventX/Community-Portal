@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 const questionSchema = mongoose.Schema({
     userId:{ type:mongoose.Types.ObjectId , required:true , ref:'User'},
+
+    userName:{type:String , require:true },
     
     title:{type:String , require:true },
     

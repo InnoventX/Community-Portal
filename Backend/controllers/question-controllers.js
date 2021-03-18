@@ -75,22 +75,17 @@ const getQuestionsByCategory = async (req,res,next) => {
 
 const newQuestion = async (req,res,next) => {
 
+    // Validating the input give by the body
     const error = validationResult(req);
-
     if(!error.isEmpty()){
         console.log(error.message);
         next(new HttpError('Invalid input.Please enter again',422));
     }
 
+    // Taking the data from the body
     const {userId , title , category , wholeQuestion} = req.body;
-    const newQuestion = new Question({
-        userId,
-        title,
-        category,
-        wholeQuestion,
-        answers:[]
-    });
-
+    
+    // Finding the user by the given userId
     let userFound;
     try{
         userFound = await User.findById(userId);
@@ -99,17 +94,36 @@ const newQuestion = async (req,res,next) => {
         next(new HttpError('Something went wrong',500));
     }
 
+    // Throwing error if the user not found
     if(!userFound){
         next(new HttpError('Invalid userId!',500));
     }
+
+    // Making the Question object
+    const newQuestion = new Question({
+        userId,
+        userName:userFound.name,
+        title,
+        category,
+        wholeQuestion,
+        answers:[]
+    });
     
+    // Saving the question
     try{
 
+        // Making the Session because we have to do multiple operations with different databases
         const sess = await mongoose.startSession();
         sess.startTransaction();
+
+        // Saving the new Question
         await newQuestion.save({ session:sess });
+
+        // Adding this question into the user's data 
         userFound.questions.push(newQuestion);
         await userFound.save({ session : sess });
+
+        // Commiting the transaction
         sess.commitTransaction();
 
     }catch(err){

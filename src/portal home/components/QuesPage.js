@@ -1,5 +1,5 @@
 import React,{useState, useContext, useEffect} from 'react';
-import {useParams,Link} from 'react-router-dom';
+import {useParams, Link, useHistory} from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 
@@ -10,6 +10,8 @@ import Backdrop from "../../shared/components/UIElements/Backdrop";
 
 
 const QuesPage = () => {
+
+    const history = useHistory();
 
     // For components which shoul be rendered when the user is authenticated
     const auth = useContext(AuthContext);
@@ -29,8 +31,43 @@ const QuesPage = () => {
 
     // Answer STATE used after adding other ANSWER
     const [ansGiven, setAnsGiven] = useState();
+    const [submitAnswer , setSubmitAnswer] =  useState(false);
+ 
+    // Showing POST ANSWER block
+    const showPostSection = () => {
+        const postDiv = document.querySelector(".post-ans-div");
+        if(postDiv.style.display === "none"){
+            postDiv.style.display = "block";
+        }
+        else{
+            postDiv.style.display = "none";
+        }
+    }
 
-    
+    // Updating the ANSWER state
+    const handleGivenAns = (event) => {
+        const ans = event.target.value;
+        setAnsGiven(ans);
+    }
+
+    const showDeleteSection = () => {
+        setDeleteSection(true);
+    }
+
+    const cancleShowDeleteSection = () => {
+        setDeleteSection(false);
+    }
+
+    const deleteTheQuestion = () => {
+        console.log("Deleted !!");
+        setDeleteSection(false);
+    }
+
+    // Setting error to null after we click the screen
+    const errorHandler = () => {
+        setError(null);
+    }
+
     // Using useEffect hoock because this should be rendered only once
     useEffect(() => {
 
@@ -75,25 +112,7 @@ const QuesPage = () => {
             setIsLoading(false);
         }
         sendRequest();
-    },[])
-
-
-    // Showing POST ANSWER block
-    const showPostSection = () => {
-        const postDiv = document.querySelector(".post-ans-div");
-        if(postDiv.style.display === "none"){
-            postDiv.style.display = "block";
-        }
-        else{
-            postDiv.style.display = "none";
-        }
-    }
-
-    // Updating the new ANSWER
-    const handleGivenAns = (event) => {
-        const ans = event.target.value;
-        setAnsGiven(ans);
-    }
+    },[submitAnswer]);
 
     // Posting the NEW ANSWER
     const nowPostAns = async (event) => {
@@ -114,32 +133,13 @@ const QuesPage = () => {
             if(responseData.message){
                 throw new Error(responseData.message);
             }
-
-
         }catch(err){
             console.log(err);
-            setError(err.message);
+            if(err.message !== "WriteConflict error: this operation conflicted with another operation. Please retry your operation or multi-document transaction."){
+                setError(err.message);
+            }
         }
-
-        showPostSection();
-    }
-
-    const showDeleteSection = () => {
-        setDeleteSection(true);
-    }
-
-    const cancleShowDeleteSection = () => {
-        setDeleteSection(false);
-    }
-
-    const deleteTheQuestion = () => {
-        console.log("Deleted !!");
-        setDeleteSection(false);
-    }
-
-    // Setting error to null after we click the screen
-    const errorHandler = () => {
-        setError(null);
+        setSubmitAnswer(true);
     }
 
     return(
@@ -193,11 +193,11 @@ const QuesPage = () => {
 
                         {answers && (
                             <div className="answers-div">
-                                {
-                                    answers.map((ans) => {
+                                {   
+                                    answers.map((ans,index) => {
                                         return (
                                             <React.Fragment>
-                                                <h6>{ans.userId}</h6>
+                                                <h6>{ans.userName}</h6>
                                                 <button><StarBorderIcon style={{display:"inlineBlock"}}/></button>
                                                 <p >Rating :- {ans.rating}</p>
                                                 <p className="answers">{ans.answer}</p>

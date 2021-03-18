@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const {validationResult} = require('express-validator');
 const { Http } = require('@material-ui/icons');
 
+// Function used for sorting the ansers according to their rating
 const compare = (a , b) => {
 
     // If B has higher rating then SORT
@@ -20,38 +21,47 @@ const compare = (a , b) => {
 
 const getAnswersByQuestionId = async (req,res,next) => {
 
+    // Taking the questionId from the route
     const questionId = req.params.questionId;
 
+    // Finding the question
     let questionFound;
     try{
+        // Allocating an array of answers into "questionFound.answers" through populate
         questionFound = await Question.findById(questionId).populate('answers');
     }catch(err){
         console.log(err);
         next(new HttpError('Something went wrong',500));
     }
 
+    // Throwing the error if the question is not found
     if(!questionFound){
         next(new HttpError("Question not found",500));
     }else if (questionFound.answers.length===0){
         return res.json({message:"No answers found of that question"});
     }
 
-    questionFound.answers.sort(compare)
+    // Sorting the array of answers according to their rating
+    questionFound.answers.sort(compare);
 
+    // Sending the answers as response
     res.json({answers:questionFound.answers.map((ans) => ans.toObject({getters:true}))});
     
 }
 
 const giveAnswer = async (req,res,next) => {
 
+    // Validating weather the input is correct or not 
     const error = validationResult(req);
-
     if(!error.isEmpty()){
         console.log(error.message);
         next(new HttpError('Invalid input.Please enter again',422));
     }
 
+    // Taking questionId from the route
     const questionId = req.params.questionId;
+
+    // Taking input from the body
     const { userId, answer , rating } = req.body;
 
     // Finding question by ID
@@ -63,16 +73,10 @@ const giveAnswer = async (req,res,next) => {
         next(new HttpError('Something went wrong',500));
     }
 
+    // Throwing error if the question was not found
     if(!questionFound){
         next(new HttpError("Question not found",500));
     }
-
-    const newAnswer = new Answer({
-        userId,
-        answer,
-        rating:rating || 0,
-        questionId:questionId
-    });
 
     // Finding User by ID
     let userFound;
@@ -83,9 +87,19 @@ const giveAnswer = async (req,res,next) => {
         next(new HttpError('Something went wrong',500));
     }
 
+    // Throwing error if the user was not found
     if(!userFound){
         next(new HttpError("User not found",500));
     }
+
+    // Making the answer instance
+    const newAnswer = new Answer({
+        userId,
+        userName:userFound.name,
+        answer,
+        rating:rating || 0,
+        questionId:questionId
+    });
 
     // Now storing the answer
     try{
@@ -109,6 +123,7 @@ const giveAnswer = async (req,res,next) => {
         next(new HttpError(err.message || 'Answer not saved',500));
     }
     
+    // Sending the answer as response
     res.json({answer:newAnswer.toObject({getters:true})});
 }
 
