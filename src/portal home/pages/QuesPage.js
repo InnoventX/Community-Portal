@@ -32,6 +32,8 @@ const QuesPage = () => {
     // Answer STATE used after adding other ANSWER
     const [ansGiven, setAnsGiven] = useState();
     const [submitAnswer , setSubmitAnswer] =  useState(false);
+
+    const [stopIncerement , setStopIncrement] = useState(false);
  
     // Showing POST ANSWER block
     const showPostSection = () => {
@@ -144,7 +146,7 @@ const QuesPage = () => {
             }
         }
         // Turning this state because we want to rerender the question with updation in answers array
-        setSubmitAnswer(true);
+        setSubmitAnswer(prevValue => !prevValue);
     }
 
     // Deleating the question
@@ -200,6 +202,26 @@ const QuesPage = () => {
         }
     }
 
+    const incrementRating = async (event) => {
+        // const answerId = event.target.name;
+        console.log(event.target.name);
+        // try{
+        //     const response = await fetch(`http://localhost:5000/api/answer/rating/${answerId}`,{
+        //         method:'PATCH'        
+        //     });
+        //     const responseData = await response.json();
+
+        //     if(responseData.message){
+        //         throw new Error(responseData.message);
+        //     }
+
+        //     setStopIncrement(true);
+        //     setSubmitAnswer(prevValue => !prevValue)
+        // }catch(err){
+        //     console.log(err);
+        //     setError(error);
+        // }
+    }
 
     return(
             <div className="question-container">
@@ -262,10 +284,18 @@ const QuesPage = () => {
                             <div className="answers-div">
                                 {   
                                     answers.map((ans) => {
+                                        
                                         return (
                                             <React.Fragment>
                                                 <h6>{ans.userName}</h6>
-                                                <button><StarBorderIcon style={{display:"inlineBlock"}}/></button>
+
+                                                {/* Showing the rating button to all the users who have not given this answer */}
+                                                { auth.userId !== ans.userId ? (
+                                                    <button className="" name={ans.id} disabled={stopIncerement} onClick={incrementRating}><StarBorderIcon style={{display:"inlineBlock"}}/></button>
+                                                ):null}
+                                                <p>Rating :- {ans.rating}</p>
+                            
+                                                {/* Showing the update & delete button if the user have given the answer */}
                                                 { auth.userId === ans.userId ? (
                                                     <React.Fragment>
                                                         <button className="update-btn" >UPDATE</button>
@@ -273,7 +303,7 @@ const QuesPage = () => {
                                                     </React.Fragment>
                                                     ):null
                                                 }
-                                                <p >Rating :- {ans.rating}</p>
+                            
                                                 <p className="answers">{ans.answer}</p>
                                                 <hr style={{width:"95%",margin:"0 auto"}}/>
                                             </React.Fragment>

@@ -47,7 +47,7 @@ const CatQuestions = ( ) =>  {
                 // Setting the error in frontend
                 setError(err.message);
             }
-            // Turning on the loading spinner after the data is received
+            // Turning off the loading spinner after the data is received
             setIsLoading(false);
         }
 

@@ -47,7 +47,7 @@ function PortalNavbar(){
                         { auth.isLogedIn && ( 
                             <React.Fragment>
                             <li className="nav-item">
-                                <NavLink to={`/userid/question`} className="nav-link" style={{color:"white"}}>My Ques</NavLink>
+                                <NavLink to={`/${auth.userId}/questions`} className="nav-link" style={{color:"white"}}>My Ques</NavLink>
                             </li>
 
                             <li className="nav-item">

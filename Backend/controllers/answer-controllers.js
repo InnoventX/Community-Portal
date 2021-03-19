@@ -167,6 +167,7 @@ const incrementRating = async (req,res,next) => {
 
     const answerId = req.params.answerId;
 
+    console.log(answerId);
     let answerFound;
     try{
         answerFound = await Answer.findById(answerId);
@@ -179,6 +180,7 @@ const incrementRating = async (req,res,next) => {
         next(new HttpError("Answer not found",500));
     }
 
+    console.log(answerFound);
     answerFound.rating += 1;
     try{
         await answerFound.save();
