@@ -5,6 +5,7 @@ import Categories from "../components/Categories";
 import QuesList from "../components/QuesList";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 
 function PortalHome(){
 
@@ -72,10 +73,7 @@ function PortalHome(){
             {error && (
                 <React.Fragment>
                     <Backdrop onClick={errorHandler} />
-                    <div className="show-error-section">
-                        <h1>Error Occured!</h1>
-                        <p>{error}</p>
-                    </div>
+                    <ErrorModal heading="Error Occured!" error={error} />
                 </React.Fragment>
             )}
                 

@@ -7,6 +7,7 @@ import Input from "../../shared/components/Input";
 import {useForm} from "../../shared/hoocks/form-hook";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 
 const UpdateQues = (props) => {
 
@@ -131,10 +132,7 @@ const UpdateQues = (props) => {
             {error && (
                 <React.Fragment>
                     <Backdrop onClick={errorHandler} />
-                    <div className="show-error-section">
-                        <h1>Error Occured!</h1>
-                        <p>{error}</p>
-                    </div>
+                    <ErrorModal heading="Error Occured!" error={error} />
                 </React.Fragment>
             )}
 

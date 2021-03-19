@@ -164,7 +164,6 @@ const updateQuestion = async (req,res,next) => {
     questionFound.title = title;
     questionFound.category = category;
     questionFound.wholeQuestion = wholeQuestion;
-    // Not perfet can be changed
     // questionFound.answers = [];
 
     // Saving the changes

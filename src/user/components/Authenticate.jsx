@@ -10,6 +10,8 @@ import {VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE} from "../../sha
 // import {useForm} from "../../shared/hoocks/form-hook";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+
 // This function will be called whenever we use "dispatch"
 const formReducer = ( state, action) => {
 
@@ -238,10 +240,7 @@ function Authenticate(){
             {error && (
                 <React.Fragment>
                     <Backdrop onClick={errorHandler} />
-                    <div className="show-error-section">
-                        <h1>Error Occured!</h1>
-                        <p>{error}</p>
-                    </div>
+                    <ErrorModal heading="Error Occured!" error={error} />
                 </React.Fragment>
             )} 
 

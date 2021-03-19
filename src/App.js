@@ -8,9 +8,9 @@ import PortalHome from "./portal home/pages/PortalHome";
 import QuesPage from "./portal home/pages/QuesPage";
 import CatQuestions from "./portal home/components/CatQuestions";
 import UserQuestions from "./portal home/components/UserQuestions";
-import NewQuestion from "./portal home/components/NewQuestion";
+import NewQuestion from "./portal home/pages/NewQuestion";
 import {AuthContext} from "./shared/context/AuthContext";
-import UpdateQues from "./portal home/components/UpdateQues";
+import UpdateQues from "./portal home/pages/UpdateQues";
 
 function App() {
 
