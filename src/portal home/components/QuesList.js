@@ -1,5 +1,4 @@
 // This component is responsible for rendering all the questions on the Portal's home page
-
 import React from 'react';
 
 import Question from "./Question";

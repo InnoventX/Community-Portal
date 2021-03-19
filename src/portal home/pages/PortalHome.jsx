@@ -82,6 +82,7 @@ function PortalHome(){
 
             {/* Showing Home page */}
             <div className="home">
+                {/* Showing all the categories */}
                 { !isLoading && allQuestions && (
                     <div className="left">
                         <Categories />

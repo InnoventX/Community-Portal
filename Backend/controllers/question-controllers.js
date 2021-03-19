@@ -50,10 +50,13 @@ const getQuestionById = async (req,res,next) => {
     
 }
 
+
 const getQuestionsByCategory = async (req,res,next) => {
 
+    // Taking the category from the route
     const category = req.params.category;
 
+    // Finding all the questions of that category
     let questionsFound;
     try{
         questionsFound = await Question.find({ category : category });
@@ -62,12 +65,12 @@ const getQuestionsByCategory = async (req,res,next) => {
         next(new HttpError('Something went wrong',500));
     }
 
+    // Sending the message if the questions were not found
     if(!questionsFound || questionsFound.length === 0){
         return res.json({message:"No questions of mentioned category"});
     }
 
-    res.json({questions:questionsFound.map((ques) => ques.toObject({getters:true}))});
-    
+    res.json({questions:questionsFound.map((ques) => ques.toObject({getters:true}))}); 
 }
 
 const newQuestion = async (req,res,next) => {

@@ -1,6 +1,6 @@
 // This component is responsible for rendering the question block on Portal's home page
 
-import React,{useEffect,useState} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
