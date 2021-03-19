@@ -11,13 +11,14 @@ import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 
 const QuesPage = () => {
 
+    // Using history to get redirected to "/" route if the question is deleted
     const history = useHistory();
 
     // For components which shoul be rendered when the user is authenticated
     const auth = useContext(AuthContext);
 
-    // State to render delete modal
-    const [deleteSection , setDeleteSection] = useState(false);
+    // State to render delete modal for question & answer
+    const [deleteSection , setDeleteSection] = useState();
 
     // Getting QuestionID from the route
     const quesId = useParams().quesID;
@@ -52,13 +53,15 @@ const QuesPage = () => {
     }
 
     // Showing delete section
-    const showDeleteSection = () => {
-        setDeleteSection(true);
+    const showDeleteSection = (event) => {
+        // event.target.name will contain the name which shoul be deleted( Question 0r Answer )
+        const commingFrom = event.target.name;
+        setDeleteSection(commingFrom);
     }
 
     // Closing delete section
     const cancleShowDeleteSection = () => {
-        setDeleteSection(false);
+        setDeleteSection(null);
     }
 
     // Setting error to null after we click the screen
@@ -145,7 +148,7 @@ const QuesPage = () => {
     }
 
     // Deleating the question
-    const deleteTheQuestion = async () => {
+    const deleteQuestion = async () => {
 
         // Sending Request to delete the question 
         try{
@@ -169,6 +172,34 @@ const QuesPage = () => {
         }
     }
 
+    // Deleting the answer
+    const deleteAnswer = async (event) => {
+        
+        // Getting answerId by the button name which triggers the event
+        const answerId = event.target.name;
+
+        // Sending the delete request
+        try{
+            const response = await fetch(`http://localhost:5000/api/answer/${answerId}`,{
+                method:'DELETE'
+            });
+            const responseData = await response.json();
+            
+            // Rerendering this page by changing the submitAnswer state so that useEffect will be triggered after deleting answer
+            if(responseData.message === 'Deleted successfully'){
+                setDeleteSection(null);
+                setSubmitAnswer(prevValue => !prevValue);
+            }else{
+                // Throwing error comming from backend
+                throw new Error(responseData.message);
+            }
+        }catch(err){
+            console.log(err);
+            //Seting error in frontend
+            setError(err.message);
+        }
+    }
+
 
     return(
             <div className="question-container">
@@ -188,20 +219,22 @@ const QuesPage = () => {
                 {!isLoading && question && (
                     <React.Fragment>
 
-                        {/* Showing Delet Section or Modal  */}
+                        {/* Showing Delete Section when the button is clicked */}
                         { deleteSection && (
                             <React.Fragment>
                                 <Backdrop onClick={errorHandler} />
                                 <div className="show-delete-section">
                                     <h1>Are You Sure?</h1>
-                                    <p>Do you want delete your?</p>
-                                    <button onClick={deleteTheQuestion}>DELETE</button>
+                                    <p>Do you want to delete your { deleteSection === "question" ? "question" : "answer" }</p>
+
+                                    {/* Checking which is to be deleted question or answer */}
+                                    <button onClick={deleteSection === "question" ? deleteQuestion : deleteAnswer} name={deleteSection}>DELETE</button>
                                     <button onClick={cancleShowDeleteSection}>CANCLE</button>
                                 </div>
                             </React.Fragment>
                         )}
 
-                        {/* Showing the student's details who had asked the question */}
+                        {/* Showing the Student's details who had asked the question */}
                         <React.Fragment>
                             <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
                             <h6 className="student-name">{question.userName}</h6>
@@ -214,7 +247,7 @@ const QuesPage = () => {
                                     <button className="update-btn" >UPDATE</button>
                                 </Link>
 
-                                <button className="delete-btn" onClick={showDeleteSection}>DELETE</button>
+                                <button className="delete-btn" name="question" onClick={showDeleteSection}>DELETE</button>
                             </React.Fragment>
                             ): null
                         }
@@ -228,11 +261,18 @@ const QuesPage = () => {
                         {answers && (
                             <div className="answers-div">
                                 {   
-                                    answers.map((ans,index) => {
+                                    answers.map((ans) => {
                                         return (
                                             <React.Fragment>
                                                 <h6>{ans.userName}</h6>
                                                 <button><StarBorderIcon style={{display:"inlineBlock"}}/></button>
+                                                { auth.userId === ans.userId ? (
+                                                    <React.Fragment>
+                                                        <button className="update-btn" >UPDATE</button>
+                                                        <button className="delete-btn" name={ans.id} onClick={showDeleteSection}>DELETE</button>
+                                                    </React.Fragment>
+                                                    ):null
+                                                }
                                                 <p >Rating :- {ans.rating}</p>
                                                 <p className="answers">{ans.answer}</p>
                                                 <hr style={{width:"95%",margin:"0 auto"}}/>

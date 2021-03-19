@@ -192,8 +192,10 @@ const incrementRating = async (req,res,next) => {
 
 const deleteAnswer = async (req,res,next) => {
 
+    // Getting answerId by route
     const answerId = req.params.answerId;
 
+    // Finding the answer and it's respective question
     let answerFound;
     try{
         // Now we can access question by "answerFound.questionId"
@@ -203,12 +205,14 @@ const deleteAnswer = async (req,res,next) => {
         next(new HttpError('Something went wrong',500));
     }
 
+    // Throwing error if the answer is not found
     if(!answerFound){
         next(new HttpError('Answer not found',500));
     }else if(!answerFound.questionId){
         next(new HttpError("Question of this qnswer was not found",500));
     }
 
+    // Finding the user who has given this answer
     let answerGivenBy;
     try{
         answerGivenBy =  await User.findById(answerFound.userId);
@@ -217,10 +221,12 @@ const deleteAnswer = async (req,res,next) => {
         next(new HttpError('Something went wrong',500));
     }
 
+    // Throwing error if the user is not found
     if(!answerGivenBy){
         next(new Http("User was not found who has given the answer"));
     }
 
+    // Removing the answer and it's id from the question and user's array
     try{
         const sess = await mongoose.startSession();
         sess.startTransaction();

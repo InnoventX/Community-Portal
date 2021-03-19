@@ -23,6 +23,9 @@ const getAllQuestions =async (req,res,next) => {
         return res.json({message:"No questions found"});
     }
 
+    // Reversing the sequence of questions
+    questions.reverse();
+
     res.json({questions:questions.map((ques) => ques.toObject({getters:true}))});
     
 }
@@ -50,7 +53,6 @@ const getQuestionById = async (req,res,next) => {
     
 }
 
-
 const getQuestionsByCategory = async (req,res,next) => {
 
     // Taking the category from the route
@@ -69,6 +71,9 @@ const getQuestionsByCategory = async (req,res,next) => {
     if(!questionsFound || questionsFound.length === 0){
         return res.json({message:"No questions of mentioned category"});
     }
+
+    // Reversing the sequence of questions
+    questionsFound.reverse();
 
     res.json({questions:questionsFound.map((ques) => ques.toObject({getters:true}))}); 
 }
