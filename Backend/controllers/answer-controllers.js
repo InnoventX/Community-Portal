@@ -37,15 +37,16 @@ const getAnswersByQuestionId = async (req,res,next) => {
     // Throwing the error if the question is not found
     if(!questionFound){
         next(new HttpError("Question not found",500));
-    }else if (questionFound.answers.length===0){
-        return res.json({message:"No answers found of that question"});
+    }
+    else if (questionFound.answers.length===0){
+        return res.json({question:questionFound.toObject({getters:true}),message:"No answers found of that question"});
     }
 
     // Sorting the array of answers according to their rating
     questionFound.answers.sort(compare);
 
-    // Sending the answers as response
-    res.json({answers:questionFound.answers.map((ans) => ans.toObject({getters:true}))});
+    // Sending the question and answers as response
+    res.json({question:questionFound.toObject({getters:true}),answers:questionFound.answers.map((ans) => ans.toObject({getters:true}))});
     
 }
 
@@ -165,9 +166,10 @@ const updateAnswer = async (req,res,next) => {
 
 const incrementRating = async (req,res,next) => {
 
+    // Taking answerId from the route
     const answerId = req.params.answerId;
 
-    console.log(answerId);
+    // Getting the answer which should be updated
     let answerFound;
     try{
         answerFound = await Answer.findById(answerId);
@@ -176,12 +178,14 @@ const incrementRating = async (req,res,next) => {
         next(new HttpError('Something went wrong',500));
     }
 
+    // Throwing error if the answer is not found
     if(!answerFound){
         next(new HttpError("Answer not found",500));
     }
 
-    console.log(answerFound);
+    // Incrementing the rating by 1
     answerFound.rating += 1;
+    // Saving the updated answer
     try{
         await answerFound.save();
     }catch(err){

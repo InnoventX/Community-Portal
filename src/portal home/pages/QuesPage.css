@@ -43,6 +43,18 @@
     width: 100px;
 }
 
+.show-more-btn{
+  border-radius: 28px;
+  background-color:yellow;
+  color:black;
+  font-size: 1.2rem;
+  border: none;
+  outline: none;
+  padding:auto 0.4%;
+  width: 10%;
+  margin-top: 1%;
+  margin-left:45%;
+}
   .give-ans-btn{
     border-radius: 28px;
     background-color: #4CD964;

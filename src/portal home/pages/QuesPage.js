@@ -23,7 +23,7 @@ const QuesPage = () => {
     // Getting QuestionID from the route
     const quesId = useParams().quesID;
 
-    // State which are used in this page
+    // State which are used to store data from "GET question request" 
     const [question,setQuestion] = useState();
     const [answers , setAnswers] = useState();
     const [error, setError] = useState();
@@ -33,11 +33,13 @@ const QuesPage = () => {
     const [ansGiven, setAnsGiven] = useState();
     const [submitAnswer , setSubmitAnswer] =  useState(false);
 
+    // State fro handle increment of rating for answers
     const [stopIncerement , setStopIncrement] = useState(false);
- 
+
+    const [showAllAnswers,setShowAllAnswers] = useState(false);
+
     // Showing POST ANSWER block
     const showPostSection = () => {
-
         // It will display the GiveAnswer block when we chick the button and hide when we again click it.
         const postDiv = document.querySelector(".post-ans-div");
         if(postDiv.style.display === "none"){
@@ -71,6 +73,15 @@ const QuesPage = () => {
         setError(null);
     }
 
+    // When user clicks "show more" button
+    const handleShowAllAnswers = () => {
+        // Now stop displaying the button
+        const btn = document.querySelector(".show-more-btn");
+        btn.style.display="none";
+        // switching the state to show all answers
+        setShowAllAnswers(true);
+    }
+
     // Using useEffect hoock which renders question and it's answers,this should only be rendered when submitAnswer changes.  
     useEffect(() => {
 
@@ -81,27 +92,17 @@ const QuesPage = () => {
                 // Showing the loading spinner
                 setIsLoading(true);
 
-                // Getting the question from the backend api
-                const getQuestion = await fetch(`http://localhost:5000/api/question/${quesId}`);
-                const responseDataOfQuestion = await getQuestion.json();
+                // Getting question & all the answers of that perticular question
+                const response = await fetch(`http://localhost:5000/api/answer/${quesId}`);
+                const responseData = await response.json();
 
-                if(responseDataOfQuestion.message){
-                    throw new Error(responseDataOfQuestion.message);
+                if(responseData.message && responseData.message!=="No answers found of that question"){
+                    throw new Error(responseData.message);
                 }
 
                 // Assigning the backend responce to the frontend states
-                setQuestion(responseDataOfQuestion.question);
-
-                // Getting all the answers of that perticular question
-                const getAnswers = await fetch(`http://localhost:5000/api/answer/${quesId}`);
-                const responseDataOfAnswers = await getAnswers.json();
-
-                if(responseDataOfAnswers.message && responseDataOfAnswers.message!=="No answers found of that question"){
-                    throw new Error(responseDataOfAnswers.message);
-                }
-
-                // Assigning the backend responce to the frontend states
-                setAnswers(responseDataOfAnswers.answers);
+                setQuestion(responseData.question);
+                setAnswers(responseData.answers);
                 
             }catch(err){
                 console.log(err);
@@ -202,25 +203,31 @@ const QuesPage = () => {
         }
     }
 
-    const incrementRating = async (event) => {
-        // const answerId = event.target.name;
-        console.log(event.target.name);
-        // try{
-        //     const response = await fetch(`http://localhost:5000/api/answer/rating/${answerId}`,{
-        //         method:'PATCH'        
-        //     });
-        //     const responseData = await response.json();
+    // Increments the rating of a particular answer
+    const incrementRating = async (answerId) => {
+        
+        // Sending update request to increment rating
+        try{
+            const response = await fetch(`http://localhost:5000/api/answer/rating/${answerId}`,{
+                method:'PATCH'        
+            });
+            const responseData = await response.json();
 
-        //     if(responseData.message){
-        //         throw new Error(responseData.message);
-        //     }
+            // Throwing error comming from backend
+            if(responseData.message){
+                throw new Error(responseData.message);
+            }
 
-        //     setStopIncrement(true);
-        //     setSubmitAnswer(prevValue => !prevValue)
-        // }catch(err){
-        //     console.log(err);
-        //     setError(error);
-        // }
+            // A user is only allowed to increment the rating once so after incrementation disableing the button
+            setStopIncrement(true);
+
+            // Rerendering the question again by sending the question request from useEffect
+            setSubmitAnswer(prevValue => !prevValue)
+        }catch(err){
+            console.log(err);
+            // Setting error in frontend
+            setError(error);
+        }
     }
 
     return(
@@ -248,7 +255,6 @@ const QuesPage = () => {
                                 <div className="show-delete-section">
                                     <h1>Are You Sure?</h1>
                                     <p>Do you want to delete your { deleteSection === "question" ? "question" : "answer" }</p>
-
                                     {/* Checking which is to be deleted question or answer */}
                                     <button onClick={deleteSection === "question" ? deleteQuestion : deleteAnswer} name={deleteSection}>DELETE</button>
                                     <button onClick={cancleShowDeleteSection}>CANCLE</button>
@@ -268,7 +274,6 @@ const QuesPage = () => {
                                 <Link to={`/${quesId}/update`}>
                                     <button className="update-btn" >UPDATE</button>
                                 </Link>
-
                                 <button className="delete-btn" name="question" onClick={showDeleteSection}>DELETE</button>
                             </React.Fragment>
                             ): null
@@ -283,41 +288,81 @@ const QuesPage = () => {
                         {answers && (
                             <div className="answers-div">
                                 {   
-                                    answers.map((ans) => {
-                                        
-                                        return (
-                                            <React.Fragment>
-                                                <h6>{ans.userName}</h6>
-
-                                                {/* Showing the rating button to all the users who have not given this answer */}
-                                                { auth.userId !== ans.userId ? (
-                                                    <button className="" name={ans.id} disabled={stopIncerement} onClick={incrementRating}><StarBorderIcon style={{display:"inlineBlock"}}/></button>
-                                                ):null}
-                                                <p>Rating :- {ans.rating}</p>
-                            
-                                                {/* Showing the update & delete button if the user have given the answer */}
-                                                { auth.userId === ans.userId ? (
-                                                    <React.Fragment>
-                                                        <button className="update-btn" >UPDATE</button>
-                                                        <button className="delete-btn" name={ans.id} onClick={showDeleteSection}>DELETE</button>
-                                                    </React.Fragment>
-                                                    ):null
-                                                }
-                            
-                                                <p className="answers">{ans.answer}</p>
-                                                <hr style={{width:"95%",margin:"0 auto"}}/>
-                                            </React.Fragment>
-                                        )
+                                    answers.map((ans,index) => {
+                                        if(!showAllAnswers && index<3){
+                                            return (
+                                                <React.Fragment>
+                                                    <h6>{ans.userName}</h6>
+                                    
+                                                    {/* Showing the rating button to all the users who have not given this answer */}
+                                                    { auth.userId !== ans.userId ? (
+                                                        <button disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}}><StarBorderIcon style={{display:"inlineBlock"}}/></button>
+                                                    ):null}
+                                                    <p>Rating :- {ans.rating}</p>
+                                    
+                                                    {/* Showing the update & delete button if the user have given the answer */}
+                                                    { auth.userId === ans.userId ? (
+                                                        <React.Fragment>
+                                                            <button className="update-btn" >UPDATE</button>
+                                                            <button className="delete-btn" name={ans.id} onClick={showDeleteSection}>DELETE</button>
+                                                        </React.Fragment>
+                                                        ):null
+                                                    }
+                                    
+                                                    <p className="answers">{ans.answer}</p>
+                                                    <hr style={{width:"95%",margin:"0 auto"}}/>
+                                                </React.Fragment>
+                                            )
+                                        }
+                                        else if(showAllAnswers){
+                                            return (
+                                                <React.Fragment>
+                                                    <h6>{ans.userName}</h6>
+                                                    {/* Rating button will not be showen to the user who hass given the answer */}
+                                                    { auth.userId !== ans.userId ? (
+                                                        <button disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}}><StarBorderIcon style={{display:"inlineBlock"}}/></button>
+                                                    ):null}
+                                                    <p>Rating :- {ans.rating}</p>
+                                    
+                                                    {/* Showing the update & delete button if the user have given the answer */}
+                                                    { auth.userId === ans.userId ? (
+                                                        <React.Fragment>
+                                                            <button className="update-btn" >UPDATE</button>
+                                                            <button className="delete-btn" name={ans.id} onClick={showDeleteSection}>DELETE</button>
+                                                        </React.Fragment>
+                                                        ):null
+                                                    }
+                                                    <p className="answers">{ans.answer}</p>
+                                                    <hr style={{width:"95%",margin:"0 auto"}}/>
+                                                </React.Fragment>
+                                            )
+                                        }   
                                     })
                                 }
                             </div>
-                        )}       
+                        )}
 
-                        {/* Allowing the user to give answer only if he is authenticated */}
-                        { auth.isLogedIn && (
+                        {/* Show more and Give answers options if the user is authenticated */}
+                        { auth.isLogedIn ? (
+                            <React.Fragment>
+                                {/* If there are more then 3 answers then displaying show more option */}
+                                {answers && ((answers.length>3) ? (
+                                    <button className="show-more-btn" onClick={handleShowAllAnswers}>Show more</button>
+                                ):null)}
+
+                                {/* Displaying give answer option to give answer */}
                                 <button className="give-ans-btn" onClick={() => {
                                     showPostSection()
                                 }}>Give Answer</button>
+                            </React.Fragment>
+                            ):(
+                            <React.Fragment>
+                                {/* This will redirect the users to authentication page because they are not logged in */}
+                                {answers && ((answers.length>3) ? (
+                                    <button className="show-more-btn"><a href="/authenticate">Show more</a></button>
+                                ):null)}
+                                <button className="give-ans-btn"><a href="/authenticate">Give Answer</a></button>
+                                </React.Fragment>
                             )
                         }
 
