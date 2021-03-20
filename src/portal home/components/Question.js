@@ -13,8 +13,10 @@ const Question = (props) => {
                 <div className="question-container">
                 <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
                 <h6 className="student-name">{props.userName}</h6>
+                <p>Category :- {props.category}</p>
                 <h4 className="question-title">{props.title}</h4>
-                <p>{props.wholeQuestion.substring(0,100) + '...'}</p>
+                <p>{props.wholeQuestion.substring(0,100) + '... read more'}</p>
+                <h6>{props.answers.length} Answers</h6>
                 </div>
             </Link>
         </React.Fragment>
