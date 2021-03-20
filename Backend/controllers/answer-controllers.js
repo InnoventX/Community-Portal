@@ -42,6 +42,9 @@ const getAnswersByQuestionId = async (req,res,next) => {
         return res.json({question:questionFound.toObject({getters:true}),message:"No answers found of that question"});
     }
 
+    // First reversing the array so that latest question comes first 
+    questionFound.answers.reverse();
+
     // Sorting the array of answers according to their rating
     questionFound.answers.sort(compare);
 
