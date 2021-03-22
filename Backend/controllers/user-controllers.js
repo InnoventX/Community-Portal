@@ -119,6 +119,27 @@ const login = async (req,res,next) => {
     res.json({user:userFound.toObject({getters:true})});
 }
 
+const saveAnswer = async (req,res,next) => {
+
+    // Getting userId and answerId from the route
+    const userId = req.params.userId;
+    const answerId = req.params.answerId;
+
+    // finding the user and his saved answers
+    let userFound; 
+    try{
+        userFound = await User.findById(userId);
+        userFound.savedAnswers.push(answerId);
+        await userFound.save();
+    }catch(err){
+        console.log(err);
+        next(new HttpError('Something went wrong',500));
+    }
+
+    res.json({user:userFound});
+}
+
+
 const getQuestionByUserId = async (req,res,next) => {
 
     // Taking userId by route
@@ -185,24 +206,6 @@ const getAnswersByUserId = async (req,res,next) => {
 
     // res.json({answers: userFound.answers.map((ans) => ans.toObject({getters:true}))});
 }
-
-const saveAnswer = async (req,res,next) => {
-    const userId = req.params.userId;
-    const answerId = req.params.answerId;
-
-    let userFound; 
-    try{
-        userFound = await User.findById(userId).populate('savedAnswers');
-        userFound.savedAnswers.push(answerId);
-        userFound.save();
-    }catch(err){
-        console.log(err);
-        next(new HttpError('Something went wrong',500));
-    }
-
-    res.json({user:userFound});
-}
-
 
 const getSavedAnswers = async (req,res,next) => {
     
