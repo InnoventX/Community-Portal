@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import {useParams} from 'react-router-dom';
+import {useParams,Link} from 'react-router-dom';
 
-import "./UserQuestions.css";
-import QuesList from './QuesList';
-import Categories from './Categories';
+import "./UserAnswers.css";
+import Categories from '../components/Categories';
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 
-const UserQuestions = () => {
+const UserAnswers = () => {
+
+    // Getting userId from the route
     const userId = useParams().userId;
 
-    // State for storing all the questions of the given category
-    const [userQuestions , setUserQuestions] = useState();
+    // State for storing all the answers and respective question
+    const [quesAns , setQuesAns] = useState();
 
     // State for Loading spinner & Error model
     const [isLoading , setIsLoading] = useState(false);
@@ -30,16 +31,16 @@ const UserQuestions = () => {
             try{
                 // Turning on the loading spinner
                 setIsLoading(true);
-                const response = await fetch(`http://localhost:5000/api/user/${userId}/questions`);
+                const response = await fetch(`http://localhost:5000/api/user/${userId}/answers`);
                 const responseData = await response.json();
 
                 // Throwing error comming from backend
-                if(responseData.message && responseData.message !== "No questions found"){
+                if(responseData.message){
                     throw new Error(responseData.message);
                 }
 
-                // Storing the user questions in our State
-                setUserQuestions(responseData.questions);
+                // Storing the user question and asnwers in our State
+                setQuesAns(responseData.quesAns);
             }catch(err){
                 console.log(err);
                 // Setting the error in frontend
@@ -65,15 +66,28 @@ const UserQuestions = () => {
             {/* Showing Loading spinner */}
             {isLoading && <LoadingSpinner asOverlay />}
 
-            {/* Showing the user questions after the data is received from backend */}
+            {/* Showing the user answers with respective questions after the data is received from backend */}
             { !isLoading && (
                 <div className="home">
                     <div className="left">
                         <Categories />
                     </div>
                     <div className="right">
-                        { userQuestions && <QuesList allQuestions={userQuestions} /> }
-                        { !userQuestions && <h1>No questios of this category available</h1>}
+                        { quesAns && (
+                            quesAns.map(qa => {
+                                return(
+                                    <Link to={`/ques/${qa.question._id}`}>
+                                        <div className="container">
+                                            <p>{qa.question.userName}</p>
+                                            <h1>{qa.question.title}</h1>
+                                            <p>{qa.ans.userName}'s Answer:- </p>
+                                            <h5>{qa.ans.answer}</h5>
+                                        </div>
+                                    </Link>
+                                )
+                            })
+                        )}
+                        { !quesAns && <h1>No questios of this category available</h1>}
                     </div>
                 </div>
             )}
@@ -81,4 +95,4 @@ const UserQuestions = () => {
     );
 }
 
-export default UserQuestions;
+export default UserAnswers;

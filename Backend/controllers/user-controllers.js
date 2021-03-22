@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 
 // User Model
 const User = require("../models/user-model");
+const Question = require('../models/question-model');
 // Own Error Class
 const HttpError = require("../util/http-error-message");
 // For validiting the inputs comming to the post api
@@ -119,8 +120,10 @@ const login = async (req,res,next) => {
 
 const getQuestionByUserId = async (req,res,next) => {
 
+    // Taking userId by route
     const userId = req.params.userId;
 
+    // Finding the users & his questions
     let userFound;
     try{
         // Now we can access question of user by userFound.questions
@@ -130,6 +133,7 @@ const getQuestionByUserId = async (req,res,next) => {
         next(new HttpError('Something went wrong',500));
     }
 
+    // Throwing error if the user doesnot exixts
     if(!userFound){
         next(new HttpError('User not found',500));
     }
@@ -142,8 +146,10 @@ const getQuestionByUserId = async (req,res,next) => {
 
 const getAnswersByUserId = async (req,res,next) => {
 
+    // Taking userId by route
     const userId = req.params.userId;
 
+    // Finding the users & his answers
     let userFound;
     try{
         userFound = await User.findById(userId).populate('answers');
@@ -152,11 +158,30 @@ const getAnswersByUserId = async (req,res,next) => {
         next(new HttpError('Something went wrong',500));
     }
     
-    if(!userFound || userFound.answers.length === 0){
+    // Throwing error if the user doesnot exixts
+    if(!userFound){
         res.json({message:"No answers are given by user"});
     }
 
-    res.json({answers: userFound.answers.map((ans) => ans.toObject({getters:true}))});
+    // Getting the questions of those answers which was given by user
+    let array = [];
+    userFound.answers.forEach( async (ans,index) => {
+        let question;
+        try{
+            question = await Question.findById(ans.questionId);
+        }catch(err){
+            console.log(err);
+            next(new HttpError('Something went wrong',500));
+        }
+        array.push({question,ans});
+
+        if(index === userFound.answers.length-1){
+            res.json({quesAns:array});
+        }
+        
+    })
+
+    // res.json({answers: userFound.answers.map((ans) => ans.toObject({getters:true}))});
 }
 
 exports.signup = signup;

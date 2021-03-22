@@ -24,4 +24,5 @@ router.get("/:userId/questions", userControllers.getQuestionByUserId);
 
 router.get("/:userId/answers", userControllers.getAnswersByUserId);
 
+
 module.exports = router;

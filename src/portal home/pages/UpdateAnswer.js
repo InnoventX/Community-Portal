@@ -14,7 +14,7 @@ const UpdateAnswer = (props) => {
     // Using useHistory hook to go to the question page after updation
     const history = useHistory();
 
-    // Taking quesId from the route
+    // Taking answerId from the route
     const answerId = useParams().answerId;
 
     // State for Loading Spinner and Error model
@@ -32,21 +32,21 @@ const UpdateAnswer = (props) => {
         false
     );
 
-    // Sending the fetcg get request to get the data of the question
+    // Sending the fetch get request to get the data of the answer
     useEffect(() => {
         const sendRequest = async () => {
             try{
                 // Turning on the loading spinner
                 setIsLoading(true);
 
-                // Sending get request for question
+                // Sending get request for answer data
                 const response = await fetch(`http://localhost:5000/api/answer/getAnswer/${answerId}`);
                 const responseData = await response.json();
                 if(responseData.message){
                     throw new Error(responseData.message);
                 }
 
-                // After getting the question data we have to update our formState
+                // After getting the answer data we have to update our formState
                 setFormData(
                     {
                         answer:{
@@ -75,7 +75,7 @@ const UpdateAnswer = (props) => {
         // Preventing the default after clicking the button
         event.preventDefault();
      
-        // Sending the Patch request with old question details to update the question 
+        // Sending the Patch request with old answer details to update the answer 
         try{
             const response = await fetch(`http://localhost:5000/api/answer/${answerId}`,{
                 method: 'PATCH',
@@ -123,7 +123,7 @@ const UpdateAnswer = (props) => {
 
             { !isLoading && (
                 <form onSubmit={submitHandler}>
-                    {/* Taking category of question as input */}
+                    {/* Taking answer as input */}
                     <Input 
                         id="answer"
                         element="textarea"

@@ -12,6 +12,7 @@ import NewQuestion from "./portal home/pages/NewQuestion";
 import {AuthContext} from "./shared/context/AuthContext";
 import UpdateQues from "./portal home/pages/UpdateQues";
 import UpdateAnswer from "./portal home/pages/UpdateAnswer";
+import UserAnswers from "./portal home/pages/UserAnswers";
 
 function App() {
 
@@ -97,6 +98,11 @@ function App() {
           {/*  User ( Questions asked By User )  */}
           <Route path="/:userId/questions" exact>
             <UserQuestions />
+          </Route>
+
+          {/*  User ( Answers given By User )  */}
+          <Route path="/:userId/answers" exact>
+            <UserAnswers />
           </Route>
 
           <Redirect to="/" />
