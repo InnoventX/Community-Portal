@@ -132,8 +132,11 @@ const giveAnswer = async (req,res,next) => {
 }
 
 const getAnswerById = async (req,res,next) => {
+
+    // Taking answerId from the route
     const answerId = req.params.answerId;
 
+    // Finding the answer by it;s id
     let answerFound;
     try{
         answerFound = await Answer.findById(answerId);
@@ -147,16 +150,19 @@ const getAnswerById = async (req,res,next) => {
 
 const updateAnswer = async (req,res,next) => {
 
+    // Validating the input comming from body
     const error = validationResult(req);
-
     if(!error.isEmpty()){
         console.log(error.message);
         next(new HttpError('Invalid input.Please enter again',422));
     }
 
+    // Taking answer ID from th route
     const answerId = req.params.answerId;
+    // Taking updated data from the body
     const {answer} = req.body;
 
+    // Finding the answrr of the given ID
     let answerFound;
     try{
         answerFound = await Answer.findById(answerId);
@@ -165,12 +171,15 @@ const updateAnswer = async (req,res,next) => {
         next(new Http('Something went worng',500));
     }
     
+    // Throwing the error if the answer is not found
     if(!answerFound){
         next(new HttpError('Answer not found',500));
     }
 
+    // Updating the answer 
     answerFound.answer = answer;
 
+    // Saving the answer
     try{
         await answerFound.save();
     }catch(err){

@@ -1,7 +1,8 @@
 import React,{useState,useContext} from 'react';
 import {NavLink} from 'react-router-dom';
 
-import logo from '../../photos/logo.png';
+import ask from '../../photos/ask-add.svg';
+import logo from '../../photos/logo.svg';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import "./PortalNavbar.css";
@@ -21,24 +22,27 @@ function PortalNavbar(){
         alert("Search: " + search);
         setSearch("");
     }
-
+ 
     return(
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark">
-                <a className="navbar-brand" href="#"><img className="logo" src={logo} />InnoventX</a>
+            <a className="navbar-brand" href="#">
+                <img className="logo" src={logo} alt="logo" />
+                <span style={{color: "red"}}>I</span>NNOVENT<span style={{color: "red"}}>X</span>
+            </a>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav ml-auto">
+                <div className="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                    <ul className="nav nav-pills justify-content-right">
                         <li className="nav-item">
-                            <NavLink to="/" className="nav-link" style={{color:"white"}}>Home</NavLink>
+                            <NavLink to="/" className="nav-link" exact>Home</NavLink>
                         </li>
 
                         { !auth.isLogedIn && (  
                             <li className="nav-item">
                                 <div className="portal-div">
-                                    <NavLink to="/authenticate" className="nav-link"><p className="portal-link">Portal</p></NavLink>
+                                    <NavLink to="/authenticate" className="nav-link PORTAL">Portal</NavLink>
                                 </div>
                             </li>
                             )
@@ -47,7 +51,7 @@ function PortalNavbar(){
                         { auth.isLogedIn && ( 
                             <React.Fragment>
                             <li className="nav-item">
-                                <NavLink to={`/${auth.userId}/questions`} className="nav-link" style={{color:"white"}}>My Ques</NavLink>
+                                <NavLink to={`/${auth.userId}/questions`} className="nav-link">My Ques</NavLink>
                             </li>
 
                             <li className="nav-item">
@@ -60,13 +64,13 @@ function PortalNavbar(){
                             </li>
                             
                             <li className="nav-item">
-                                <NavLink to="/question/new">
-                                    <div className="ask-div">ASK</div>
+                                <NavLink to="/question/new" style={{textDecoration:"none"}} className="nav-link">
+                                    <img className="ask-button" src={ask}></img>ASK
                                 </NavLink>
                             </li>
 
                             <li className="nav-item">
-                                <NavLink to="/" className="nav-link"><AccountCircleIcon style={{color:"#4CD9D9",fontSize:"2.3rem",marginLeft:"0"}} /></NavLink>
+                                <NavLink to="/" className="PROFILE"><AccountCircleIcon style={{fontSize:"2.3rem",marginLeft:"2", marginTop:"8"}} /></NavLink>
                             </li>
                             </React.Fragment>
                             )
@@ -78,6 +82,4 @@ function PortalNavbar(){
     )
 }
 
-
 export default PortalNavbar;
-

@@ -310,6 +310,11 @@ const QuesPage = () => {
                                                         </React.Fragment>
                                                         ):null
                                                     }
+
+                                                    {/* To save the answer in users database */}
+                                                    {auth.userId !== ans.userId && (
+                                                        <button>SAVE</button>
+                                                    )}
                                     
                                                     <p className="answers">{ans.answer}</p>
                                                     <hr style={{width:"95%",margin:"0 auto"}}/>
@@ -329,11 +334,19 @@ const QuesPage = () => {
                                                     {/* Showing the update & delete button if the user have given the answer */}
                                                     { auth.userId === ans.userId ? (
                                                         <React.Fragment>
-                                                            <button className="update-btn" >UPDATE</button>
+                                                            <Link to={`/update/${ans.id}`}>
+                                                                <button className="update-btn" >UPDATE</button>
+                                                            </Link>
                                                             <button className="delete-btn" name={ans.id} onClick={showDeleteSection}>DELETE</button>
                                                         </React.Fragment>
                                                         ):null
                                                     }
+                                                    
+                                                    {/* To save the answer in users database */}
+                                                    {auth.userId !== ans.userId && (
+                                                        <button>SAVE</button>
+                                                    )}
+
                                                     <p className="answers">{ans.answer}</p>
                                                     <hr style={{width:"95%",margin:"0 auto"}}/>
                                                 </React.Fragment>

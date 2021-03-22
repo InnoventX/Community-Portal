@@ -3,22 +3,27 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import answer from '../../photos/answer.svg';
 
 import "./Question.css";
 
 const Question = (props) => {
     return(
         <React.Fragment>
-            <Link to={`/ques/${props.id}`} style={{textDecoration:"none"}}>
+            
                 <div className="question-container">
-                <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
-                <h6 className="student-name">{props.userName}</h6>
-                <p>Category :- {props.category}</p>
-                <h4 className="question-title">{props.title}</h4>
-                <p>{props.wholeQuestion.substring(0,100) + '... read more'}</p>
-                <h6>{props.answers.length} Answers</h6>
+                    <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
+                    <h6 className="student-name">{props.userName}</h6>
+                    <h6 className="category">{props.category}</h6>
+                    <h4 className="question-title">{props.title}</h4>
+                    <p className="read-more">{props.wholeQuestion.substring(0,120)}
+                        <Link to={`/ques/${props.id}`} style={{textDecoration:"none"}}> ...(read more)</Link>
+                    </p>
+                    
+                    <Link to={`/ques/${props.id}`} style={{textDecoration:"none"}}>
+                            <button className="btn btn-warning"><img className="answer-img" src={answer} style={{width:"20%", height:"20%", float: "none"}}></img><u style={{marginLeft:"4%"}}> {props.answers.length} Answers</u></button>
+                    </Link>                
                 </div>
-            </Link>
         </React.Fragment>
 
     );

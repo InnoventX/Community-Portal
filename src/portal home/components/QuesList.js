@@ -9,7 +9,7 @@ const QuesList = (props) => {
 
     return(
         <React.Fragment>
-            <h6 className="answers-heading">QUESTIONS</h6>
+            <h6 className="answers-heading">FEED</h6>
             <hr/>
             {
                 props.allQuestions.map((question) => {
