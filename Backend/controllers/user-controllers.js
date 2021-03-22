@@ -57,7 +57,8 @@ const signup = async (req,res,next) => {
         email:email,
         password:password,
         questions:[],
-        answers:[]
+        answers:[],
+        savedAnswers:[]
     });
 
     try{
@@ -160,32 +161,96 @@ const getAnswersByUserId = async (req,res,next) => {
     
     // Throwing error if the user doesnot exixts
     if(!userFound){
+        res.json({message:"User not found."});
+    }else if(userFound.answers.length === 0){
         res.json({message:"No answers are given by user"});
+    }else{
+        // Getting the questions of those answers which was given by user
+        let array = [];
+        userFound.answers.forEach( async (ans,index) => {
+            let question;
+            try{
+                question = await Question.findById(ans.questionId);
+            }catch(err){
+                console.log(err);
+                next(new HttpError('Something went wrong',500));
+            }
+            array.push({question,ans});
+
+            if(index === (userFound.answers.length-1)){
+                res.json({quesAns:array});
+            }  
+        })
     }
 
-    // Getting the questions of those answers which was given by user
-    let array = [];
-    userFound.answers.forEach( async (ans,index) => {
-        let question;
-        try{
-            question = await Question.findById(ans.questionId);
-        }catch(err){
-            console.log(err);
-            next(new HttpError('Something went wrong',500));
-        }
-        array.push({question,ans});
-
-        if(index === userFound.answers.length-1){
-            res.json({quesAns:array});
-        }
-        
-    })
-
     // res.json({answers: userFound.answers.map((ans) => ans.toObject({getters:true}))});
+}
+
+const saveAnswer = async (req,res,next) => {
+    const userId = req.params.userId;
+    const answerId = req.params.answerId;
+
+    let userFound; 
+    try{
+        userFound = await User.findById(userId).populate('savedAnswers');
+        userFound.savedAnswers.push(answerId);
+        userFound.save();
+    }catch(err){
+        console.log(err);
+        next(new HttpError('Something went wrong',500));
+    }
+
+    res.json({user:userFound});
+}
+
+
+const getSavedAnswers = async (req,res,next) => {
+    
+    // Taking userId by route
+    const userId = req.params.userId;
+
+    // Finding the users & his answers
+    let userFound;
+    try{
+        userFound = await User.findById(userId).populate('savedAnswers');
+    }catch(err){
+        console.log(err);
+        next(new HttpError('Something went wrong',500));
+    }
+    
+    // Throwing error if the user doesnot exixts
+    if(!userFound){
+        res.json({message:"User not found."});
+    }else if(userFound.savedAnswers.length === 0){
+        res.json({message:"No answers were saved by the user."});
+    }else{
+        userFound.savedAnswers.reverse();
+
+        // Getting the questions of those answers which was given by user
+        let array = [];
+        userFound.savedAnswers.forEach( async (ans,index) => {
+            let question;
+            try{
+                question = await Question.findById(ans.questionId);
+            }catch(err){
+                console.log(err);
+                next(new HttpError('Something went wrong',500));
+            }
+            array.push({question,ans});
+
+            if(index === (userFound.savedAnswers.length-1)){
+                res.json({quesAns:array});
+            }  
+        })
+    }
+
+    
 }
 
 exports.signup = signup;
 exports.login = login;
 exports.getQuestionByUserId = getQuestionByUserId;
 exports.getAnswersByUserId = getAnswersByUserId;
+exports.saveAnswer = saveAnswer;
+exports.getSavedAnswers = getSavedAnswers;
 

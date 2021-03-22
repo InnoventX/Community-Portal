@@ -24,5 +24,8 @@ router.get("/:userId/questions", userControllers.getQuestionByUserId);
 
 router.get("/:userId/answers", userControllers.getAnswersByUserId);
 
+router.get("/:userId/savedAnswers",userControllers.getSavedAnswers);
+
+router.patch("/:userId/save/:answerId",userControllers.saveAnswer);
 
 module.exports = router;

@@ -15,6 +15,10 @@ const userSchema = mongoose.Schema({
     
     answers:[
         { type:mongoose.Types.ObjectId , required:true , ref:'Answer' }
+    ],
+
+    savedAnswers:[
+        { type:mongoose.Types.ObjectId , required:true , ref:'Answer' }
     ]
 });
 

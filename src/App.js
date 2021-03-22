@@ -13,6 +13,7 @@ import {AuthContext} from "./shared/context/AuthContext";
 import UpdateQues from "./portal home/pages/UpdateQues";
 import UpdateAnswer from "./portal home/pages/UpdateAnswer";
 import UserAnswers from "./portal home/pages/UserAnswers";
+import SavedAnswers from "./portal home/pages/SavedAnswers";
 
 function App() {
 
@@ -103,6 +104,11 @@ function App() {
           {/*  User ( Answers given By User )  */}
           <Route path="/:userId/answers" exact>
             <UserAnswers />
+          </Route>
+
+          {/*  User ( Show Saved Answers of User )  */}
+          <Route path="/:userId/savedAnswers" exact>
+            <SavedAnswers />
           </Route>
 
           <Redirect to="/" />

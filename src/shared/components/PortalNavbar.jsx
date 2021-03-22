@@ -59,6 +59,10 @@ function PortalNavbar(){
                             </li>
 
                             <li className="nav-item">
+                                <NavLink to={`/${auth.userId}/savedAnswers`} className="nav-link">Save</NavLink>
+                            </li>
+
+                            <li className="nav-item">
                                 <form className="form-inline my-2 my-lg-0">
                                     <div className="button-in">
                                         <input  className="search" type="search" placeholder="Search" aria-label="Search" value={search} onChange={handleSearch}/>

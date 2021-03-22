@@ -230,6 +230,26 @@ const QuesPage = () => {
         }
     }
 
+    const saveAnswer = async (answerId) => {
+        const userId = auth.userId;
+
+        try{
+            const response = await fetch(`http://localhost:5000/api/user/${userId}/save/${answerId}`,{
+                method:'PATCH'
+            });
+            const responseData = await response.json();
+
+            if(responseData.message){
+                throw new Error(responseData.message);
+            }
+
+            setError("Saved successfully");
+        }catch(err){
+            console.log(err);
+            setError(err.message);
+        }
+    }
+
     return(
             <div className="question-container">
 
@@ -295,10 +315,15 @@ const QuesPage = () => {
                                                     <h6>{ans.userName}</h6>
                                     
                                                     {/* Showing the rating button to all the users who have not given this answer */}
-                                                    { auth.userId !== ans.userId ? (
+                                                    { auth.isLogedIn &&  (auth.userId !== ans.userId ? (
                                                         <button disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}}><StarBorderIcon style={{display:"inlineBlock"}}/></button>
-                                                    ):null}
+                                                    ):null)}
                                                     <p>Rating :- {ans.rating}</p>
+
+                                                    {/* To save the answer in users database */}
+                                                    { auth.isLogedIn && ((auth.userId !== ans.userId) && (
+                                                        <button onClick={() => {saveAnswer(ans.id)}}>SAVE</button>
+                                                    ))}
                                     
                                                     {/* Showing the update & delete button if the user have given the answer */}
                                                     { auth.userId === ans.userId ? (
@@ -310,11 +335,6 @@ const QuesPage = () => {
                                                         </React.Fragment>
                                                         ):null
                                                     }
-
-                                                    {/* To save the answer in users database */}
-                                                    {auth.userId !== ans.userId && (
-                                                        <button>SAVE</button>
-                                                    )}
                                     
                                                     <p className="answers">{ans.answer}</p>
                                                     <hr style={{width:"95%",margin:"0 auto"}}/>
@@ -343,9 +363,9 @@ const QuesPage = () => {
                                                     }
                                                     
                                                     {/* To save the answer in users database */}
-                                                    {auth.userId !== ans.userId && (
-                                                        <button>SAVE</button>
-                                                    )}
+                                                    { auth.isLogedIn && ((auth.userId !== ans.userId) && (
+                                                        <button onClick={() => {saveAnswer(ans.id)}}>SAVE</button>
+                                                    ))}
 
                                                     <p className="answers">{ans.answer}</p>
                                                     <hr style={{width:"95%",margin:"0 auto"}}/>

@@ -7,7 +7,7 @@ import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 
-const UserAnswers = () => {
+const SavedAnswers = () => {
 
     // Getting userId from the route
     const userId = useParams().userId;
@@ -31,11 +31,11 @@ const UserAnswers = () => {
             try{
                 // Turning on the loading spinner
                 setIsLoading(true);
-                const response = await fetch(`http://localhost:5000/api/user/${userId}/answers`);
+                const response = await fetch(`http://localhost:5000/api/user/${userId}/savedAnswers`);
                 const responseData = await response.json();
 
                 // Throwing error comming from backend
-                if(responseData.message && responseData.message !== "No answers are given by user"){
+                if(responseData.message && responseData.message !== "No answers were saved by the user."){
                     throw new Error(responseData.message);
                 }
 
@@ -87,7 +87,7 @@ const UserAnswers = () => {
                                 )
                             })
                         )}
-                        { !quesAns && <h1>No answers are given by user</h1>}
+                        { !quesAns && <h1>No answers were saved by the user.</h1>}
                     </div>
                 </div>
             )}
@@ -95,4 +95,4 @@ const UserAnswers = () => {
     );
 }
 
-export default UserAnswers;
+export default SavedAnswers;
