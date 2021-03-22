@@ -1,0 +1,16 @@
+.input-box{
+    padding:1%;
+    background-color:#6c757d;
+    color:black;
+    border-radius: 10px;
+}
+
+.text-area{
+    position: relative;
+    width:80%; 
+    margin-left:1%;
+}
+
+.invalid-input input{
+    border:red 3px solid;
+}

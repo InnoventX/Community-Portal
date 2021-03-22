@@ -1,0 +1,20 @@
+.answers-heading{
+    display: inline-block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color:#FC7600;
+    border-style: solid;
+    border-top: #FC7600;
+    border-width: 8px;
+    border-left: none;
+    border-right: none;
+    margin-bottom: 0%;
+    
+  }
+
+  hr {
+    margin-top: 0%;
+    padding-top: 0px;
+    border-width: 1.2px;
+    border-color: #FC7600;
+  }

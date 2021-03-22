@@ -1,0 +1,56 @@
+/* SignIn */
+body{
+  /* background-image: url("../../photos/background.png"); */
+}
+
+input.sign-in{
+    margin: 10px auto;
+    border-radius: 28px;
+    text-align: left;
+    background-color: white;
+    /* opacity: 0.5; */
+    width:280px;
+    position: static;
+    display: block;
+    border-color:white;
+    color:black;
+    padding-left:17px;
+    border:none;
+    outline: none;
+  }
+  
+  .signup-button{
+    width:280px;
+    margin: 10px auto;
+    border-radius: 28px;
+    background-color: #4CD964;
+    border-color: #4CD964;
+    position: static;
+    display: block;
+    color:black;
+    font-weight: bold;
+  }
+  
+  .forgot-password{
+    text-align: center;
+    position: static;
+    display: block;
+  }
+  
+  .moveto-signup{
+    margin-top:30px;
+    margin-left:3px;
+    padding-left: 10px;
+    padding-right: 7px;
+    color:white;
+  }
+  
+  .my-form{
+    text-align: center;
+    margin: 150px auto;
+    background-color:#000000ba;
+    width: 350px;
+    padding: 10px;
+    border-radius: 20px;
+  }
+  
