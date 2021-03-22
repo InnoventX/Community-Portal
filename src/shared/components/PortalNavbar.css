@@ -1,8 +1,16 @@
 /* Navbar */
 
 .logo{
-  width:50px;
-  margin: auto 7px;
+  width: 24px;
+  height: 30px;
+  /* margin: auto 7px; */
+  margin-bottom: 5%;
+  margin-right: 5%;
+}
+
+.navbar-brand{
+  font-family: 'Berlin Sans FB';
+  font-size: 1.7rem;
 }
 
 .logo2{
@@ -11,32 +19,38 @@
 }
 
 .navbar{
-  background-color: black;
+  background-color: #1A1A1A;
 }
 
-.nav-link{
-  font-size: 1.3rem;
-  margin: auto 15px;
-  text-decoration: none;
+.nav-link {
+  color: white;
+  margin-top: 5px;
+  margin-left: 10px;
+  font-weight: 600;
+  border-radius: 10px;
+  font-size: 1.1rem;
 }
 
+.nav-link:hover {
+  color: white;
+  background-color: rgb(94, 91, 91);
+  
+}
 
 .nav-item:hover{
   text-decoration: none;
 }
 
-.nav-link:hover{
-  font-size:1.35rem;
-  text-decoration: none;
+.PORTAL {
+  background-color: orange;
 }
-
-.portal-div{
+/* .portal-div{
   background-color: white;
   border-radius: 28px;
   height:40px;
   margin:auto 15px;
   margin-top:3px;
-}
+} */
 
 .portal-link{
   position:relative;
@@ -52,6 +66,7 @@
 .button-in{
     position:relative;
     width:280px;
+    margin-left: 3%;
   }
   
   input.search{
@@ -60,7 +75,7 @@
     text-align: left;
     background-color: white;
     width:100%;
-    height: 30px;
+    height: 35px;
     padding-left:17px;
     border:none;
     outline: none;
@@ -71,35 +86,17 @@
     z-index: 1;
     top:11.5px;
     right:3px;
-    padding:2px;
-    height: 27px;
-    width:40px;
+    /* padding:2px; */
+    height: 30px;
+    width:50px;
     background-color:#004CFC;
     border-radius: 28px;
     border:none;
     outline: none;
   }
-  
-  .ask-div{
-    background-color:#004CFC;
-    padding-top:1px;
-    border-radius: 28px;
-    height:30px;
-    width: 70px;
-    margin: auto 30px;
-    margin-right: 0px;
-    margin-top:11px;
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: white;
-    border:none;
-    outline:none;
-  }
-  
-  .ask-div:hover{
-    height:33px;
-    background-color: blue;
-    font-size: 1.4rem;
-  }
-  
+.ask-button {
+  width: 32%;
+  height: 32%;
+  margin-right: 10%;
+  margin-bottom: 5%;
+}

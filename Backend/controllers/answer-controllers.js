@@ -131,6 +131,20 @@ const giveAnswer = async (req,res,next) => {
     res.json({answer:newAnswer.toObject({getters:true})});
 }
 
+const getAnswerById = async (req,res,next) => {
+    const answerId = req.params.answerId;
+
+    let answerFound;
+    try{
+        answerFound = await Answer.findById(answerId);
+    }catch(err){
+        console.log(err);
+        next(new Http('Something went worng',500));
+    }
+
+    res.json({answer:answerFound.toObject({getters:true})});
+}
+
 const updateAnswer = async (req,res,next) => {
 
     const error = validationResult(req);
@@ -262,6 +276,7 @@ const deleteAnswer = async (req,res,next) => {
 
 
 exports.giveAnswer = giveAnswer;
+exports.getAnswerById = getAnswerById;
 exports.updateAnswer = updateAnswer;
 exports.deleteAnswer = deleteAnswer;
 exports.getAnswersByQuestionId = getAnswersByQuestionId;

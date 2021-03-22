@@ -303,7 +303,9 @@ const QuesPage = () => {
                                                     {/* Showing the update & delete button if the user have given the answer */}
                                                     { auth.userId === ans.userId ? (
                                                         <React.Fragment>
-                                                            <button className="update-btn" >UPDATE</button>
+                                                            <Link to={`/update/${ans.id}`}>
+                                                                <button className="update-btn" >UPDATE</button>
+                                                            </Link>
                                                             <button className="delete-btn" name={ans.id} onClick={showDeleteSection}>DELETE</button>
                                                         </React.Fragment>
                                                         ):null

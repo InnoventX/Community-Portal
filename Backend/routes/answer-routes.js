@@ -12,6 +12,8 @@ const User = require("../models/user-model");
 // It will order the answers by RATING
 router.get("/:questionId/" , answerControllers.getAnswersByQuestionId);
 
+router.get("/getAnswer/:answerId",answerControllers.getAnswerById);
+
 router.post("/:questionId/",
             [
                 check('userId').not().isEmpty(),
