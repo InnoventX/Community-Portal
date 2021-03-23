@@ -8,6 +8,14 @@ import {AuthContext} from "../../shared/context/AuthContext";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import update from '../../photos/update.svg';
+import del from '../../photos/delete.svg';
+import addans from '../../photos/add-answer.svg';
+import ratings from '../../photos/ratings.svg';
+import showmore from '../../photos/show-more.svg';
+import rate from '../../photos/rate.svg';
+import post from '../../photos/post.svg';
+
 
 const QuesPage = () => {
 
@@ -232,17 +240,17 @@ const QuesPage = () => {
 
     const saveAnswer = async (answerId) => {
         const userId = auth.userId;
-
+    
         try{
             const response = await fetch(`http://localhost:5000/api/user/${userId}/save/${answerId}`,{
                 method:'PATCH'
             });
             const responseData = await response.json();
-
+    
             if(responseData.message){
                 throw new Error(responseData.message);
             }
-
+    
             setError("Saved successfully");
         }catch(err){
             console.log(err);
@@ -251,169 +259,206 @@ const QuesPage = () => {
     }
 
     return(
-            <div className="question-container">
+        <React.Fragment>
+            
+            {/* Showing error if occured */}
+            {error && (
+                <React.Fragment>
+                    <Backdrop onClick={errorHandler} />
+                    <ErrorModal heading="Error Occured!" error={error} />
+                </React.Fragment>
+            )}
 
-                {/* Showing error if occured */}
-                {error && (
-                    <React.Fragment>
-                        <Backdrop onClick={errorHandler} />
-                        <ErrorModal heading="Error Occured!" error={error} />
-                    </React.Fragment>
-                )}
+            {/* Showing Loading spinner */}
+            {isLoading && <LoadingSpinner asOverlay />}
 
-                {/* Showing Loading spinner */}
-                {isLoading && <LoadingSpinner asOverlay />}
+            {/* Rendering the component if all the data is received from backend */}
+            {!isLoading && question && (
+                <React.Fragment>
 
-                {/* Rendering the component if all the data is received from backend */}
-                {!isLoading && question && (
-                    <React.Fragment>
-
-                        {/* Showing Delete Section when the button is clicked */}
-                        { deleteSection && (
-                            <React.Fragment>
-                                <Backdrop onClick={errorHandler} />
-                                <div className="show-delete-section">
-                                    <h1>Are You Sure?</h1>
-                                    <p>Do you want to delete your { deleteSection === "question" ? "question" : "answer" }</p>
-                                    {/* Checking which is to be deleted question or answer */}
-                                    <button onClick={deleteSection === "question" ? deleteQuestion : deleteAnswer} name={deleteSection}>DELETE</button>
-                                    <button onClick={cancleShowDeleteSection}>CANCLE</button>
-                                </div>
-                            </React.Fragment>
-                        )}
-
-                        {/* Showing the Student's details who had asked the question */}
+                    {/* Showing Delete Section when the button is clicked */}
+                    { deleteSection && (
                         <React.Fragment>
-                            <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
-                            <h6 className="student-name">{question.userName}</h6>
+                            <Backdrop onClick={errorHandler} />
+                            <div className="show-delete-section">
+                                <h1>Are You Sure?</h1>
+                                <p>Do you want to delete your { deleteSection === "question" ? "question" : "answer" }</p>
+                                {/* Checking which is to be deleted question or answer */}
+                                <button onClick={deleteSection === "question" ? deleteQuestion : deleteAnswer} name={deleteSection}>DELETE</button>
+                                <button onClick={cancleShowDeleteSection}>CANCLE</button>
+                            </div>
                         </React.Fragment>
+                    )}
 
-                        {/* Showing the update & delete button if the user is authenticated and have asked the question */}
+                    {/* Showing question's data */}
+                    <div className="question-container">
+                        
+                        {/* Showing the update & delete button of question if the user is authenticated and have asked the question */}
                         { (auth.userId === question.userId) ? (
                             <React.Fragment>
+                                <button className="btn delete-btn" style={{float:"right"}} name="question" onClick={showDeleteSection}><img className="delete-img" src={del}></img>  DELETE</button>                                       
                                 <Link to={`/${quesId}/update`}>
-                                    <button className="update-btn" >UPDATE</button>
+                                    <button className="btn update-btn" style={{float:"right"}}><img className="update-img" src={update}></img>UPDATE</button>
                                 </Link>
-                                <button className="delete-btn" name="question" onClick={showDeleteSection}>DELETE</button>
                             </React.Fragment>
                             ): null
                         }
-
-                        {/* Showing question's data */}
+                            
+                        <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
+                        <h6 className="student-name">{question.userName} • just now</h6>
+                        <h6 className="category">{question.category}</h6>
                         <h4 className="question-title">{question.title}</h4>
-                        <p>Category -- {question.category}</p>
                         <p>{question.wholeQuestion}</p>
 
-                        {/* Showing all the answers of thaat question */}
-                        {answers && (
-                            <div className="answers-div">
-                                {   
-                                    answers.map((ans,index) => {
-                                        if(!showAllAnswers && index<3){
-                                            return (
-                                                <React.Fragment>
-                                                    <h6>{ans.userName}</h6>
-                                    
-                                                    {/* Showing the rating button to all the users who have not given this answer */}
-                                                    { auth.isLogedIn &&  (auth.userId !== ans.userId ? (
-                                                        <button disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}}><StarBorderIcon style={{display:"inlineBlock"}}/></button>
-                                                    ):null)}
-                                                    <p>Rating :- {ans.rating}</p>
-
-                                                    {/* To save the answer in users database */}
-                                                    { auth.isLogedIn && ((auth.userId !== ans.userId) && (
-                                                        <button onClick={() => {saveAnswer(ans.id)}}>SAVE</button>
-                                                    ))}
-                                    
-                                                    {/* Showing the update & delete button if the user have given the answer */}
-                                                    { auth.userId === ans.userId ? (
-                                                        <React.Fragment>
-                                                            <Link to={`/update/${ans.id}`}>
-                                                                <button className="update-btn" >UPDATE</button>
-                                                            </Link>
-                                                            <button className="delete-btn" name={ans.id} onClick={showDeleteSection}>DELETE</button>
-                                                        </React.Fragment>
-                                                        ):null
-                                                    }
-                                    
-                                                    <p className="answers">{ans.answer}</p>
-                                                    <hr style={{width:"95%",margin:"0 auto"}}/>
-                                                </React.Fragment>
-                                            )
-                                        }
-                                        else if(showAllAnswers){
-                                            return (
-                                                <React.Fragment>
-                                                    <h6>{ans.userName}</h6>
-                                                    {/* Rating button will not be showen to the user who hass given the answer */}
-                                                    { auth.userId !== ans.userId ? (
-                                                        <button disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}}><StarBorderIcon style={{display:"inlineBlock"}}/></button>
-                                                    ):null}
-                                                    <p>Rating :- {ans.rating}</p>
-                                    
-                                                    {/* Showing the update & delete button if the user have given the answer */}
-                                                    { auth.userId === ans.userId ? (
-                                                        <React.Fragment>
-                                                            <Link to={`/update/${ans.id}`}>
-                                                                <button className="update-btn" >UPDATE</button>
-                                                            </Link>
-                                                            <button className="delete-btn" name={ans.id} onClick={showDeleteSection}>DELETE</button>
-                                                        </React.Fragment>
-                                                        ):null
-                                                    }
-                                                    
-                                                    {/* To save the answer in users database */}
-                                                    { auth.isLogedIn && ((auth.userId !== ans.userId) && (
-                                                        <button onClick={() => {saveAnswer(ans.id)}}>SAVE</button>
-                                                    ))}
-
-                                                    <p className="answers">{ans.answer}</p>
-                                                    <hr style={{width:"95%",margin:"0 auto"}}/>
-                                                </React.Fragment>
-                                            )
-                                        }   
-                                    })
-                                }
-                            </div>
-                        )}
-
-                        {/* Show more and Give answers options if the user is authenticated */}
+                        {/* Give answers options if the user is authenticated */}
                         { auth.isLogedIn ? (
-                            <React.Fragment>
-                                {/* If there are more then 3 answers then displaying show more option */}
-                                {answers && ((answers.length>3) ? (
-                                    <button className="show-more-btn" onClick={handleShowAllAnswers}>Show more</button>
-                                ):null)}
-
+                            <React.Fragment>                            
                                 {/* Displaying give answer option to give answer */}
                                 <button className="give-ans-btn" onClick={() => {
                                     showPostSection()
-                                }}>Give Answer</button>
+                                }}><img className="add-ans-img" src={addans}></img>Give Answer</button>
                             </React.Fragment>
                             ):(
                             <React.Fragment>
-                                {/* This will redirect the users to authentication page because they are not logged in */}
-                                {answers && ((answers.length>3) ? (
-                                    <button className="show-more-btn"><a href="/authenticate">Show more</a></button>
-                                ):null)}
-                                <button className="give-ans-btn"><a href="/authenticate">Give Answer</a></button>
-                                </React.Fragment>
+                                <a href="/authenticate"><button className="give-ans-btn"><img className="add-ans-img" src={addans}></img>Give Answer</button></a>
+                            </React.Fragment>
                             )
                         }
+                    </div>
 
-                        {/* Showing the Give Answer block */}
-                        <div className="post-ans-div">
-                            <hr />
-                            <form onSubmit={nowPostAns}>
-                                <textarea className="post-ans-text" rows="3" value={ansGiven} onChange={handleGivenAns}/>
-                                <button type="submit" className="post-btn">Post</button>
-                            </form>
+                    {/* Showing the post answer block */}
+                    <div className="post-ans-div">
+                        <form onSubmit={nowPostAns}>
+                            <textarea className="post-ans-text" rows="3" value={ansGiven} onChange={handleGivenAns} placeholder="   Type your answer here..."/>
+                            <button type="submit" className="post-btn"><img className="post-img" src={post}></img>Post</button>
+                        </form>
+                    </div>
+                        
+                    <h6 className="answers-heading">Answers</h6>
+                    <hr/>
+
+                    {/* Showing all the answers of that question */}
+                    {answers && (
+                        <div className="answers-div" >
+                        {   
+                            answers.map((ans,index) => {
+                                if(!showAllAnswers && index<3){
+                                    return (
+                                        <React.Fragment>
+                                            <div className="answer-container">
+                                            
+                                                {/* Showing the update & delete button of answer if the user have given that answer */}
+                                                { auth.userId === ans.userId ? (
+                                                    <React.Fragment>
+                                                        <button className="btn delete-btn" style={{float:"right"}} name={ans.id} onClick={showDeleteSection}><img className="delete-img" src={del}></img>  DELETE</button>
+                                                        <Link to={`/update/${ans.id}`}>
+                                                            <button className="btn update-btn" style={{float:"right"}}><img className="update-img" src={update}></img>UPDATE</button>
+                                                        </Link>
+                                                    </React.Fragment>
+                                                    ):null
+                                                }
+
+                                                {/* Showing the rating button to all the users who have not given this answer */}
+                                                { auth.isLogedIn ? (
+                                                    auth.userId !== ans.userId ? (
+                                                        <button className="btn rate-btn" disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}} style={{float:"right"}}><img className="rate-img" src={rate}></img></button>
+                                                        ):null
+                                                    ):(
+                                                    <a href="/authenticate">
+                                                        <button className="btn rate-btn" disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}} style={{float:"right"}}>
+                                                            <img className="rate-img" src={rate}></img>
+                                                        </button>
+                                                    </a> 
+                                                    )
+                                                }
+                                        
+                                                <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
+                                                <h6 className="student-name">{ans.userName} • just now</h6>
+                                                <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                 
+                                                <p className="answers">{ans.answer}</p>
+                                                        
+                                                {/* To save the answer in users database */}
+                                                { auth.isLogedIn && ((auth.userId !== ans.userId) && (
+                                                    <button className="btn save-btn" style={{float:"left"}} onClick={() => {saveAnswer(ans.id)}}>SAVE</button>
+                                                ))}
+
+                                            </div>
+                                        </React.Fragment>
+                                    )
+                                }
+                                else if(showAllAnswers){
+                                    return (
+                                        <React.Fragment>
+                                            <div className="answer-container">
+                                                {/* Showing the update & delete button if the user have given the answer */}
+                                                { auth.userId === ans.userId ? (
+                                                    <React.Fragment>
+                                                        <button className="btn delete-btn" style={{float:"right"}} name={ans.id} onClick={showDeleteSection}><img className="delete-img" src={del}></img>  DELETE</button>
+                                                        <Link to={`/update/${ans.id}`}>
+                                                            <button className="btn update-btn" style={{float:"right"}}><img className="update-img" src={update}></img>UPDATE</button>
+                                                        </Link>
+                                                    </React.Fragment>
+                                                    ):null
+                                                }
+
+                                                {/* Showing the rating button to all the users who have not given this answer */}
+                                                { auth.isLogedIn ? (
+                                                    auth.userId !== ans.userId ? (
+                                                        <button className="btn rate-btn" disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}} style={{float:"right"}}><img className="rate-img" src={rate}></img></button>
+                                                        ):null
+                                                    ):(
+                                                    <a href="/authenticate">
+                                                        <button className="btn rate-btn" disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}} style={{float:"right"}}>
+                                                            <img className="rate-img" src={rate}></img>
+                                                        </button>
+                                                    </a> 
+                                                    )
+                                                }
+                                        
+                                                <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
+                                                <h6 className="student-name">{ans.userName} • just now</h6>
+                                                <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                                    
+                                                <p className="answers">{ans.answer}</p>
+
+                                                {/* To save the answer in users database */}
+                                                { auth.isLogedIn && ((auth.userId !== ans.userId) && (
+                                                    <button className="btn save-btn" style={{float:"left"}} onClick={() => {saveAnswer(ans.id)}}>SAVE</button>
+                                                ))}
+                                            </div>
+                                        </React.Fragment>
+                                    )
+                                }   
+                            })
+                        }
                         </div>
-                    </React.Fragment>    
-                )}
+                    )}
+
+                    {/* Show more options if the user is authenticated */}
+                    { auth.isLogedIn ? (
+                        <React.Fragment>
+                            {/* If there are more then 3 answers then displaying show more option */}
+                            {answers && ((answers.length>3) ? (
+                                <button className="show-more-btn" onClick={handleShowAllAnswers}><img className="show-more-img" src={showmore}></img>Show more</button>
+                            ):null)}                               
+                        </React.Fragment>
+                        ):(
+                        <React.Fragment>
+                            {/* This will redirect the users to authentication page because they are not logged in */}
+                            {answers && ((answers.length>3) ? (
+                                <a href="/authenticate"><button className="show-more-btn"><img className="show-more-img" src={showmore}></img>Show more</button></a>
+                            ):null)}
+                        </React.Fragment>
+                        )
+                    }
+
+                </React.Fragment>    
+            )}
                 
-            </div>   
+        </React.Fragment>   
     );
 }
 
 export default QuesPage;
+
+
+

@@ -102,7 +102,8 @@ const giveAnswer = async (req,res,next) => {
         userName:userFound.name,
         answer,
         rating:rating || 0,
-        questionId:questionId
+        questionId:questionId,
+        subAnswers:[]
     });
 
     // Now storing the answer

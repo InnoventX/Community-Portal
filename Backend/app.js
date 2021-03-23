@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const questionRoutes = require('./routes/question-routes');
 const answerRoutes = require("./routes/answer-routes");
 const userRoutes = require("./routes/user-routes");
+const subAnswerRoutes = require("./routes/subAnswer-routes");
 const HttpError = require("./util/http-error-message");
 
 app.use(express.json());
@@ -29,6 +30,8 @@ app.use('/api/user',userRoutes);
 app.use('/api/question',questionRoutes);
 
 app.use('/api/answer',answerRoutes);
+
+app.use('/api/subAnswer',subAnswerRoutes);
 
 // If any of the routes were not found
 app.use((req,res,next) => {
