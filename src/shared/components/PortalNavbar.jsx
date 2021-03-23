@@ -15,14 +15,31 @@ function PortalNavbar(){
 
     function handleSearch(event){
         const ipValue = event.target.value;
+        searchkey(ipValue);
         setSearch(ipValue);
     }
 
     function handleClick(){
-        alert("Search: " + search);
+        // alert("Search: " + search);
         setSearch("");
     }
- 
+    function searchkey(search) {
+        let filter = search.toUpperCase();
+        let title = document.querySelectorAll("h4.question-title");
+        for (let i = 0; i < title.length; i++) {
+            let h4 = document.querySelectorAll("h4.question-title")[i];
+            if (h4) {
+                let textValueh = h4.textContent;
+    
+                if (textValueh.toUpperCase().indexOf(filter) > -1) {
+                    document.querySelectorAll("div.question-container")[i].style.display = "";
+                } else {
+                    document.querySelectorAll("div.question-container")[i].style.display = "none";
+                }
+            }
+        }
+    
+    }
     return(
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark">

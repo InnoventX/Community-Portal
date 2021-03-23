@@ -7,8 +7,8 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
 // module for mail service
-const nodeMailer = requite('nodemailer');
-const sendGridTransport = reqire('nodemailer-sendgrid-transport');
+const nodeMailer = require('nodemailer');
+const sendGridTransport = require('nodemailer-sendgrid-transport');
 const tranporter = nodeMailer.createTransport(sendGridTransport({
     auth: {
         api_key: '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'
@@ -232,6 +232,6 @@ const newpassword = (req, res, next) => {
 
 exports.signup = signup;
 exports.login = login;
-exports.postReset = postReset;
+// exports.postReset = postReset;
 exports.getQuestionByUserId = getQuestionByUserId;
 exports.getAnswersByUserId = getAnswersByUserId;
