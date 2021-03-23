@@ -48,6 +48,10 @@ const getAnswersByQuestionId = async (req,res,next) => {
     // Sorting the array of answers according to their rating
     questionFound.answers.sort(compare);
 
+    // subanswers = questionFound.answers.forEach((ans) => {
+    // })
+
+
     // Sending the question and answers as response
     res.json({question:questionFound.toObject({getters:true}),answers:questionFound.answers.map((ans) => ans.toObject({getters:true}))});
     

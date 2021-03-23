@@ -19,7 +19,11 @@ const userSchema = mongoose.Schema({
 
     savedAnswers:[
         { type:mongoose.Types.ObjectId , required:true , ref:'Answer' }
-    ]
+    ],
+
+    resetToken: { type: String },
+    
+    resetExpire: { type: Date }
 });
 
 userSchema.plugin(mongooseUniqueValidator);

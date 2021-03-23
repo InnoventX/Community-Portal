@@ -12,6 +12,17 @@ const HttpError = require("../util/http-error-message");
 // For validiting the inputs comming to the post api
 const { validationResult } = require('express-validator');
 
+const crypto = require('crypto');
+
+// module for mail service
+const nodeMailer = require('nodemailer');
+const sendGridTransport = require('nodemailer-sendgrid-transport');
+const tranporter = nodeMailer.createTransport(sendGridTransport({
+    auth: {
+        api_key: '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'
+    }
+}));
+
 // Function for creating jwt token
 const createToken = (userId) => {
     return jwt.sign(
@@ -245,9 +256,67 @@ const getSavedAnswers = async (req,res,next) => {
                 res.json({quesAns:array});
             }  
         })
-    }
+    }   
+}
 
-    
+
+const postReset = async(req, res, next) => {
+    crypto.randomBytes(32, (err, buffer) => {
+        if (err) {
+            console.log(err);
+            next(new HttpError('Something went wrong', 500));
+        }
+        const token = buffer.toString('hex');
+        User.findOne({ email: req.body.email })
+            .then(user => {
+                if (!user) {
+                    req.flash('error', 'No account with the email found.');
+                }
+                user.resetToken = token;
+                user.resetExpire = Date.now() + 3600000;
+                user.save();
+            })
+            .then(result => {
+                res.json({ status: 'Email Sent' });
+                tranporter.sendMail({
+                    to: req.body.email,
+                    from: 'info.innoventx@gmail.com',
+                    subject: 'Reset Password',
+                    html: `
+                        <p>You Requested a password reset </p>
+                        <P>Please click this  <a href="http://localhost:3000/reset/token/${token}" to reset the password</p> 
+                    `
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                next(new HttpError('Something went wrong', 500));
+            });
+
+    });
+};
+
+const newpassword = (req, res, next) => {
+    const token = req.body.token;
+    const newpassword = req.body.password;
+    let resetuser;
+    User.findOne({ resetToken: token, resetExpire: { $gt: Date.now() } })
+        .then(user => {
+            resetuser = user;
+            return bcrypt.hash(newpassword, 12);
+        })
+        .then(hashedPassword => {
+            resetuser.password = hashedPassword;
+            resetuser.resetToken = undefined;
+            resetuser.resetExpire = undefined;
+            resetuser.save();
+        })
+        .then(result => {
+            res.json({ status: 'Sexy' });
+        })
+        .catch(err => {
+            console.log(err);
+        });
 }
 
 exports.signup = signup;
@@ -256,4 +325,6 @@ exports.getQuestionByUserId = getQuestionByUserId;
 exports.getAnswersByUserId = getAnswersByUserId;
 exports.saveAnswer = saveAnswer;
 exports.getSavedAnswers = getSavedAnswers;
+exports.postReset = postReset;
+exports.newpassword = newpassword;
 
