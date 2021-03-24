@@ -110,17 +110,38 @@ const QuesPage = () => {
 
                 // Assigning the backend responce to the frontend states
                 setQuestion(responseData.question);
-                setAnswers(responseData.answers);
+                // setAnswers(responseData.answers);
+
+                responseData.answers.forEach(async (ans,index) => {
+                    if(ans.subAnswers.length !== 0){
+                        const getSubAnswers = await fetch(`http://localhost:5000/api/subAnswer/${ans.id}`);
+                        const getSubAnswersData = await getSubAnswers.json();
+                        
+                        if(getSubAnswersData.message){
+                            throw new Error(getSubAnswersData.message);
+                        }
+
+                        ans.subAnswers = getSubAnswersData.subAnswers;
+                        // console.log(ans);      
+                    }
+                    if(index === (responseData.answers.length - 1)){
+                        setAnswers(responseData.answers);
+                        setIsLoading(false);
+                    }
+                })
+
+                console.log(responseData.answers);
                 
             }catch(err){
                 console.log(err);
 
                 // Showing the error message comming from backend
                 setError(err.message);
+                setIsLoading(false);
             }
 
             // Turning off the loading spinner
-            setIsLoading(false);
+            // setIsLoading(false);
         }
         sendRequest();
     },[submitAnswer]);
@@ -376,6 +397,21 @@ const QuesPage = () => {
                                                 <h6 className="student-name">{ans.userName} • just now</h6>
                                                 <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                 
                                                 <p className="answers">{ans.answer}</p>
+
+                                                {(ans.subAnswers.length !== 0) ? (
+                                                    ans.subAnswers.map((subAns) => {
+                                                        return(
+                                                            <React.Fragment>
+                                                                <hr />
+                                                                <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
+                                                                <h6 className="student-name">{subAns.userName} • just now</h6>
+                                                                <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
+                                                                <p className="answers">{subAns.subAnswer}</p>
+                                                            </React.Fragment>
+                                                        )
+                                                    })
+                                                    ):null
+                                                }
                                                         
                                                 {/* To save the answer in users database */}
                                                 { auth.isLogedIn && ((auth.userId !== ans.userId) && (
@@ -419,6 +455,21 @@ const QuesPage = () => {
                                                 <h6 className="student-name">{ans.userName} • just now</h6>
                                                 <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                                    
                                                 <p className="answers">{ans.answer}</p>
+
+                                                {(ans.subAnswers.length !== 0) ? (
+                                                    ans.subAnswers.map((subAns) => {
+                                                        return(
+                                                            <React.Fragment>
+                                                                <hr />
+                                                                <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
+                                                                <h6 className="student-name">{subAns.userName} • just now</h6>
+                                                                <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
+                                                                <p className="answers">{subAns.subAnswer}</p>
+                                                            </React.Fragment>
+                                                        )
+                                                    })
+                                                    ):null
+                                                }
 
                                                 {/* To save the answer in users database */}
                                                 { auth.isLogedIn && ((auth.userId !== ans.userId) && (

@@ -11,4 +11,6 @@ const User = require("../models/user-model");
 
 router.post("/:answerId/newSubAnswer",subAnswerControllers.newSubAnswer);
 
+router.get("/:answerId",subAnswerControllers.getSubAnswersByAnswerId);
+
 module.exports = router;

@@ -57,4 +57,26 @@ const newSubAnswer = async (req,res,next) => {
     res.json({subAnswer:newSubAnswer.toObject({getters:true})});
 }
 
+
+const getSubAnswersByAnswerId = async (req,res,next) => {
+    const answerId = req.params.answerId;
+
+    let answerFound;
+    try{
+        answerFound = await Answer.findById(answerId).populate("subAnswers"); 
+    }catch(err){
+        console.log(err);
+        next(new HttpError('Something went wrong.Answer not found',500));
+    }
+
+    if(!answerFound){
+        next(new HttpError('Answer not found',500));
+    }else if(answerFound.subAnswers.length === 0){
+        next(new HttpError('No sub-answers',500));
+    }
+
+    res.json({subAnswers:answerFound.subAnswers.map(ans => ans.toObject({getters:true}))});
+}
+
 exports.newSubAnswer = newSubAnswer;
+exports.getSubAnswersByAnswerId = getSubAnswersByAnswerId;
