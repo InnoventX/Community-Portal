@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import {useParams,Link} from 'react-router-dom';
 
-import "./UserAnswers.css";
+import "./SavedAnswers.css";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Categories from '../components/Categories';
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import ratings from '../../photos/ratings.svg';
+
 
 const SavedAnswers = () => {
 
@@ -76,14 +79,20 @@ const SavedAnswers = () => {
                         { quesAns && (
                             quesAns.map(qa => {
                                 return(
-                                    <Link to={`/ques/${qa.question._id}`}>
-                                        <div className="container">
-                                            <p>{qa.question.userName}</p>
-                                            <h1>{qa.question.title}</h1>
-                                            <p>{qa.ans.userName}'s Answer:- </p>
-                                            <h5>{qa.ans.answer}</h5>
+                                    <div className="container">
+                                        <div className="user-icon"><AccountCircleIcon style={{fontSize:"3.3rem"}}/></div>
+                                        <h6 className="student-name">{qa.question.userName} • just now</h6>
+                                        <Link to={`/ques/${qa.question._id}`}>
+                                            <h4 className="question-title">{qa.question.title}</h4>
+                                        </Link>
+                                        <div className="answer-container-save">
+                                            <div className="user-icon"><AccountCircleIcon style={{fontSize:"3.3rem"}}/></div>
+                                            <h6 className="student-name" >{qa.ans.userName}'s Answer:- </h6>   
+                                            <h6 className="category">{qa.ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                 
+                                            
+                                            <p className="answers">{qa.ans.answer}</p>
                                         </div>
-                                    </Link>
+                                    </div>                             
                                 )
                             })
                         )}

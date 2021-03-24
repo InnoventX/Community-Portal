@@ -1,12 +1,3 @@
-.container{
-    background-color: #363636;
-    font-family: 'Montserrat', sans-serif;
-    border-radius: 20px;
-    padding:1%;
-    margin:2% auto;
-    color:rgb(230, 219, 219);
-}
-
 .user-icon{
     position: absolute;
     display: inline-block;
