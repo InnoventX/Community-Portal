@@ -33,6 +33,13 @@
   text-align: right;
 }
 
+.sub-ans-div{
+  margin:2% 8%;
+  position: relative;
+  display:none;
+  text-align: right;
+}
+
 .user-icon{
   position: absolute;
   display: inline-block;
@@ -94,6 +101,15 @@ margin-top: 1%;
   color:#393E46;
   border-radius: 28px;
   width: 12%;
+}
+
+.post-subAns-btn{
+  margin:auto 1%;
+  border-color:greenyellow;
+  background-color:greenyellow;
+  color:#393E46;
+  border-radius: 28px;
+  width: 8%;
 }
 
 .give-ans-btn{
