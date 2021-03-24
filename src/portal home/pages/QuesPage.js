@@ -46,6 +46,8 @@ const QuesPage = () => {
 
     const [showAllAnswers,setShowAllAnswers] = useState(false);
 
+    const  [subAnswer , setSubAnswer] = useState();
+
     // Showing POST ANSWER block
     const showPostSection = () => {
         // It will display the GiveAnswer block when we chick the button and hide when we again click it.
@@ -95,9 +97,13 @@ const QuesPage = () => {
         if(subAnsDiv.style.display === "none"){
             subAnsDiv.style.display = "block";
         }else{
-            const subAnsDivClose = document.querySelector(`.sub-ans-div`);
-            subAnsDivClose.style.display = "none";
+            subAnsDiv.style.display = "none";
         }   
+    }
+
+    const handleSubAnswer = (event) => {
+        const subAns = event.target.value;
+        setSubAnswer(subAns);
     }
 
     // Using useEffect hoock which renders question and it's answers,this should only be rendered when submitAnswer changes.  
@@ -288,22 +294,30 @@ const QuesPage = () => {
     }
 
     const postSubAns = async (answerId) => {
-        console.log(answerId);
-        // const userId = auth.userId;
-        // try{
-        //     const response = await fetch(`http://localhost:5000/api/sunAnswer/${answerId}/newSubAnswer`,{
-        //         method:'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({
+        console.log(subAnswer , answerId);
+        const userId = auth.userId;
+        try{
+            const response = await fetch(`http://localhost:5000/api/subAnswer/${answerId}/newSubAnswer`,{
+                method:'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId:userId,
+                    subAnswer:subAnswer
+                })
+            });
+            const responseData = await response.json();
 
-        //         })
-        //     })
-        // }catch(err){
-        //     console.log(err);
-        //     setError(err.message);
-        // }
+            if(responseData.message){
+                throw new Error(responseData.message);
+            }
+
+            setSubmitAnswer(prevValue => !prevValue);
+        }catch(err){
+            console.log(err);
+            setError(err.message);
+        }
     }
 
     return(
@@ -461,8 +475,11 @@ const QuesPage = () => {
 
                                                 {/* Showing the post answer block */}
                                                 <div className={`sub-ans-div ans-${ans.id}`}>
-                                                    <form>
-                                                        <textarea className="post-ans-text" rows="3"/>
+                                                    <form onSubmit={(event) => {
+                                                        event.preventDefault();
+                                                        postSubAns(ans.id);
+                                                    }}>
+                                                        <textarea className="post-ans-text" rows="3" value={subAnswer} onChange={handleSubAnswer} placeholder="     Write your query here .."/>
                                                         <button type="submit" className="post-btn"><img className="post-img" src={post}></img>Post</button>
                                                     </form>
                                                 </div>
@@ -532,8 +549,11 @@ const QuesPage = () => {
 
                                                 {/* Showing the post answer block */}
                                                 <div className={`sub-ans-div ans-${ans.id}`}>
-                                                    <form>
-                                                        <textarea className="post-ans-text" rows="3"/>
+                                                    <form onSubmit={(event) => {
+                                                        event.preventDefault();
+                                                        postSubAns(ans.id);
+                                                    }}>
+                                                        <textarea className="post-ans-text" rows="3" value={subAnswer} onChange={handleSubAnswer} placeholder="     Write your query here .."/>
                                                         <button type="submit" className="post-btn"><img className="post-img" src={post}></img>Post</button>
                                                     </form>
                                                 </div>
