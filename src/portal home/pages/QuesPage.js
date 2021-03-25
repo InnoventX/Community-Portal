@@ -458,11 +458,15 @@ const QuesPage = () => {
                                                     ans.subAnswers.map((subAns) => {
                                                         return(
                                                             <React.Fragment>
-                                                                <hr />
-                                                                <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
-                                                                <h6 className="student-name">{subAns.userName} • just now</h6>
-                                                                <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
-                                                                <p className="answers">{subAns.subAnswer}</p>
+                                                                
+                                                                <div className="subANS">
+                                                                    
+                                                                    <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
+                                                                    <h6 className="student-name">{subAns.userName} • just now</h6>
+                                                                    <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
+                                                                    <p className="answers">{subAns.subAnswer}</p>
+                                                                </div>
+                                                                
                                                             </React.Fragment>
                                                         )
                                                     })
@@ -534,11 +538,15 @@ const QuesPage = () => {
                                                     ans.subAnswers.map((subAns) => {
                                                         return(
                                                             <React.Fragment>
-                                                                <hr />
-                                                                <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
-                                                                <h6 className="student-name">{subAns.userName} • just now</h6>
-                                                                <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
-                                                                <p className="answers">{subAns.subAnswer}</p>
+                                                                
+                                                                <div className="subANS">
+                                                                    
+                                                                    <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
+                                                                    <h6 className="student-name">{subAns.userName} • just now</h6>
+                                                                    <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
+                                                                    <p className="answers">{subAns.subAnswer}</p>
+                                                                </div>
+                                                                
                                                             </React.Fragment>
                                                         )
                                                     })

@@ -82,12 +82,12 @@ const UserAnswers = () => {
                                     <div className="container">
                                         <div className="user-icon"><AccountCircleIcon style={{fontSize:"3.3rem"}}/></div>
                                         <h6 className="student-name">{qa.question.userName} • just now</h6>
-                                        <Link to={`/ques/${qa.question._id}`}>
+                                        <Link style={{textDecoration:"none"}} to={`/ques/${qa.question._id}`}>
                                             <h4 className="question-title">{qa.question.title}</h4>
                                         </Link>
                                         <div className="answer-container-save">
                                             <div className="user-icon"><AccountCircleIcon style={{fontSize:"3.3rem"}}/></div>
-                                            <h6 className="student-name" >{qa.ans.userName}'s Answer:- </h6>   
+                                            <h6 className="student-name" >{qa.ans.userName}<p className="student-tag">'s answer</p></h6>   
                                             <h6 className="category">{qa.ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                 
                                             
                                             <p className="answers">{qa.ans.answer}</p>

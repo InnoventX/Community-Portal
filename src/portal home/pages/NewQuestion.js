@@ -10,7 +10,7 @@ import {useForm} from "../../shared/hoocks/form-hook";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
-// import submit from '../../photos/submit.svg';
+import submit from '../../photos/submit.svg';
 
 const NewQuestion = () => {
 
@@ -171,7 +171,7 @@ const NewQuestion = () => {
 
                     {/* This button will be disabled if the formState is invalid */}
                     <button className="submit-btn" disabled={!formState.isValid}>
-                        Submit
+                        <img className="submit-img" src={submit}></img>Submit
                     </button>
                 </form>
             )}
@@ -182,7 +182,7 @@ const NewQuestion = () => {
 
 export default NewQuestion;
 
-{/* <img className="submit-img" src={submit}></img> */}
+// {/*  */}
 // {/* Input for title of question */}
 //                 {/* <Input 
 //                     id="title"

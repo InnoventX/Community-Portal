@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from 'react';
 import {useParams, useHistory} from 'react-router-dom';
 
-import "./UpdateQues.css";
+import "./UpdateAnswer.css";
 import {VALIDATOR_REQUIRE,VALIDATOR_MINLENGTH} from "../../shared/components/validators";
 import Input from "../../shared/components/Input";
 import {useForm} from "../../shared/hoocks/form-hook";
@@ -124,24 +124,25 @@ const UpdateAnswer = (props) => {
             { !isLoading && (
                 <form onSubmit={submitHandler}>
                     {/* Taking answer as input */}
-                    <Input 
-                        id="answer"
-                        element="textarea"
-                        type="text"
-                        label="Answer"
-                        value={formState.inputs.answer.value}
-                        isValid={formState.inputs.answer.isValid}
-                        isTouch={true}
-                        errorMessage="Please write your answer."
-                        validators={[VALIDATOR_REQUIRE()]}
-                        onInput={handleInput}
-                    />
-
+                    <p className="U-ans-heading">Your Answer</p>
+                    <div className="U-ans-text">
+                        <Input 
+                            id="answer"
+                            element="textarea"
+                            type="text"
+                            className=" post-ans-text form-control U-ans-text"
+                            rows="5"
+                            value={formState.inputs.answer.value}
+                            isValid={formState.inputs.answer.isValid}
+                            isTouch={true}
+                            errorMessage="Please write your answer."
+                            validators={[VALIDATOR_REQUIRE()]}
+                            onInput={handleInput}
+                        />
+                    </div>
                     
                     {/* This button should be disabled if the form in invalid */}
-                    <button disabled={!formState.isValid}>
-                        Submit
-                    </button>
+                    <button disabled={!formState.isValid} className="btn btn-outline-danger submit-btn"><i class="fas fa-check-circle"></i> Submit</button>
                 </form>
             )}
             
