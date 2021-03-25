@@ -68,6 +68,7 @@ const Input = (props) =>  {
                 id={props.id}
                 className={props.className || "text-area"}
                 rows={props.rows || 1}
+                placeholder={props.placeholder}
                 value={inputState.value}
                 onChange={handleChange}
                 onBlur={handleTouch}
@@ -78,7 +79,7 @@ const Input = (props) =>  {
         <div>
             <label>{props.label}</label>
             {element}
-            {!inputState.isValid && inputState.isTouch && <p>{props.errorMessage}</p>}
+            {!inputState.isValid && inputState.isTouch && <p className="error"><i class="fas fa-exclamation-triangle" style={{color:"red"}}></i>  {props.errorMessage}</p>}
         </div>
     )
 }

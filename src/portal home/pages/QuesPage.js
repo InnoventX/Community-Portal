@@ -128,23 +128,28 @@ const QuesPage = () => {
                 setQuestion(responseData.question);
                 // setAnswers(responseData.answers);
 
-                responseData.answers.forEach(async (ans,index) => {
-                    if(ans.subAnswers.length !== 0){
-                        const getSubAnswers = await fetch(`http://localhost:5000/api/subAnswer/${ans.id}`);
-                        const getSubAnswersData = await getSubAnswers.json();
-                        
-                        if(getSubAnswersData.message){
-                            throw new Error(getSubAnswersData.message);
+                if(responseData.answers){
+                    responseData.answers.forEach(async (ans,index) => {
+                        if(ans.subAnswers.length !== 0){
+                            const getSubAnswers = await fetch(`http://localhost:5000/api/subAnswer/${ans.id}`);
+                            const getSubAnswersData = await getSubAnswers.json();
+                            
+                            if(getSubAnswersData.message){
+                                throw new Error(getSubAnswersData.message);
+                            }
+    
+                            ans.subAnswers = getSubAnswersData.subAnswers;
+                                  
                         }
-
-                        ans.subAnswers = getSubAnswersData.subAnswers;
-                              
-                    }
-                    if(index === (responseData.answers.length - 1)){
-                        setAnswers(responseData.answers);
-                        setIsLoading(false);
-                    }
-                })
+                        if(index === (responseData.answers.length - 1)){
+                            setAnswers(responseData.answers);
+                            setIsLoading(false);
+                        }
+                    })
+                }else{
+                    setIsLoading(false);
+                }
+                
                 
             }catch(err){
                 console.log(err);
@@ -396,8 +401,12 @@ const QuesPage = () => {
                         </form>
                     </div>
                         
-                    <h6 className="answers-heading">Answers</h6>
-                    <hr/>
+                    { answers && (
+                        <React.Fragment>
+                            <h6 className="answers-heading">Answers</h6>
+                            <hr/>
+                        </React.Fragment>
+                    )}
 
                     {/* Showing all the answers of that question */}
                     {answers && (
@@ -592,6 +601,3 @@ const QuesPage = () => {
 }
 
 export default QuesPage;
-
-
-

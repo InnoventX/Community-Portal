@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from 'react';
 import {useParams, useHistory} from 'react-router-dom';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import "./UpdateQues.css";
 import {VALIDATOR_REQUIRE,VALIDATOR_MINLENGTH} from "../../shared/components/validators";
@@ -20,6 +21,8 @@ const UpdateQues = (props) => {
     // State for Loading Spinner and Error model
     const [isLoading , setIsLoading] = useState(false);
     const [error , setError] = useState();
+
+    const [userName , setUserName] = useState();
 
     // Form State initially it is empty because we have not sended the get request to backend
     const [formState, handleInput, setFormData] =  useForm(
@@ -53,6 +56,8 @@ const UpdateQues = (props) => {
                 if(responseData.message){
                     throw new Error(responseData.message);
                 }
+
+                setUserName(responseData.question.userName);
 
                 // After getting the question data we have to update our formState
                 setFormData(
@@ -139,51 +144,63 @@ const UpdateQues = (props) => {
             {/* Showing Loading spinner */}
             {isLoading && <LoadingSpinner asOverlay />}
 
-            { !isLoading && (
+            { !isLoading && userName && (
                 <form onSubmit={submitHandler}>
-                    {/* Taking category of question as input */}
-                    <Input 
-                        id="category"
-                        element="input"
-                        type="text"
-                        label="Category"
-                        value={formState.inputs.category.value}
-                        isValid={formState.inputs.category.isValid}
-                        isTouch={true}
-                        errorMessage="Please enter a category"
-                        validators={[VALIDATOR_REQUIRE()]}
-                        onInput={handleInput}
-                    />
 
-                    {/* Taking title of question as input */}
-                    <Input 
-                        id="title"
-                        element="textarea"
-                        label="Title"
-                        value={formState.inputs.title.value}
-                        isValid={formState.inputs.title.isValid}
-                        isTouch={true}
-                        errorMessage = "Please enter a valid title"
-                        validators={[VALIDATOR_REQUIRE()]}
-                        onInput={handleInput}
-                    />
+                    {/* Input for title of question */}                
+                    <div className="ask-question-container">                                
+                        <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
+                        <h6 className="student-name">{userName} • asked</h6>
+                        <Input 
+                            id="title"
+                            element="textarea"
+                            value={formState.inputs.title.value}
+                            isValid={formState.inputs.title.isValid}
+                            isTouch={true}
+                            errorMessage = "Please enter a valid title"
+                            validators={[VALIDATOR_REQUIRE()]}
+                            onInput={handleInput}
+                            className="que-title-text" 
+                            rows="2"
+                        />
+                    </div>
 
-                    {/* Taking wholeQuestion of question as input */}
-                    <Input  
-                        id="wholeQuestion"
-                        element="textarea"
-                        rows={5}
-                        label="Question"
-                        value={formState.inputs.wholeQuestion.value}
-                        isValid={formState.inputs.wholeQuestion.isValid}
-                        isTouch={true}
-                        errorMessage="Question must be of 10 Characters"
-                        validators={[VALIDATOR_MINLENGTH(10)]}
-                        onInput={handleInput}
-                    />
+                    {/* Input for category of question*/}
+                    <div className="ask-question-container">                                
+                        <h6>Add Category</h6>    
+                        <Input 
+                            id="category"
+                            element="input"
+                            type="text"
+                            label="Category"
+                            value={formState.inputs.category.value}
+                            isValid={formState.inputs.category.isValid}
+                            isTouch={true}
+                            errorMessage="Please enter a category"
+                            validators={[VALIDATOR_REQUIRE()]}
+                            onInput={handleInput}
+                            className="cat"
+                        />
+                    </div>
+
+                    {/* Input for wholeQuestion of question */}
+                    <div className="que-body-container">
+                        <Input  
+                            id="wholeQuestion"
+                            element="textarea"
+                            value={formState.inputs.wholeQuestion.value}
+                            isValid={formState.inputs.wholeQuestion.isValid}
+                            isTouch={true}
+                            errorMessage="Question must be of 10 Characters"
+                            validators={[VALIDATOR_MINLENGTH(10)]}
+                            onInput={handleInput}
+                            className="que-body-text" 
+                            rows="7"
+                        />
+                    </div>
 
                     {/* This button should be disabled if the form in invalid */}
-                    <button disabled={!formState.isValid}>
+                    <button className="submit-btn" disabled={!formState.isValid}>
                         Submit
                     </button>
                 </form>

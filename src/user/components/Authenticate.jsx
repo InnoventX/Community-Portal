@@ -1,8 +1,7 @@
 import React,{useState,useContext,useReducer,useCallback} from 'react';
 // import {useHistory} from 'react-router-dom';
 
-import "./Authenticate.css";
-import logo from '../../photos/logo.png';
+import logo from '../../photos/logo.svg';
 import './SignIn.css';
 import {AuthContext} from "../../shared/context/AuthContext";
 import Input from "../../shared/components/Input";
@@ -246,57 +245,83 @@ function Authenticate(){
 
             {/* Showing Loading Spinner till the data is arrived */}
             { isLoading && <LoadingSpinner asOverlay />}
-            
-            <div className="my-form">
-                <img className="logo2" src={logo}/>
+                <div id="wrapper">
+                    <div className="signIn-text-DIV">
+                        <h1 className="signIN-text">INSPIRING.</h1>
+                        <h1 className="signIN-text">INNOVATING.</h1>
+                        <h1 className="signIN-text">INNVENTING.</h1>
+                    </div>
+                    <div className="my-form">
+                        <img className="logo2" src={logo}/>
 
-                {/* Authentication Form */}
-                <form onSubmit={handleSubmit}>
+                        {/* Authentication Form */}
+                        <form onSubmit={handleSubmit}>
 
-                    {/* Display "Name" only if it is in Signup form(!isLogin) */}
-                    { !isLogin && (<Input 
-                        id="name"
-                        element="input"
-                        placeholder="Use Name"
-                        type="text"
-                        className="sign-in"
-                        value={formState.inputs.name.value}
-                        onInput = {handleInput}
-                        validators = {[VALIDATOR_REQUIRE()]}
-                        errorMessage="Please enter a valid user name"
-                    />)
-                    }
+                            {/* Display "Name" only if it is in Signup form(!isLogin) */}
+                            { !isLogin && (
+                                <div>
+                                    <span className="icon"><i class="fas fa-user"></i></span>  
+                                    <Input 
+                                        id="name"
+                                        element="input"
+                                        placeholder="User Name"
+                                        type="text"
+                                        className="form-control sign-in-Box"
+                                        value={formState.inputs.name.value}
+                                        onInput = {handleInput}
+                                        validators = {[VALIDATOR_REQUIRE()]}
+                                        errorMessage="Please enter a valid user name"
+                                    />
+                                </div>
+                                )
+                            }
 
-                    {/* Email & password input components */}
-                    <Input 
-                        id="email"
-                        element="input"
-                        type="email"
-                        placeholder="Email"
-                        className="sign-in"
-                        value={formState.inputs.email.value}
-                        onInput={handleInput}
-                        validators={[VALIDATOR_EMAIL()]}
-                        errorMessage="Please enter a valid email"
-                    />
-                    <Input
-                        id="password"
-                        element="input"
-                        type="password"
-                        placeholder="password"
-                        className="sign-in"
-                        value={formState.inputs.password.value}
-                        onInput={handleInput}
-                        validators={[VALIDATOR_MINLENGTH(6)]}
-                        errorMessage="Pleaase enter a password of length 6"
-                    />
+                            {/* Email & password input components */}
+                            <div className="email-div"> 
+                                <span className="icon"><i class="far fa-envelope"></i></span>  
+                                <div className="input">
+                                <Input 
+                                    id="email"
+                                    element="input"
+                                    type="email"
+                                    placeholder="Email"
+                                    className="email form-control"
+                                    value={formState.inputs.email.value}
+                                    onInput={handleInput}
+                                    validators={[VALIDATOR_EMAIL()]}
+                                    errorMessage="Please enter a valid email"
+                                    >
+                                </Input>
+                                </div>
+                                
+                            </div>
+                            
+                            <div>
+                                <span className="icon password-icon"><i class="fas fa-key"></i></span>  
+                                <Input
+                                    id="password"
+                                    element="input"
+                                    type="password"
+                                    placeholder="Password"
+                                    className="password form-control"
+                                    value={formState.inputs.password.value}
+                                    onInput={handleInput}
+                                    validators={[VALIDATOR_MINLENGTH(6)]}
+                                    errorMessage="Pleaase enter a password of length 6"
+                                >
+                                </Input>
+                            </div>
 
-                    {/* This button will be disabled if the form is not valid */}
-                    <button disabled={!formState.isValid} onClick={haldleSubmitButton}>{ isLogin ? "Login" : "Signup" }</button>
+                            {/* This button will be disabled if the form is not valid */}
+                            <div className="buttons">
+                                {/* This button will be disabled if the form is not valid */}
+                                <button className="btn btn-success LOGIN" disabled={!formState.isValid} onClick={haldleSubmitButton}>{ isLogin ? "Login" : "Signup" }</button>
 
-                    {/* Switching button */}
-                    <button onClick={handleSwitch}>Switch to { isLogin ? "Signup" : "Login" }</button>
-                </form>
+                                {/* Switching button */}
+                                <a className="SIGNUP" onClick={handleSwitch}>{ isLogin ? "Sign up" : "Login" }?</a>
+                            </div>
+                        </form>
+                    </div>
             </div>
         </React.Fragment>
         

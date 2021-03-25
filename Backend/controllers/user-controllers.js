@@ -259,6 +259,24 @@ const getSavedAnswers = async (req,res,next) => {
     }   
 }
 
+const getUserById = async (req,res,next) => {
+    const userId = req.params.userId;
+
+    let userFound;
+    try{
+        userFound = await User.findById(userId);
+    }catch(err){
+        console.log(err);
+        next(new HttpError('Something went wrong',500));  
+    }
+
+    if(!userFound){
+        next(new HttpError('Something went wrong',500));
+    }
+
+    res.json({user:userFound.toObject({getters:true})});
+}
+
 
 const postReset = async(req, res, next) => {
     crypto.randomBytes(32, (err, buffer) => {
@@ -296,7 +314,7 @@ const postReset = async(req, res, next) => {
     });
 };
 
-const newpassword = (req, res, next) => {
+const newpassword = async (req, res, next) => {
     const token = req.body.token;
     const newpassword = req.body.password;
     let resetuser;
@@ -327,4 +345,5 @@ exports.saveAnswer = saveAnswer;
 exports.getSavedAnswers = getSavedAnswers;
 exports.postReset = postReset;
 exports.newpassword = newpassword;
+exports.getUserById = getUserById;
 

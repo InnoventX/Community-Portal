@@ -20,6 +20,8 @@ router.post("/login",
                 check('password').isLength({min:6})
             ],userControllers.login);
 
+router.get("/:userId",userControllers.getUserById);
+
 router.get("/:userId/questions", userControllers.getQuestionByUserId);
 
 router.get("/:userId/answers", userControllers.getAnswersByUserId);
