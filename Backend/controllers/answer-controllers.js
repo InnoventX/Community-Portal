@@ -37,15 +37,19 @@ const getAnswersByQuestionId = async (req,res,next) => {
     // Throwing the error if the question is not found
     if(!questionFound){
         next(new HttpError("Question not found",500));
-    }else if (questionFound.answers.length===0){
-        return res.json({message:"No answers found of that question"});
     }
+    else if (questionFound.answers.length===0){
+        return res.json({question:questionFound.toObject({getters:true}),message:"No answers found of that question"});
+    }
+
+    // First reversing the array so that latest question comes first 
+    questionFound.answers.reverse();
 
     // Sorting the array of answers according to their rating
     questionFound.answers.sort(compare);
 
-    // Sending the answers as response
-    res.json({answers:questionFound.answers.map((ans) => ans.toObject({getters:true}))});
+    // Sending the question and answers as response
+    res.json({question:questionFound.toObject({getters:true}),answers:questionFound.answers.map((ans) => ans.toObject({getters:true}))});
     
 }
 
@@ -127,18 +131,38 @@ const giveAnswer = async (req,res,next) => {
     res.json({answer:newAnswer.toObject({getters:true})});
 }
 
+const getAnswerById = async (req,res,next) => {
+
+    // Taking answerId from the route
+    const answerId = req.params.answerId;
+
+    // Finding the answer by it;s id
+    let answerFound;
+    try{
+        answerFound = await Answer.findById(answerId);
+    }catch(err){
+        console.log(err);
+        next(new Http('Something went worng',500));
+    }
+
+    res.json({answer:answerFound.toObject({getters:true})});
+}
+
 const updateAnswer = async (req,res,next) => {
 
+    // Validating the input comming from body
     const error = validationResult(req);
-
     if(!error.isEmpty()){
         console.log(error.message);
         next(new HttpError('Invalid input.Please enter again',422));
     }
 
+    // Taking answer ID from th route
     const answerId = req.params.answerId;
+    // Taking updated data from the body
     const {answer} = req.body;
 
+    // Finding the answrr of the given ID
     let answerFound;
     try{
         answerFound = await Answer.findById(answerId);
@@ -147,12 +171,15 @@ const updateAnswer = async (req,res,next) => {
         next(new Http('Something went worng',500));
     }
     
+    // Throwing the error if the answer is not found
     if(!answerFound){
         next(new HttpError('Answer not found',500));
     }
 
+    // Updating the answer 
     answerFound.answer = answer;
 
+    // Saving the answer
     try{
         await answerFound.save();
     }catch(err){
@@ -165,9 +192,10 @@ const updateAnswer = async (req,res,next) => {
 
 const incrementRating = async (req,res,next) => {
 
+    // Taking answerId from the route
     const answerId = req.params.answerId;
 
-    console.log(answerId);
+    // Getting the answer which should be updated
     let answerFound;
     try{
         answerFound = await Answer.findById(answerId);
@@ -176,12 +204,14 @@ const incrementRating = async (req,res,next) => {
         next(new HttpError('Something went wrong',500));
     }
 
+    // Throwing error if the answer is not found
     if(!answerFound){
         next(new HttpError("Answer not found",500));
     }
 
-    console.log(answerFound);
+    // Incrementing the rating by 1
     answerFound.rating += 1;
+    // Saving the updated answer
     try{
         await answerFound.save();
     }catch(err){
@@ -255,6 +285,7 @@ const deleteAnswer = async (req,res,next) => {
 
 
 exports.giveAnswer = giveAnswer;
+exports.getAnswerById = getAnswerById;
 exports.updateAnswer = updateAnswer;
 exports.deleteAnswer = deleteAnswer;
 exports.getAnswersByQuestionId = getAnswersByQuestionId;

@@ -78,7 +78,7 @@ const Input = (props) =>  {
         <div>
             <label>{props.label}</label>
             {element}
-            {!inputState.isValid && inputState.isTouch && <p>{props.errorMessage}</p>}
+            {!inputState.isValid && inputState.isTouch && <p className="error"><i class="fas fa-exclamation-triangle" style={{color:"red"}}></i>  {props.errorMessage}</p>}
         </div>
     )
 }

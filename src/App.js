@@ -11,6 +11,7 @@ import UserQuestions from "./portal home/components/UserQuestions";
 import NewQuestion from "./portal home/pages/NewQuestion";
 import {AuthContext} from "./shared/context/AuthContext";
 import UpdateQues from "./portal home/pages/UpdateQues";
+import UpdateAnswer from "./portal home/pages/UpdateAnswer";
 
 function App() {
 
@@ -88,6 +89,11 @@ function App() {
             <UpdateQues />
           </Route>
 
+          {/*  Question ( Update Question )  */}
+          <Route path="/update/:answerId" exact>
+            <UpdateAnswer />
+          </Route>
+          
           {/*  User ( Questions asked By User )  */}
           <Route path="/:userId/questions" exact>
             <UserQuestions />

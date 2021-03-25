@@ -36,7 +36,7 @@ function PortalNavbar(){
                 <div className="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                     <ul className="nav nav-pills justify-content-right">
                         <li className="nav-item">
-                            <NavLink to="/" className="nav-link">Home</NavLink>
+                            <NavLink to="/" className="nav-link" exact>Home</NavLink>
                         </li>
 
                         { !auth.isLogedIn && (  
@@ -64,8 +64,8 @@ function PortalNavbar(){
                             </li>
                             
                             <li className="nav-item">
-                                <NavLink to="/question/new" style={{textDecoration:"none"}}>
-                                    <div className="nav-link"><img className="ask-button" src={ask}></img>ASK</div>
+                                <NavLink to="/question/new" style={{textDecoration:"none"}} className="nav-link">
+                                    <img className="ask-button" src={ask}></img>ASK
                                 </NavLink>
                             </li>
 
@@ -83,4 +83,3 @@ function PortalNavbar(){
 }
 
 export default PortalNavbar;
-

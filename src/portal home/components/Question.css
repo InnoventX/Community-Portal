@@ -1,3 +1,8 @@
+body {
+    background-image: none;
+    background-color: #1a1a1a !important; 
+}
+
 .question-container{
     background-color: #363636;
     font-family: 'Montserrat', sans-serif;
@@ -65,4 +70,3 @@
     margin-left:78%;
   
   }
-  

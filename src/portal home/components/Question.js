@@ -10,7 +10,6 @@ import "./Question.css";
 const Question = (props) => {
     return(
         <React.Fragment>
-            
                 <div className="question-container">
                     <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
                     <h6 className="student-name">{props.userName}</h6>

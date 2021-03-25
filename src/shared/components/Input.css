@@ -1,7 +1,9 @@
-.input-box{
+
+
+.input-box {
     padding:1%;
     background-color:#6c757d;
-    color:black;
+    color:rgb(255, 255, 255);
     border-radius: 10px;
 }
 
@@ -13,4 +15,10 @@
 
 .invalid-input input{
     border:red 3px solid;
+}
+
+.error {
+    font-size: .85rem;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
 }
