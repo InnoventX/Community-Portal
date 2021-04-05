@@ -1,11 +1,9 @@
 // Using bcrypt for encrypting passwords
 const bcrypt = require('bcrypt');
 
-// Using Json Web Token
-const jwt = require('jsonwebtoken');
-
 // User Model
 const User = require("../models/user-model");
+const Code = require("../models/code-model");
 const Question = require('../models/question-model');
 // Own Error Class
 const HttpError = require("../util/http-error-message");
@@ -23,16 +21,7 @@ const transporter = nodeMailer.createTransport(sendGridTransport({
     }
 }));
 
-// Function for creating jwt token
-const createToken = (userId) => {
-    return jwt.sign(
-        {userId},                         // UserId as payload
-        "InnoventX's own secret",         // Secret
-        { expiresIn : 24*60*60 }          // Expiration time set to 1 day
-    );
-}
-
-const signup = async (req,res,next) => {
+const siggnup = async (req,res,next) => {
 
     // Storing error if it is comming from the inputs of signup through validationResult
     const error = validationResult(req);
@@ -62,26 +51,36 @@ const signup = async (req,res,next) => {
         next(new HttpError('User already exists.Please Login!',500));
     }
 
-    // Creating the user
+    const code = req.body.code;
+    console.log(code);
+
+    let codeFound;
+    try{
+        // Checking whether the user of that perticular email exists or not
+        codeFound = await Code.findOne({code: code});
+    }catch(err){
+        console.log(err);
+        next(new HttpError('something went wrong try again',500));
+    }
+
+    if(!codeFound){
+        next(new HttpError('No such code found.Please enter a valid code',500));
+    }
+        
     const newUser = new User({
         name: req.body.name,
         email:email,
         password:password,
         questions:[],
         answers:[],
-        savedAnswers:[]
+        savedAnswers:[],
+        schoolName: req.body.schoolName,
+        code: code
     });
 
     try{
         // Saving the user
         await newUser.save();
-
-        // Getting jwt token
-        // const token = createToken(user._id);
-
-        // Wrapping jwt token in the cookie use " npm install cookie-parser"
-        // res.setHeader('Set-Cookie' , 'newUser=true');
-
     }catch(err){
         console.log(err);
         // Sending the error message
@@ -334,7 +333,69 @@ const newpassword =  (req, res, next) => {
     })
 }
 
-exports.signup = signup;
+/*
+const signup = async (req,res,next) => {
+
+    // Storing error if it is comming from the inputs of signup through validationResult
+    const error = validationResult(req);
+    if(!error.isEmpty()){
+        console.log(error.message);
+        next(new HttpError('Invalid input.Please enter again',422));
+    }
+
+    // Generating salt to encrypting the password
+    const salt = await bcrypt.genSalt();
+
+    // Encripting the password
+    const password = await bcrypt.hash(req.body.password , salt);
+
+    const email = req.body.email;
+
+    // Checking if the user already exists or not via email
+    let existingUser;
+    try{
+        existingUser = await User.findOne({email:email});
+    }catch(err){
+        console.log(err);
+        next(new HttpError('Something went wrong',500));
+    }
+
+    if(existingUser){
+        next(new HttpError('User already exists.Please Login!',500));
+    }
+
+    // Creating the user
+    const newUser = new User({
+        name: req.body.name,
+        email:email,
+        password:password,
+        questions:[],
+        answers:[],
+        savedAnswers:[]
+    });
+
+    const newCode = new Code({
+        schoolName: "Mount Carmel",
+        code: "MYBIY1"
+    })
+
+    try{
+        // Saving the user
+        await newUser.save();
+        await newCode.save();
+    }catch(err){
+        console.log(err);
+        // Sending the error message
+        next(new HttpError('User not saved',500));
+    }
+
+    // Sending user in Response
+    res.json({user:newUser.toObject({getters:true})});
+}
+*/
+
+// exports.signup = signup;
+exports.siggnup = siggnup;
 exports.login = login;
 exports.getQuestionByUserId = getQuestionByUserId;
 exports.getAnswersByUserId = getAnswersByUserId;

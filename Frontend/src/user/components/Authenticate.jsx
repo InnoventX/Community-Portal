@@ -125,7 +125,9 @@ function Authenticate(){
             // Signup -> Login
             setData({
                 ...formState.inputs,
-                name:undefined 
+                name:undefined,
+                schoolName:undefined,
+                code:undefined
             },
             formState.inputs.email.isValid && formState.inputs)
         }else{
@@ -134,6 +136,14 @@ function Authenticate(){
                 {
                   ...formState.inputs,
                   name: {
+                    value: '',
+                    isValid: false
+                  },
+                  schoolName: {
+                    value: '',
+                    isValid: false
+                  },
+                  code: {
                     value: '',
                     isValid: false
                   }
@@ -198,6 +208,8 @@ function Authenticate(){
                         },
                         body: JSON.stringify({
                             name:formState.inputs.name.value,
+                            schoolName:formState.inputs.schoolName.value,
+                            code:formState.inputs.code.value,
                             email:formState.inputs.email.value,
                             password:formState.inputs.password.value
                         })
@@ -271,6 +283,32 @@ function Authenticate(){
                                         onInput = {handleInput}
                                         validators = {[VALIDATOR_REQUIRE()]}
                                         errorMessage="Please enter a valid user name"
+                                    />
+
+                                    <span className="icon"><i class="fas fa-user"></i></span>  
+                                    <Input 
+                                        id="schoolName"
+                                        element="input"
+                                        placeholder="School Name"
+                                        type="text"
+                                        className="form-control sign-in-Box"
+                                        value={formState.inputs.schoolName.value}
+                                        onInput = {handleInput}
+                                        validators = {[VALIDATOR_REQUIRE()]}
+                                        errorMessage="Please enter a valid school name"
+                                    />
+
+                                    <span className="icon"><i class="fas fa-user"></i></span>  
+                                    <Input 
+                                        id="code"
+                                        element="input"
+                                        placeholder="Enter Code"
+                                        type="text"
+                                        className="form-control sign-in-Box"
+                                        value={formState.inputs.code.value}
+                                        onInput = {handleInput}
+                                        validators = {[VALIDATOR_MINLENGTH(6)]}
+                                        errorMessage="Please enter a valid 6-digit code"
                                     />
                                 </div>
                                 )

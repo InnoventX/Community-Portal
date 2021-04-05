@@ -10,19 +10,30 @@ const User = require("../models/user-model");
 router.post("/signup",
             [
                 check('name').not().isEmpty(),
+                check('schoolName').not().isEmpty(),
+                check('code').isLength({min:6}),
                 check('email').isEmail(),
                 check('password').isLength({min:6})
-            ], userControllers.signup);
+            ], 
+            userControllers.siggnup);
 
-router.post("/reset-password", userControllers.postReset);
-
-router.post("/new-password", userControllers.newpassword);
+// router.post("/signup",
+//             [
+//                 check('name').not().isEmpty(),
+//                 check('email').isEmail(),
+//                 check('password').isLength({min:6})
+//             ], userControllers.siggnup);
 
 router.post("/login",
             [
                 check('email').isEmail(),
                 check('password').isLength({min:6})
-            ],userControllers.login);
+            ],
+            userControllers.login);
+
+router.post("/reset-password", userControllers.postReset);
+
+router.post("/new-password", userControllers.newpassword);
 
 router.get("/:userId",userControllers.getUserById);
 

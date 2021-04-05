@@ -23,7 +23,11 @@ const userSchema = mongoose.Schema({
 
     resetToken: { type: String },
     
-    resetExpire: { type: Date }
+    resetExpire: { type: Date },
+
+    // schoolName:{ type:String, required:true },
+    //
+    // code: { type: String }
 });
 
 userSchema.plugin(mongooseUniqueValidator);
