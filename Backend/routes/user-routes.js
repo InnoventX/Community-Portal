@@ -6,8 +6,10 @@ const userControllers = require("../controllers/user-controllers");
 const Question = require('../models/question-model');
 const HttpError = require("../util/http-error-message");
 const User = require("../models/user-model");
+const fileUpload = require("../middlewares/file-upload");
 
 router.post("/signup",
+            fileUpload.single('image'),
             [
                 check('name').not().isEmpty(),
                 check('schoolName').not().isEmpty(),

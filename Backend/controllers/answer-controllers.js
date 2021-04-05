@@ -104,8 +104,10 @@ const giveAnswer = async (req,res,next) => {
     const newAnswer = new Answer({
         userId,
         userName:userFound.name,
+        userImage:userFound.image,
         answer,
         rating:rating || 0,
+        image:'https://picsum.photos/200/300',
         questionId:questionId,
         subAnswers:[]
     });

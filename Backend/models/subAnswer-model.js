@@ -6,10 +6,13 @@ const subAnswerSchema = mongoose.Schema({
     
     userName:{ type:String , require:true},
 
+    userImage:{type:String , require:true},
+
     parentAnswerId:{type:mongoose.Types.ObjectId , require:true, ref:'Answer'},
 
-    subAnswer:{type:String, require:true}
+    subAnswer:{type:String, require:true},
 
+    image:{ type:String , required:true }
 });
 
 module.exports = mongoose.model("Subanswer",subAnswerSchema); 

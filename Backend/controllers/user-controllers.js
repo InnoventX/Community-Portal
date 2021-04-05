@@ -52,8 +52,6 @@ const siggnup = async (req,res,next) => {
     }
 
     const code = req.body.code;
-    console.log(code);
-
     let codeFound;
     try{
         // Checking whether the user of that perticular email exists or not
@@ -65,30 +63,30 @@ const siggnup = async (req,res,next) => {
 
     if(!codeFound){
         next(new HttpError('No such code found.Please enter a valid code',500));
+    }else{
+        const newUser = new User({
+            name: req.body.name,
+            email:email,
+            password:password,
+            image:req.file.path,
+            questions:[],
+            answers:[],
+            savedAnswers:[],
+            schoolName: req.body.schoolName,
+            code: code
+        });
+    
+        try{
+            // Saving the user
+            await newUser.save();
+        }catch(err){
+            console.log(err);
+            // Sending the error message
+            next(new HttpError('User not saved',500));
+        }
+        // Sending user in Response
+        res.json({user:newUser.toObject({getters:true})});
     }
-        
-    const newUser = new User({
-        name: req.body.name,
-        email:email,
-        password:password,
-        questions:[],
-        answers:[],
-        savedAnswers:[],
-        schoolName: req.body.schoolName,
-        code: code
-    });
-
-    try{
-        // Saving the user
-        await newUser.save();
-    }catch(err){
-        console.log(err);
-        // Sending the error message
-        next(new HttpError('User not saved',500));
-    }
-
-    // Sending user in Response
-    res.json({user:newUser.toObject({getters:true})});
 }
 
 const login = async (req,res,next) => {

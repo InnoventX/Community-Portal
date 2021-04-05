@@ -107,9 +107,11 @@ const newQuestion = async (req,res,next) => {
     const newQuestion = new Question({
         userId,
         userName:userFound.name,
+        userImage:userFound.image,
         title,
         category,
         wholeQuestion,
+        image:'https://picsum.photos/200/300',
         answers:[]
     });
     

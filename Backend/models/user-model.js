@@ -8,6 +8,8 @@ const userSchema = mongoose.Schema({
     email:{ type:String , required:true , unique:true },
     
     password:{ type:String , required:true , minlength:6 },
+
+    image:{ type:String , required:true },
     
     questions:[
         { type:mongoose.Types.ObjectId , required:true , ref:'Question'}
@@ -25,9 +27,9 @@ const userSchema = mongoose.Schema({
     
     resetExpire: { type: Date },
 
-    // schoolName:{ type:String, required:true },
-    //
-    // code: { type: String }
+    schoolName:{ type:String, required:true },
+    
+    code: { type: String, required:true }
 });
 
 userSchema.plugin(mongooseUniqueValidator);

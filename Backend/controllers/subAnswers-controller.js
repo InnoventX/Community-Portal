@@ -34,8 +34,10 @@ const newSubAnswer = async (req,res,next) => {
     const newSubAnswer = new Subanswer({
         userId,
         userName:userFound.name,
+        userImage:userFound.image,
         parentAnswerId,
-        subAnswer
+        subAnswer,
+        image:'https://picsum.photos/200/300'
     });
 
     try{

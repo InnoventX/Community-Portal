@@ -18,6 +18,7 @@ const QuesList = (props) => {
                         id={question.id}
                         userId = {question.userId}
                         userName = {question.userName}
+                        userImage = {question.userImage}
                         title = {question.title}
                         wholeQuestion = {question.wholeQuestion}
                         answers= {question.answers}

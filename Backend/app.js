@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -14,6 +17,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.json());
 
+// Sending images as response
+app.use("/uploads/images" , express.static(path.join('uploads','images')));
 
 app.use((req,res,next) => {
     // Header used to patch the backend with Frontend
@@ -40,6 +45,12 @@ app.use((req,res,next) => {
 
 // For sending Error messages
 app.use((error,req,res,next) => {
+    // If the route is dealing with file so we have to remove the stored file 
+    if(req.file){
+        fs.unlink(req.file.path, (err) => {
+            console.log(err);
+        })
+    }
     res.status(error.status || 500);
     res.json({message:error.message || "Something went wrong"});
 })

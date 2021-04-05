@@ -12,9 +12,11 @@
 }
 
 .user-icon{
-    position: relative;
-    display: inline-block;
-    color: #B2B1B1;
+  display: inline-block;
+  border-radius: 50%;
+  width: 20%;
+  height: 25%;
+  object-fit: cover;
 }
 
 .student-name{

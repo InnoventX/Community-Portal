@@ -12,7 +12,9 @@ const Question = (props) => {
         <React.Fragment>
             
                 <div className="question-container">
-                    <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
+                    <div className="user-icon">
+                        <img className="user-icon" src={`http://localhost:5000/${props.userImage}`} alt="User"/>
+                    </div>
                     <h6 className="student-name">{props.userName}</h6>
                     <h6 className="category">{props.category}</h6>
                     <h4 className="question-title">{props.title}</h4>

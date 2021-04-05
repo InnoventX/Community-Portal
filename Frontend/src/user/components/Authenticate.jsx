@@ -10,6 +10,7 @@ import {VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE} from "../../sha
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import ImageUpload from "../../shared/components/ImageUpload";
 
 // This function will be called whenever we use "dispatch"
 const formReducer = ( state, action) => {
@@ -126,6 +127,7 @@ function Authenticate(){
             setData({
                 ...formState.inputs,
                 name:undefined,
+                image:undefined,
                 schoolName:undefined,
                 code:undefined
             },
@@ -138,6 +140,10 @@ function Authenticate(){
                   name: {
                     value: '',
                     isValid: false
+                  },
+                  image:{ 
+                      value: null,
+                      isValid: false
                   },
                   schoolName: {
                     value: '',
@@ -201,18 +207,19 @@ function Authenticate(){
             }else{
                 try{
                     setIsLoading(true);
+
+                    // Using FormData to pass the image as url
+                    const formData = new FormData();
+                    formData.append('name',formState.inputs.name.value);
+                    formData.append('image',formState.inputs.image.value);
+                    formData.append('schoolName',formState.inputs.schoolName.value);
+                    formData.append('code',formState.inputs.code.value);
+                    formData.append('email',formState.inputs.email.value);
+                    formData.append('password',formState.inputs.password.value);
+
                     const response = await fetch("http://localhost:5000/api/user/signup",{
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            name:formState.inputs.name.value,
-                            schoolName:formState.inputs.schoolName.value,
-                            code:formState.inputs.code.value,
-                            email:formState.inputs.email.value,
-                            password:formState.inputs.password.value
-                        })
+                        body:formData
                     });
         
                     const responseData = await response.json();
@@ -284,6 +291,8 @@ function Authenticate(){
                                         validators = {[VALIDATOR_REQUIRE()]}
                                         errorMessage="Please enter a valid user name"
                                     />
+
+                                    <ImageUpload id="image" center onInput={handleInput}/>
 
                                     <span className="icon"><i class="fas fa-user"></i></span>  
                                     <Input 

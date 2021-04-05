@@ -6,8 +6,12 @@ const answerSchema = mongoose.Schema({
 
     userName:{ type:String , require:true },
 
+    userImage:{type:String , require:true},
+
     answer:{ type:String , require:true },
     
+    image:{ type:String , required:true },
+
     rating:{ type:Number , require:true },
     
     questionId:{ type:mongoose.Types.ObjectId , require:true , ref:'Question' },
