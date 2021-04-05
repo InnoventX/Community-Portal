@@ -14,6 +14,10 @@ router.post("/signup",
                 check('password').isLength({min:6})
             ], userControllers.signup);
 
+router.post("/reset-password", userControllers.postReset);
+
+router.post("/new-password", userControllers.newpassword);
+
 router.post("/login",
             [
                 check('email').isEmail(),

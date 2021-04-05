@@ -5,7 +5,6 @@ const User = require("../models/user-model");
 const Subanswer = require("../models/subanswer-model");
 const mongoose = require('mongoose');
 const {validationResult} = require('express-validator');
-const { Http } = require('@material-ui/icons');
 
 const newSubAnswer = async (req,res,next) => {
     const parentAnswerId = req.params.answerId;

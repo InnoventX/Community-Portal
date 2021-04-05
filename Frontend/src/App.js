@@ -14,6 +14,8 @@ import UpdateQues from "./portal home/pages/UpdateQues";
 import UpdateAnswer from "./portal home/pages/UpdateAnswer";
 import UserAnswers from "./portal home/pages/UserAnswers";
 import SavedAnswers from "./portal home/pages/SavedAnswers";
+import Reset from "./user/components/Reset";
+import NewPassword from "./user/components/NewPassword";
 
 function App() {
 
@@ -40,6 +42,7 @@ function App() {
       <Switch>
           {/*  Home Page  */}
           <Route path="/" exact>
+            <PortalNavbar />
             <PortalHome />
           </Route>
 
@@ -48,13 +51,23 @@ function App() {
             <Authenticate />
           </Route>
 
+          <Route path="/reset" exact>
+            <Reset />
+          </Route>
+
+          <Route path="/reset/:token" exact>
+              <NewPassword />
+          </Route>
+
           {/*  Question ( Single Page )  */}
           <Route path="/ques/:quesID" exact>
+            <PortalNavbar />
             <QuesPage />
           </Route>
 
           {/*  Questions According to the Category  */}
           <Route path="/questions/:catID" exact>
+            <PortalNavbar />
             <CatQuestions />
           </Route>
 
@@ -68,46 +81,55 @@ function App() {
 
           {/*  Home Page  */}
           <Route path="/" exact>
+            <PortalNavbar />
             <PortalHome />
           </Route>
 
           {/*  Question ( Add New Question)  */}
           <Route path = "/question/new" exact>
+            <PortalNavbar />
             <NewQuestion />
           </Route>
 
           {/*  Question ( Single Question Page )  */}
           <Route path="/ques/:quesID" exact>
+            <PortalNavbar />
             <QuesPage />
           </Route>
 
           {/*  Question ( According to the Category )  */}
           <Route path="/questions/:catID" exact>
+            <PortalNavbar />
             <CatQuestions />
           </Route>
 
           {/*  Question ( Update Question )  */}
           <Route path="/:quesId/update" exact>
+            <PortalNavbar />
             <UpdateQues />
           </Route>
 
           {/*  Question ( Update Question )  */}
           <Route path="/update/:answerId" exact>
+            <PortalNavbar />
             <UpdateAnswer />
           </Route>
           
           {/*  User ( Questions asked By User )  */}
           <Route path="/:userId/questions" exact>
+            <PortalNavbar />
             <UserQuestions />
           </Route>
 
           {/*  User ( Answers given By User )  */}
           <Route path="/:userId/answers" exact>
+            <PortalNavbar />
             <UserAnswers />
           </Route>
 
           {/*  User ( Show Saved Answers of User )  */}
           <Route path="/:userId/savedAnswers" exact>
+            <PortalNavbar />
             <SavedAnswers />
           </Route>
 
@@ -126,7 +148,7 @@ function App() {
     }}>
       <Router>
         <main>
-          <PortalNavbar />
+          
           {routes}   
         </main>
       </Router>

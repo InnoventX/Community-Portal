@@ -307,7 +307,7 @@ function Authenticate(){
                                     value={formState.inputs.password.value}
                                     onInput={handleInput}
                                     validators={[VALIDATOR_MINLENGTH(6)]}
-                                    errorMessage="Pleaase enter a password of length 6"
+                                    errorMessage="Please enter a password of length 6"
                                 >
                                 </Input>
                             </div>
@@ -319,6 +319,8 @@ function Authenticate(){
 
                                 {/* Switching button */}
                                 <a className="SIGNUP" onClick={handleSwitch}>{ isLogin ? "Sign up" : "Login" }?</a>
+                                <br />
+                                { isLogin && <a className="SIGNUP" href="/reset">Forget Password</a>}
                             </div>
                         </form>
                     </div>

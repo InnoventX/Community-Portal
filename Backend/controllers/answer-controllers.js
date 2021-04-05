@@ -4,7 +4,6 @@ const Question = require('../models/question-model');
 const User = require("../models/user-model");
 const mongoose = require('mongoose');
 const {validationResult} = require('express-validator');
-const { Http } = require('@material-ui/icons');
 
 // Function used for sorting the ansers according to their rating
 const compare = (a , b) => {

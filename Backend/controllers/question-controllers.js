@@ -1,4 +1,3 @@
-const { RestaurantOutlined } = require('@material-ui/icons');
 const mongoose = require('mongoose');
 const { validationResult } = require('express-validator');
 

@@ -28,6 +28,8 @@
     background-color: #363636;
     color: white;
     margin-top: 3%;
+    margin-left: 0%;
+    margin-bottom: 1%;
   }
 
 .que-body-container{
@@ -36,6 +38,7 @@
     width: 84%;
     margin:2% 8%;
     color:white;
+    margin-left: 0%;
 }
 
 .que-body-text{
@@ -47,18 +50,34 @@
     background-color: #363636;
     color: white;
     width: 100%;
+    margin-left: 0%;
+    margin-bottom: 1%;
 }
 
-.submit-btn{
+.submit-btn-div {
+    padding-bottom: 5%;
+    margin-right: 8%;
+}
+
+.ask-submit-btn{
     border-color:#EE6F57;
     background-color: #EE6F57;
     color: white;
     border-radius: 28px;
     width: 12%;
-    float: right;
-    margin-right: 8%;
-    font-size: 120%;
+    float: right;    
+    font-size: 1.2rem;
 }
+
+.ask-submit-btn:hover {
+    background-color: #e45538;
+}
+
+.ask-submit-btn:focus {
+    box-shadow: 0 0 0 0.15rem transparent;
+}
+
+
 
 .submit-img{
     width: 20%;
@@ -84,4 +103,7 @@ select{
     line-height: 3; 
     background: #363636; 
     border-radius: .25em; 
+    margin-left: 0%;
+    margin-top: 2%;
+    margin-bottom: 2%;
 }

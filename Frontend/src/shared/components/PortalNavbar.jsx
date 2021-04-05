@@ -61,7 +61,7 @@ function PortalNavbar(){
                         { !auth.isLogedIn && (  
                             <li className="nav-item">
                                 <div className="portal-div">
-                                    <NavLink to="/authenticate" className="nav-link PORTAL">Portal</NavLink>
+                                    <NavLink to="/authenticate" className="nav-link PORTAL glow-on-hover">Portal</NavLink>
                                 </div>
                             </li>
                             )
@@ -84,21 +84,22 @@ function PortalNavbar(){
                             <li className="nav-item">
                                 <form className="form-inline my-2 my-lg-0">
                                     <div className="button-in">
-                                        <input  className="search" type="search" placeholder="Search" aria-label="Search" value={search} onChange={handleSearch}/>
-                                        <button className="search-btn" onClick={handleClick}><SearchIcon style={{color:"white"}}/></button>
+                                        <input  className="form-control search" type="search" placeholder="Search" aria-label="Search" value={search} onChange={handleSearch}/>
+                                        <button className="search-btn" onClick={handleClick}><SearchIcon style={{ marginLeft: "12%", color:"white"}}/></button>
                                     </div>
-                                </form>
+                                </form>                            
                             </li>
                             
                             <li className="nav-item">
                                 <NavLink to="/question/new" style={{textDecoration:"none"}} className="nav-link">
-                                    <img className="ask-button" src={ask}></img>ASK
+                                    <i class="fas fa-plus-circle"></i> ASK
                                 </NavLink>
                             </li>
 
                             <li className="nav-item">
-                                <NavLink to="/" className="PROFILE"><AccountCircleIcon style={{fontSize:"2.3rem",marginLeft:"2", marginTop:"8"}} /></NavLink>
+                                <NavLink to="/" className="PROFILE"><AccountCircleIcon style={{fontSize:"2.7rem",marginLeft:"90%", marginTop:"12%"}} /></NavLink>
                             </li>
+                            
                             </React.Fragment>
                             )
                         }

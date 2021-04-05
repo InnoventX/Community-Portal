@@ -73,7 +73,7 @@ const UserQuestions = () => {
                     </div>
                     <div className="right">
                         { userQuestions && <QuesList allQuestions={userQuestions} /> }
-                        { !userQuestions && <h1>No questios of this category available</h1>}
+                        { !userQuestions && <h1 style={{color:"white"}}><i style={{color:"#ffc107"}} class="fas fa-exclamation-triangle"></i> No questios of this category available</h1>}
                     </div>
                 </div>
             )}

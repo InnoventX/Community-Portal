@@ -125,15 +125,15 @@ const NewQuestion = () => {
                     {/* Input for title of question */}                
                     <div className="ask-question-container">                                
                         <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
-                        <h6 className="student-name">{userName} • asked</h6>
+                        <h6 className="student-name">{userName} <i style={{color:"gray"}}>asked</i></h6>
                         <Input 
                             id="title"
                             element="textarea"
-                            placeholder="   Add description of your question here..."                        
+                            placeholder="Add description of your question here"                        
                             errorMessage = "Please enter a valid title"
                             validators={[VALIDATOR_REQUIRE()]}
                             onInput={handleInput}
-                            className="que-title-text" 
+                            className="form-control que-title-text" 
                             rows="2"
                             
                         />
@@ -148,7 +148,7 @@ const NewQuestion = () => {
                             type="text"
                             label="Category"
                             placeholder="Arduino"
-                            className="cat"
+                            className="form-control cat"
                             errorMessage="Please enter a category"
                             validators={[VALIDATOR_REQUIRE()]}
                             onInput={handleInput}
@@ -163,16 +163,19 @@ const NewQuestion = () => {
                             errorMessage="Question must be of 10 Characters"
                             validators={[VALIDATOR_MINLENGTH(10)]}
                             onInput={handleInput}
-                            className="que-body-text" 
+                            className="form-control que-body-text" 
                             rows="7"
-                            placeholder="   Add description of your question here..."
+                            placeholder="Add description of your question here..."
                         />
+                        
                     </div>
 
                     {/* This button will be disabled if the formState is invalid */}
-                    <button className="submit-btn" disabled={!formState.isValid}>
-                        <img className="submit-img" src={submit}></img>Submit
-                    </button>
+                    <div className="submit-btn-div">
+                        <button className="btn ask-submit-btn" disabled={!formState.isValid}>
+                            <i class="fas fa-check-circle"></i> Submit
+                        </button>
+                    </div>
                 </form>
             )}
             

@@ -17,9 +17,9 @@ const crypto = require('crypto');
 // module for mail service
 const nodeMailer = require('nodemailer');
 const sendGridTransport = require('nodemailer-sendgrid-transport');
-const tranporter = nodeMailer.createTransport(sendGridTransport({
+const transporter = nodeMailer.createTransport(sendGridTransport({
     auth: {
-        api_key: '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'
+        api_key: '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'
     }
 }));
 
@@ -40,7 +40,7 @@ const signup = async (req,res,next) => {
         console.log(error.message);
         next(new HttpError('Invalid input.Please enter again',422));
     }
-    
+
     // Generating salt to encrypting the password
     const salt = await bcrypt.genSalt();
 
@@ -137,7 +137,7 @@ const saveAnswer = async (req,res,next) => {
     const answerId = req.params.answerId;
 
     // finding the user and his saved answers
-    let userFound; 
+    let userFound;
     try{
         userFound = await User.findById(userId);
         userFound.savedAnswers.push(answerId);
@@ -190,7 +190,7 @@ const getAnswersByUserId = async (req,res,next) => {
         console.log(err);
         next(new HttpError('Something went wrong',500));
     }
-    
+
     // Throwing error if the user doesnot exixts
     if(!userFound){
         res.json({message:"User not found."});
@@ -211,7 +211,7 @@ const getAnswersByUserId = async (req,res,next) => {
 
             if(index === (userFound.answers.length-1)){
                 res.json({quesAns:array});
-            }  
+            }
         })
     }
 
@@ -219,7 +219,7 @@ const getAnswersByUserId = async (req,res,next) => {
 }
 
 const getSavedAnswers = async (req,res,next) => {
-    
+
     // Taking userId by route
     const userId = req.params.userId;
 
@@ -231,7 +231,7 @@ const getSavedAnswers = async (req,res,next) => {
         console.log(err);
         next(new HttpError('Something went wrong',500));
     }
-    
+
     // Throwing error if the user doesnot exixts
     if(!userFound){
         res.json({message:"User not found."});
@@ -254,9 +254,9 @@ const getSavedAnswers = async (req,res,next) => {
 
             if(index === (userFound.savedAnswers.length-1)){
                 res.json({quesAns:array});
-            }  
+            }
         })
-    }   
+    }
 }
 
 const getUserById = async (req,res,next) => {
@@ -267,7 +267,7 @@ const getUserById = async (req,res,next) => {
         userFound = await User.findById(userId);
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));  
+        next(new HttpError('Something went wrong',500));
     }
 
     if(!userFound){
@@ -278,7 +278,7 @@ const getUserById = async (req,res,next) => {
 }
 
 
-const postReset = async(req, res, next) => {
+const postReset = (req, res, next) => {
     crypto.randomBytes(32, (err, buffer) => {
         if (err) {
             console.log(err);
@@ -288,53 +288,50 @@ const postReset = async(req, res, next) => {
         User.findOne({ email: req.body.email })
             .then(user => {
                 if (!user) {
-                    req.flash('error', 'No account with the email found.');
+                    return res.status(422).json({error: "No user found for this email account"});
                 }
+                console.log("found");
                 user.resetToken = token;
                 user.resetExpire = Date.now() + 3600000;
-                user.save();
+                return user.save();
             })
             .then(result => {
-                res.json({ status: 'Email Sent' });
-                tranporter.sendMail({
+                transporter.sendMail({
                     to: req.body.email,
-                    from: 'info.innoventx@gmail.com',
+                    from: 'tinyrick5101@gmail.com',
                     subject: 'Reset Password',
                     html: `
-                        <p>You Requested a password reset </p>
-                        <P>Please click this  <a href="http://localhost:3000/reset/token/${token}" to reset the password</p> 
+                    <p>You requested a password reset</p>
+                    <p>Click this <a href="http://localhost:3000/reset/${token}">link</a></p>
                     `
                 });
             })
-            .catch(err => {
-                console.log(err);
-                next(new HttpError('Something went wrong', 500));
-            });
+            res.json({message: "check your email!!"})
+
 
     });
 };
 
-const newpassword = async (req, res, next) => {
-    const token = req.body.token;
-    const newpassword = req.body.password;
-    let resetuser;
-    User.findOne({ resetToken: token, resetExpire: { $gt: Date.now() } })
+
+const newpassword =  (req, res, next) => {
+    const newPassword = req.body.password;
+    const sentToken =  req.body.token;
+    User.findOne({resetToken: sentToken, resetExpire: {$gt: Date.now()}})
         .then(user => {
-            resetuser = user;
-            return bcrypt.hash(newpassword, 12);
-        })
-        .then(hashedPassword => {
-            resetuser.password = hashedPassword;
-            resetuser.resetToken = undefined;
-            resetuser.resetExpire = undefined;
-            resetuser.save();
-        })
-        .then(result => {
-            res.json({ status: 'Sexy' });
-        })
-        .catch(err => {
+            if (!user) {
+                return res.status(422).json({error: "Try Again session expired"})
+            }
+            bcrypt.hash(newPassword, 12).then(hasedPassword => {
+                user.password = hasedPassword
+                user.resetToken = undefined
+                user.resetExpire = undefined
+                user.save().then(savedUser => {
+                    res.json({message: "password updated pls re-login"})
+                })
+            })
+        }).catch(err=>{
             console.log(err);
-        });
+    })
 }
 
 exports.signup = signup;

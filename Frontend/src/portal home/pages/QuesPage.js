@@ -67,9 +67,9 @@ const QuesPage = () => {
     }
 
     // Showing delete section
-    const showDeleteSection = (event) => {
+    const showDeleteSection = (qOa) => {
         // event.target.name will contain the name which shoul be deleted( Question 0r Answer )
-        const commingFrom = event.target.name;
+        const commingFrom = qOa;
         setDeleteSection(commingFrom);
     }
 
@@ -146,10 +146,10 @@ const QuesPage = () => {
                             setIsLoading(false);
                         }
                     })
+
                 }else{
                     setIsLoading(false);
                 }
-                
                 
             }catch(err){
                 console.log(err);
@@ -363,9 +363,9 @@ const QuesPage = () => {
                         {/* Showing the update & delete button of question if the user is authenticated and have asked the question */}
                         { (auth.userId === question.userId) ? (
                             <React.Fragment>
-                                <button className="btn delete-btn" style={{float:"right"}} name="question" onClick={showDeleteSection}><img className="delete-img" src={del}></img>  DELETE</button>                                       
+                                <button className="btn delete-btn" style={{float:"right"}} name="question" onClick={() => {showDeleteSection('question')}}><i class="fas fa-trash-alt"></i></button>                                       
                                 <Link to={`/${quesId}/update`}>
-                                    <button className="btn update-btn" style={{float:"right"}}><img className="update-img" src={update}></img>UPDATE</button>
+                                    <button className="btn update-btn" style={{float:"right"}}><i class="fas fa-edit"></i></button>
                                 </Link>
                             </React.Fragment>
                             ): null
@@ -381,13 +381,14 @@ const QuesPage = () => {
                         { auth.isLogedIn ? (
                             <React.Fragment>                            
                                 {/* Displaying give answer option to give answer */}
-                                <button className="give-ans-btn" onClick={() => {showPostSection()}}>
-                                    <img className="add-ans-img" src={addans}></img>Give Answer
+                                <button className="btn give-ans-btn" onClick={() => {showPostSection()}}>
+                                    <i class="fas fa-comment-medical"></i> Give Answer
                                 </button>
+                                
                             </React.Fragment>
                             ):(
                             <React.Fragment>
-                                <a href="/authenticate"><button className="give-ans-btn"><img className="add-ans-img" src={addans}></img>Give Answer</button></a>
+                                <a href="/authenticate"><button className="btn give-ans-btn"><i class="fas fa-comment-medical"></i> Give Answer</button></a>
                             </React.Fragment>
                             )
                         }
@@ -396,8 +397,8 @@ const QuesPage = () => {
                     {/* Showing the post answer block */}
                     <div className="post-ans-div">
                         <form onSubmit={nowPostAns}>
-                            <textarea className="post-ans-text" rows="3" value={ansGiven} onChange={handleGivenAns} placeholder="   Type your answer here..."/>
-                            <button type="submit" className="post-btn"><img className="post-img" src={post}></img>Post</button>
+                            <textarea className="post-ans-text form-control" rows="3" value={ansGiven} onChange={handleGivenAns} placeholder="   Type your answer here..."/>
+                            <button className="btn post-btn"><i class="fas fa-paper-plane"></i> Post</button>
                         </form>
                     </div>
                         
@@ -421,12 +422,12 @@ const QuesPage = () => {
                                                 {/* Showing the update & delete button of answer if the user have given that answer */}
                                                 { auth.userId === ans.userId ? (
                                                     <React.Fragment>
-                                                        <button className="btn delete-btn" style={{float:"right"}} name={ans.id} onClick={showDeleteSection}>
-                                                            <img className="delete-img" src={del}></img>  DELETE
+                                                        <button className="btn delete-btn" style={{float:"right"}} name={ans.id} onClick={() => {showDeleteSection(ans.id)}}>
+                                                            <i class="fas fa-trash-alt"></i>
                                                         </button>
                                                         <Link to={`/update/${ans.id}`}>
                                                             <button className="btn update-btn" style={{float:"right"}}>
-                                                                <img className="update-img" src={update}></img>UPDATE
+                                                                <i class="fas fa-edit"></i>
                                                             </button>
                                                         </Link>
                                                     </React.Fragment>
@@ -453,6 +454,7 @@ const QuesPage = () => {
                                                 <h6 className="student-name">{ans.userName} • just now</h6>
                                                 <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                 
                                                 <p className="answers">{ans.answer}</p>
+                                                
 
                                                 {( auth.isLogedIn && ans.subAnswers.length !== 0) ? (
                                                     ans.subAnswers.map((subAns) => {
@@ -466,7 +468,7 @@ const QuesPage = () => {
                                                                     <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
                                                                     <p className="answers">{subAns.subAnswer}</p>
                                                                 </div>
-                                                                
+
                                                             </React.Fragment>
                                                         )
                                                     })
@@ -475,14 +477,14 @@ const QuesPage = () => {
                                                         
                                                 {/* To save the answer in users database */}
                                                 { auth.isLogedIn && ((auth.userId !== ans.userId) && (
-                                                    <button className="btn save-btn" style={{float:"left"}} onClick={() => {saveAnswer(ans.id)}}>
-                                                        SAVE
+                                                    <button className="btn save-btn" onClick={() => {saveAnswer(ans.id)}}>
+                                                        <i class="fas fa-bookmark"></i>
                                                     </button>
                                                 ))}
 
                                                 { auth.isLogedIn && (
                                                     <button className="btn post-subAns-btn" style={{float:"left"}} onClick={() => {showSubAnswerDiv(ans.id)}}>
-                                                        POST
+                                                        REPLY
                                                     </button>
                                                 )}
 
@@ -492,8 +494,8 @@ const QuesPage = () => {
                                                         event.preventDefault();
                                                         postSubAns(ans.id);
                                                     }}>
-                                                        <textarea className="post-ans-text" rows="3" value={subAnswer} onChange={handleSubAnswer} placeholder="     Write your query here .."/>
-                                                        <button type="submit" className="post-btn"><img className="post-img" src={post}></img>Post</button>
+                                                        <textarea className="post-ans-text form-control" id="txtarea" rows="3" value={subAnswer} onChange={handleSubAnswer} placeholder="Write your query here .."/>                                                    
+                                                        <button className="btn post-btn"><i class="fas fa-paper-plane"></i> Post</button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -507,9 +509,9 @@ const QuesPage = () => {
                                                 {/* Showing the update & delete button if the user have given the answer */}
                                                 { auth.userId === ans.userId ? (
                                                     <React.Fragment>
-                                                        <button className="btn delete-btn" style={{float:"right"}} name={ans.id} onClick={showDeleteSection}><img className="delete-img" src={del}></img>  DELETE</button>
+                                                        <button className="btn delete-btn" style={{float:"right"}} name={ans.id} onClick={() => {showDeleteSection(ans.id)}}><i class="fas fa-trash-alt"></i></button>
                                                         <Link to={`/update/${ans.id}`}>
-                                                            <button className="btn update-btn" style={{float:"right"}}><img className="update-img" src={update}></img>UPDATE</button>
+                                                            <button className="btn update-btn" style={{float:"right"}}><i class="fas fa-edit"></i></button>
                                                         </Link>
                                                     </React.Fragment>
                                                     ):null
@@ -533,20 +535,18 @@ const QuesPage = () => {
                                                 <h6 className="student-name">{ans.userName} • just now</h6>
                                                 <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                                    
                                                 <p className="answers">{ans.answer}</p>
+                                                
 
                                                 {( auth.isLogedIn && ans.subAnswers.length !== 0) ? (
                                                     ans.subAnswers.map((subAns) => {
                                                         return(
                                                             <React.Fragment>
-                                                                
                                                                 <div className="subANS">
-                                                                    
                                                                     <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
                                                                     <h6 className="student-name">{subAns.userName} • just now</h6>
                                                                     <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
                                                                     <p className="answers">{subAns.subAnswer}</p>
                                                                 </div>
-                                                                
                                                             </React.Fragment>
                                                         )
                                                     })
@@ -555,12 +555,12 @@ const QuesPage = () => {
 
                                                 {/* To save the answer in users database */}
                                                 { auth.isLogedIn && ((auth.userId !== ans.userId) && (
-                                                    <button className="btn save-btn" style={{float:"left"}} onClick={() => {saveAnswer(ans.id)}}>SAVE</button>
+                                                    <button className="btn save-btn" onClick={() => {saveAnswer(ans.id)}}><i class="fas fa-bookmark"></i></button>
                                                 ))}
 
                                                 { auth.isLogedIn && (
                                                     <button className="btn post-subAns-btn" style={{float:"left"}} onClick={() => {showSubAnswerDiv(ans.id)}}>
-                                                        POST
+                                                        REPLY
                                                     </button>
                                                 )}
 
@@ -570,8 +570,8 @@ const QuesPage = () => {
                                                         event.preventDefault();
                                                         postSubAns(ans.id);
                                                     }}>
-                                                        <textarea className="post-ans-text" rows="3" value={subAnswer} onChange={handleSubAnswer} placeholder="     Write your query here .."/>
-                                                        <button type="submit" className="post-btn"><img className="post-img" src={post}></img>Post</button>
+                                                        <textarea className="post-ans-text flow-control" rows="3" value={subAnswer} onChange={handleSubAnswer} placeholder="     Write your query here .."/>
+                                                        <button className="btn post-btn"><i class="fas fa-paper-plane"></i> Post</button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -588,7 +588,9 @@ const QuesPage = () => {
                         <React.Fragment>
                             {/* If there are more then 3 answers then displaying show more option */}
                             {answers && ((answers.length>3) ? (
-                                <button className="show-more-btn" onClick={handleShowAllAnswers}><img className="show-more-img" src={showmore}></img>Show more</button>
+                                <button className="btn show-more-btn" onClick={handleShowAllAnswers}>
+                                    <i class="fas fa-caret-square-down"></i> Show More
+                                </button>
                             ):null)}                               
                         </React.Fragment>
                         ):(
@@ -609,3 +611,6 @@ const QuesPage = () => {
 }
 
 export default QuesPage;
+
+
+
