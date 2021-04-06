@@ -48,6 +48,9 @@ const QuesPage = () => {
 
     const  [subAnswer , setSubAnswer] = useState();
 
+    // This state will decided to show the image section or not 
+    const [showImageUpload , setShowImageUpload] = useState(false);
+
     // Showing POST ANSWER block
     const showPostSection = () => {
         // It will display the GiveAnswer block when we chick the button and hide when we again click it.
@@ -104,6 +107,13 @@ const QuesPage = () => {
     const handleSubAnswer = (event) => {
         const subAns = event.target.value;
         setSubAnswer(subAns);
+    }
+
+    const showImageUploadHandler = (event) => {
+        event.preventDefault();
+        setShowImageUpload(true);
+        const btn = document.querySelector('#add-image-btn');
+        btn.style.display = 'none';
     }
 
     // Using useEffect hoock which renders question and it's answers,this should only be rendered when submitAnswer changes.  
@@ -371,10 +381,11 @@ const QuesPage = () => {
                             ): null
                         }
                             
-                        <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
+                        <div className="user-icon"><img className="users-icon" src={`http://localhost:5000/${question.userImage}`} alt="User"/></div>
                         <h6 className="student-name">{question.userName} • just now</h6>
                         <h6 className="category">{question.category}</h6>
                         <h4 className="question-title">{question.title}</h4>
+                        { question.image && <img className="image-container" src={`http://localhost:5000/${question.image}`} alt="Image"/>}
                         <p>{question.wholeQuestion}</p>
 
                         {/* Give answers options if the user is authenticated */}
@@ -383,8 +394,7 @@ const QuesPage = () => {
                                 {/* Displaying give answer option to give answer */}
                                 <button className="btn give-ans-btn" onClick={() => {showPostSection()}}>
                                     <i class="fas fa-comment-medical"></i> Give Answer
-                                </button>
-                                
+                                </button>        
                             </React.Fragment>
                             ):(
                             <React.Fragment>
@@ -397,6 +407,8 @@ const QuesPage = () => {
                     {/* Showing the post answer block */}
                     <div className="post-ans-div">
                         <form onSubmit={nowPostAns}>
+                            {/* { showImageUpload && <ImageUpload id='image' onInput={handleInput} center /> }
+                            <button id="add-image-btn" onClick={showImageUploadHandler}>Add Image?</button> */}
                             <textarea className="post-ans-text form-control" rows="3" value={ansGiven} onChange={handleGivenAns} placeholder="   Type your answer here..."/>
                             <button className="btn post-btn"><i class="fas fa-paper-plane"></i> Post</button>
                         </form>
@@ -450,7 +462,9 @@ const QuesPage = () => {
                                                     )
                                                 }
                                         
-                                                <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
+                                                <div className="user-icon">
+                                                    <img className="users-icon" src={`http://localhost:5000/${ans.userImage}`} alt="User"/>
+                                                </div>
                                                 <h6 className="student-name">{ans.userName} • just now</h6>
                                                 <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                 
                                                 <p className="answers">{ans.answer}</p>
@@ -463,7 +477,9 @@ const QuesPage = () => {
                                                                 
                                                                 <div className="subANS">
                                                                     
-                                                                    <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
+                                                                    <div className="user-icon">
+                                                                        <img className="users-icon" src={`http://localhost:5000/${subAns.userImage}`} alt="User"/>
+                                                                    </div>
                                                                     <h6 className="student-name">{subAns.userName} • just now</h6>
                                                                     <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
                                                                     <p className="answers">{subAns.subAnswer}</p>
@@ -531,7 +547,9 @@ const QuesPage = () => {
                                                     )
                                                 }
                                         
-                                                <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
+                                                <div className="user-icon">
+                                                    <img className="users-icon" src={`http://localhost:5000/${ans.userImage}`} alt="User"/>
+                                                </div>
                                                 <h6 className="student-name">{ans.userName} • just now</h6>
                                                 <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                                    
                                                 <p className="answers">{ans.answer}</p>
@@ -542,7 +560,9 @@ const QuesPage = () => {
                                                         return(
                                                             <React.Fragment>
                                                                 <div className="subANS">
-                                                                    <div className="user-icon"><AccountCircleIcon className="user-icon" style={{fontSize:"3.3rem"}}/></div>
+                                                                    <div className="user-icon">
+                                                                        <img className="users-icon" src={`http://localhost:5000/${subAns.userImage}`} alt="User"/>
+                                                                    </div>
                                                                     <h6 className="student-name">{subAns.userName} • just now</h6>
                                                                     <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
                                                                     <p className="answers">{subAns.subAnswer}</p>

@@ -28,7 +28,8 @@ const ImageUpload = (props) => {
         props.onInput(props.id, pickedFile , fileIsValid);
     }
 
-    const pickImageHandler = () => {
+    const pickImageHandler = (event) => {
+        event.preventDefault();
         // Shows the file input tag
         filePickerRef.current.click();
     }
@@ -65,7 +66,7 @@ const ImageUpload = (props) => {
 
             {/* Showing the image preview */}
             <div className={`image-upload ${props.center && 'center'}`}>
-                <div className="image-upload__preview">
+                <div className={`image-upload__preview ${props.previewClass}`}>
                     { previewUrl && <img src={previewUrl} alt="Preview" /> }
                     { !previewUrl && <p>Please pick an image</p>}
                 </div>

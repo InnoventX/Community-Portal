@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const mongoose = require('mongoose');
 const { validationResult } = require('express-validator');
 
@@ -83,7 +85,7 @@ const newQuestion = async (req,res,next) => {
     const error = validationResult(req);
     if(!error.isEmpty()){
         console.log(error.message);
-        next(new HttpError('Invalid input.Please enter again',422));
+        throw new HttpError('Invalid input.Please enter again',422);
     }
 
     // Taking the data from the body
@@ -111,7 +113,7 @@ const newQuestion = async (req,res,next) => {
         title,
         category,
         wholeQuestion,
-        image:'https://picsum.photos/200/300',
+        image:req.file.path || null,
         answers:[]
     });
     
@@ -206,6 +208,8 @@ const deleteQuestion = async (req,res,next) => {
         next(new HttpError('Question not found',500));
     }
 
+    const imagePath = questionFound.image;
+
     // Finding the user who has asked this question  
     let creator;
     try{
@@ -263,6 +267,10 @@ const deleteQuestion = async (req,res,next) => {
         console.log(err);
         next(new HttpError('Something went wrong',500));
     }
+
+    fs.unlink(imagePath , (err) => {
+        console.log(err);
+    })
 
     res.json({message:"Question deleted successfully"});
     

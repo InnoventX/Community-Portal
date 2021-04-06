@@ -241,7 +241,7 @@ function Authenticate(){
     // Triggered when the submit button is clicked
     const haldleSubmitButton = (event) => {
         event.preventDefault();
-        // The form shoul only be submitted now
+        // The form should only be submitted now
         setOnSubmit(true);
         handleSubmit(event);
     }
@@ -266,9 +266,9 @@ function Authenticate(){
             { isLoading && <LoadingSpinner asOverlay />}
                 <div id="wrapper">
                     <div className="signIn-text-DIV">
-                        <h1 className="signIN-text">INSPIRING.</h1>
-                        <h1 className="signIN-text">INNOVATING.</h1>
-                        <h1 className="signIN-text">INNVENTING.</h1>
+                        <h1 className="signIN-text">LEARN.</h1>
+                        <h1 className="signIN-text">IMPLEMENT.</h1>
+                        <h1 className="signIN-text">INNOVATE.</h1>
                     </div>
                     <div className="my-form">
                         <img className="logo2" src={logo}/>

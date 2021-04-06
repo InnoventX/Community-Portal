@@ -10,7 +10,7 @@ import {useForm} from "../../shared/hoocks/form-hook";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
-import submit from '../../photos/submit.svg';
+import ImageUpload from "../../shared/components/ImageUpload";
 
 const NewQuestion = () => {
 
@@ -24,7 +24,14 @@ const NewQuestion = () => {
     const [error,setError] = useState();
     const [isLoading , setIsLoading] = useState(false);
 
+    // For displaying the user's name
     const [userName , setUserName] = useState();
+
+    // This state will decided to show the image section or not 
+    const [showImageUpload , setShowImageUpload] = useState(false);
+
+    // The form should only be submitted when the SUBMIT button is clicked
+    const [onSubmit , setOnSubmit] = useState(false);
 
     // Form input State
     const [formState, handleInput] = useForm(
@@ -39,6 +46,10 @@ const NewQuestion = () => {
             },
             wholeQuestion:{
                 value:'',
+                isValid:false
+            },
+            image:{ 
+                value:null,
                 isValid:false
             }
         },
@@ -70,35 +81,50 @@ const NewQuestion = () => {
     const submitHandler = async (event) => {
         event.preventDefault();
 
-        // Sending the POST request to create new Question
-        try{
-            const response = await fetch("http://localhost:5000/api/question/",{
-                method:'POST',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify({
-                    userId:auth.userId,
-                    title:formState.inputs.title.value,
-                    category:formState.inputs.category.value,
-                    wholeQuestion:formState.inputs.wholeQuestion.value
-                })
-            });
+        if(onSubmit){
+            // Sending the POST request to create new Question
+            try{
 
-            const responseData = await response.json();
+                const formData = new FormData();
+                formData.append('userId',auth.userId);
+                formData.append('title',formState.inputs.title.value);
+                formData.append('category',formState.inputs.category.value);
+                formData.append('wholeQuestion',formState.inputs.wholeQuestion.value);
+                formData.append('image',formState.inputs.image.value);
 
-            if(responseData.message){
-                throw new Error(responseData.message);
+                const response = await fetch("http://localhost:5000/api/question/",{
+                    method:'POST',
+                    body: formData
+                });
+
+                const responseData = await response.json();
+
+                if(responseData.message){
+                    throw new Error(responseData.message);
+                }
+
+                // After creating the new question, redirect the user to home page("/")
+                history.push("/");
+            }catch(err){
+                console.log(err);
+                // Setting the error
+                setError(err.message);
             }
-
-            // After creating the new question, redirect the user to home page("/")
-            history.push("/");
-        }catch(err){
-            console.log(err);
-
-            // Setting the error
-            setError(err.message);
         }
+    }
+
+    const showImageUploadHandler = (event) => {
+        event.preventDefault();
+        setShowImageUpload(true);
+        const btn = document.querySelector('#add-image-btn');
+        btn.style.display = 'none';
+    }
+
+    // Will bw triggered when the submit button is clicked
+    const submitButtonHandler = (event) => {
+        event.preventDefault();
+        setOnSubmit(true);
+        submitHandler(event);
     }
 
     // Setting error to null after we click the screen
@@ -120,7 +146,7 @@ const NewQuestion = () => {
             { isLoading && <LoadingSpinner asOverlay />}
 
             { !isLoading && userName && (
-                <form onSubmit={submitHandler}>
+                <form>
 
                     {/* Input for title of question */}                
                     <div className="ask-question-container">                                
@@ -134,8 +160,7 @@ const NewQuestion = () => {
                             validators={[VALIDATOR_REQUIRE()]}
                             onInput={handleInput}
                             className="form-control que-title-text" 
-                            rows="2"
-                            
+                            rows="2"        
                         />
                     </div>
 
@@ -155,6 +180,9 @@ const NewQuestion = () => {
                         />
                     </div>
 
+                    { showImageUpload && <ImageUpload id='image' onInput={handleInput} center /> }
+                    <button id="add-image-btn" onClick={showImageUploadHandler}>Add Image?</button>
+
                     {/* Input for wholeQuestion of question */}
                     <div className="que-body-container">
                         <Input  
@@ -172,7 +200,7 @@ const NewQuestion = () => {
 
                     {/* This button will be disabled if the formState is invalid */}
                     <div className="submit-btn-div">
-                        <button className="btn ask-submit-btn" disabled={!formState.isValid}>
+                        <button className="btn ask-submit-btn" disabled={!formState.isValid} onClick={submitButtonHandler}> 
                             <i class="fas fa-check-circle"></i> Submit
                         </button>
                     </div>
@@ -184,24 +212,3 @@ const NewQuestion = () => {
 }
 
 export default NewQuestion;
-
-// {/*  */}
-// {/* Input for title of question */}
-//                 {/* <Input 
-//                     id="title"
-//                     element="textarea"
-//                     label="Title"
-//                     errorMessage = "Please enter a valid title"
-//                     validators={[VALIDATOR_REQUIRE()]}
-//                     onInput={handleInput}
-//                 /> */}
-//                 {/* Input for wholeQuestion of question */}
-//                 {/* <Input  
-//                     id="wholeQuestion"
-//                     element="textarea"
-//                     rows={5}
-//                     label="Question"
-//                     errorMessage="Question must be of 10 Characters"
-//                     validators={[VALIDATOR_MINLENGTH(10)]}
-//                     onInput={handleInput}
-//                 /> */}
