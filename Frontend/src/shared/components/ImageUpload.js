@@ -7,7 +7,8 @@ const ImageUpload = (props) => {
     const filePickerRef = useRef();
 
     const [file , setFile] = useState();
-    const [isValid , setIsValid] = useState(false);
+    // If the imagee is option then we don't perform validation by setting isValid = true
+    const [isValid , setIsValid] = useState(props.isVaild || false);
     const [previewUrl , setPreviewUrl] = useState();
 
     const pickHandler = (event) => {

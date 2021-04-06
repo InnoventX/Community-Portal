@@ -10,7 +10,7 @@ const answerSchema = mongoose.Schema({
 
     answer:{ type:String , require:true },
     
-    image:{ type:String , required:true },
+    image:{ type:String },
 
     rating:{ type:Number , require:true },
     

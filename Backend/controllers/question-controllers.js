@@ -113,7 +113,7 @@ const newQuestion = async (req,res,next) => {
         title,
         category,
         wholeQuestion,
-        image:req.file.path || null,
+        image:req.file ? req.file.path : null,
         answers:[]
     });
     

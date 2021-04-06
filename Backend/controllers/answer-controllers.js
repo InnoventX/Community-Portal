@@ -1,3 +1,5 @@
+const fs =  require('fs');
+
 const HttpError = require('../util/http-error-message');
 const Answer = require('../models/answer-model');
 const Question = require('../models/question-model');
@@ -107,7 +109,7 @@ const giveAnswer = async (req,res,next) => {
         userImage:userFound.image,
         answer,
         rating:rating || 0,
-        image:'https://picsum.photos/200/300',
+        image:req.file ? req.file.path : null,
         questionId:questionId,
         subAnswers:[]
     });
@@ -251,6 +253,8 @@ const deleteAnswer = async (req,res,next) => {
         next(new HttpError("Question of this qnswer was not found",500));
     }
 
+    const answerImage = answerFound.image;
+
     // Finding the user who has given this answer
     let answerGivenBy;
     try{
@@ -286,6 +290,10 @@ const deleteAnswer = async (req,res,next) => {
         console.log(err);
         next(new HttpError('Not able to delete.Please try again',500));
     }
+
+    fs.unlink(answerImage , (err) => {
+        console.log(err);
+    })
 
     res.json({message:'Deleted successfully'});
 }

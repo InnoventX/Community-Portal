@@ -12,7 +12,7 @@ const subAnswerSchema = mongoose.Schema({
 
     subAnswer:{type:String, require:true},
 
-    image:{ type:String , required:true }
+    image:{ type:String }
 });
 
 module.exports = mongoose.model("Subanswer",subAnswerSchema); 

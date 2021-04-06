@@ -15,6 +15,7 @@ import ratings from '../../photos/ratings.svg';
 import showmore from '../../photos/show-more.svg';
 import rate from '../../photos/rate.svg';
 import post from '../../photos/post.svg';
+import ImageUpload from "../../shared/components/ImageUpload";
 
 
 const QuesPage = () => {
@@ -41,15 +42,24 @@ const QuesPage = () => {
     const [ansGiven, setAnsGiven] = useState();
     const [submitAnswer , setSubmitAnswer] =  useState(false);
 
-    // State fro handle increment of rating for answers
+    // State for handle increment of rating for answers
     const [stopIncerement , setStopIncrement] = useState(false);
 
+    // Showing all the answers only if when it is true when we click "SHOW MORE" button
     const [showAllAnswers,setShowAllAnswers] = useState(false);
 
+    // State for sub-answer
     const  [subAnswer , setSubAnswer] = useState();
 
     // This state will decided to show the image section or not 
     const [showImageUpload , setShowImageUpload] = useState(false);
+
+    // State used when the user want's to upload IMAGE in the answer to this question
+    const [sholudSubmitAnswer , setSholudSubmitAnswer] = useState(false); 
+    const [answerImage , setAnswerImage] = useState({
+        value:null,
+        isValid:false
+    });
 
     // Showing POST ANSWER block
     const showPostSection = () => {
@@ -95,6 +105,7 @@ const QuesPage = () => {
         setShowAllAnswers(true);
     }
 
+    // Shows the Sub-Answer Section inside the answer
     const showSubAnswerDiv = (answerId) => {
         const subAnsDiv = document.querySelector(`.sub-ans-div.ans-${answerId}`);
         if(subAnsDiv.style.display === "none"){
@@ -104,16 +115,34 @@ const QuesPage = () => {
         }   
     }
 
+    // Updates the sub-answer state
     const handleSubAnswer = (event) => {
         const subAns = event.target.value;
         setSubAnswer(subAns);
     }
 
+    // Shows the image upload preview section
     const showImageUploadHandler = (event) => {
         event.preventDefault();
         setShowImageUpload(true);
         const btn = document.querySelector('#add-image-btn');
         btn.style.display = 'none';
+    }
+
+    // Setting the Image values
+    const imageInputHandler = (id,value,isValid) => {
+        setAnswerImage({
+            value:value,
+            isValid:isValid
+        });
+    }
+
+    // Triggers when the POST button is clicked for new Answer
+    const submitNewAnswer = (event) => {
+        event.preventDefault();
+        setSholudSubmitAnswer(true);
+        // Post the new Answer
+        nowPostAns(event);
     }
 
     // Using useEffect hoock which renders question and it's answers,this should only be rendered when submitAnswer changes.  
@@ -180,32 +209,41 @@ const QuesPage = () => {
         // Prevent the default when the button is clicked
         event.preventDefault();
 
-        // Posting the answer using backend api
-        try{
-            const response = await fetch(`http://localhost:5000/api/answer/${quesId}/`,{
-                method:'POST',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body: JSON.stringify({
-                    userId:auth.userId,
-                    answer:ansGiven
-                })
-            });
-            const responseData = await response.json();
+        // If the submit button is clicked
+        if(sholudSubmitAnswer){
+            // Posting the answer using backend api
+            try{
 
-            if(responseData.message){
-                throw new Error(responseData.message);
+                // Using formData to also send the image 
+                const formData = new FormData();
+                formData.append('userId',auth.userId);
+                formData.append('answer',ansGiven);
+                formData.append('image',answerImage.value);
+
+                const response = await fetch(`http://localhost:5000/api/answer/${quesId}/`,{
+                    method:'POST',
+                    body: formData
+                });
+                const responseData = await response.json();
+
+                if(responseData.message){
+                    throw new Error(responseData.message);
+                }
+            }catch(err){
+                console.log(err);
+                // beacause we are doing multiple operations in backend
+                if(err.message !== "WriteConflict error: this operation conflicted with another operation. Please retry your operation or multi-document transaction."){
+                    setError(err.message);
+                }
             }
-        }catch(err){
-            console.log(err);
-            // beacause we are doing multiple operations in backend
-            if(err.message !== "WriteConflict error: this operation conflicted with another operation. Please retry your operation or multi-document transaction."){
-                setError(err.message);
-            }
+            // Turning this state because we want to rerender the question with updation in answers array
+            setSubmitAnswer(prevValue => !prevValue);
+            setAnswerImage({
+                value:null,
+                isValid:false
+            });
+            setShowImageUpload(false);
         }
-        // Turning this state because we want to rerender the question with updation in answers array
-        setSubmitAnswer(prevValue => !prevValue);
     }
 
     // Deleating the question
@@ -246,10 +284,17 @@ const QuesPage = () => {
             });
             const responseData = await response.json();
             
+            console.log(responseData.message);
             // Rerendering this page by changing the submitAnswer state so that useEffect will be triggered after deleting answer
             if(responseData.message === 'Deleted successfully'){
+                // console.log(responseData.message);
                 setDeleteSection(null);
                 setSubmitAnswer(prevValue => !prevValue);
+                setAnswerImage({
+                    value:null,
+                    isValid:false
+                });
+                setShowImageUpload(false);
             }else{
                 // Throwing error comming from backend
                 throw new Error(responseData.message);
@@ -385,6 +430,7 @@ const QuesPage = () => {
                         <h6 className="student-name">{question.userName} • just now</h6>
                         <h6 className="category">{question.category}</h6>
                         <h4 className="question-title">{question.title}</h4>
+                        {/* Rendering the image if the question contains an image */}
                         { question.image && <img className="image-container" src={`http://localhost:5000/${question.image}`} alt="Image"/>}
                         <p>{question.wholeQuestion}</p>
 
@@ -407,10 +453,13 @@ const QuesPage = () => {
                     {/* Showing the post answer block */}
                     <div className="post-ans-div">
                         <form onSubmit={nowPostAns}>
-                            {/* { showImageUpload && <ImageUpload id='image' onInput={handleInput} center /> }
-                            <button id="add-image-btn" onClick={showImageUploadHandler}>Add Image?</button> */}
+
+                            {/* If the user wants to upload image in answer */}
+                            { showImageUpload && <ImageUpload id='image' onInput={imageInputHandler} center isValid={true}/> }
+                            <button id="add-image-btn" onClick={showImageUploadHandler}>Add Image?</button>
+                            
                             <textarea className="post-ans-text form-control" rows="3" value={ansGiven} onChange={handleGivenAns} placeholder="   Type your answer here..."/>
-                            <button className="btn post-btn"><i class="fas fa-paper-plane"></i> Post</button>
+                            <button className="btn post-btn" onClick={submitNewAnswer}><i class="fas fa-paper-plane"></i> Post</button>
                         </form>
                     </div>
                         
@@ -466,7 +515,8 @@ const QuesPage = () => {
                                                     <img className="users-icon" src={`http://localhost:5000/${ans.userImage}`} alt="User"/>
                                                 </div>
                                                 <h6 className="student-name">{ans.userName} • just now</h6>
-                                                <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                 
+                                                <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
+                                                { ans.image && <img className="image-container" src={`http://localhost:5000/${ans.image}`} alt="Image"/>}                                                                 
                                                 <p className="answers">{ans.answer}</p>
                                                 
 

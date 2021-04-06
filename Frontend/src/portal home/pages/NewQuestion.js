@@ -50,7 +50,7 @@ const NewQuestion = () => {
             },
             image:{ 
                 value:null,
-                isValid:false
+                isValid:true
             }
         },
         false
@@ -180,7 +180,8 @@ const NewQuestion = () => {
                         />
                     </div>
 
-                    { showImageUpload && <ImageUpload id='image' onInput={handleInput} center /> }
+                    {/* If the user wants to upload image in question */}
+                    { showImageUpload && <ImageUpload id='image' onInput={handleInput} center isValid={true}/> }
                     <button id="add-image-btn" onClick={showImageUploadHandler}>Add Image?</button>
 
                     {/* Input for wholeQuestion of question */}

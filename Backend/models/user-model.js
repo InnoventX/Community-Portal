@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
     
     password:{ type:String , required:true , minlength:6 },
 
-    image:{ type:String , required:true },
+    image:{ type:String },
     
     questions:[
         { type:mongoose.Types.ObjectId , required:true , ref:'Question'}
