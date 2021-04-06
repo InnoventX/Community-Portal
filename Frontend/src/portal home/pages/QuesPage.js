@@ -187,6 +187,7 @@ const QuesPage = () => {
                     })
 
                 }else{
+                    setAnswers(null);
                     setIsLoading(false);
                 }
                 
@@ -283,11 +284,9 @@ const QuesPage = () => {
                 method:'DELETE'
             });
             const responseData = await response.json();
-            
             console.log(responseData.message);
             // Rerendering this page by changing the submitAnswer state so that useEffect will be triggered after deleting answer
             if(responseData.message === 'Deleted successfully'){
-                // console.log(responseData.message);
                 setDeleteSection(null);
                 setSubmitAnswer(prevValue => !prevValue);
                 setAnswerImage({

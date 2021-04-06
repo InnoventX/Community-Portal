@@ -291,9 +291,11 @@ const deleteAnswer = async (req,res,next) => {
         next(new HttpError('Not able to delete.Please try again',500));
     }
 
-    fs.unlink(answerImage , (err) => {
-        console.log(err);
-    })
+    if(answerImage){
+        fs.unlink(answerImage , (err) => {
+            console.log(err);
+        });
+    }
 
     res.json({message:'Deleted successfully'});
 }
