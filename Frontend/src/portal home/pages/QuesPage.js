@@ -51,6 +51,9 @@ const QuesPage = () => {
     // State for sub-answer
     const  [subAnswer , setSubAnswer] = useState();
 
+    // For togalling the sub-answer-div
+    const [temp , setTemp] = useState(0);
+
     // This state will decided to show the image section or not 
     const [showImageUpload , setShowImageUpload] = useState(false);
 
@@ -106,12 +109,22 @@ const QuesPage = () => {
     }
 
     // Shows the Sub-Answer Section inside the answer
-    const showSubAnswerDiv = (answerId) => {
+    const showSubAnswerDiv = (answerId) => { 
+        // For hiding all other sub-answer divs
+        const others = document.getElementsByClassName('sub-ans-div')
+        for(var i=0;i<others.length;i++){
+            others[i].style.display = "none";
+        }
+
         const subAnsDiv = document.querySelector(`.sub-ans-div.ans-${answerId}`);
-        if(subAnsDiv.style.display === "none"){
+        console.log(subAnsDiv.style.display)
+        // Bad logic for temp
+        if(subAnsDiv.style.display === "none" && (temp%2 === 0)){
             subAnsDiv.style.display = "block";
+            setTemp(temp+1);
         }else{
             subAnsDiv.style.display = "none";
+            setTemp(temp+1);
         }   
     }
 
@@ -352,8 +365,9 @@ const QuesPage = () => {
         }
     }
 
+    // Posting sub answer
     const postSubAns = async (answerId) => {
-        console.log(subAnswer , answerId);
+        // console.log(subAnswer , answerId);
         const userId = auth.userId;
         try{
             const response = await fetch(`http://localhost:5000/api/subAnswer/${answerId}/newSubAnswer`,{
@@ -373,6 +387,8 @@ const QuesPage = () => {
             }
 
             setSubmitAnswer(prevValue => !prevValue);
+            // Removing the content from state after sub-answer is posted
+            setSubAnswer(null);
         }catch(err){
             console.log(err);
             setError(err.message);
@@ -510,6 +526,7 @@ const QuesPage = () => {
                                                     )
                                                 }
                                         
+                                                {/* Answer's content */}
                                                 <div className="user-icon">
                                                     <img className="users-icon" src={`http://localhost:5000/${ans.userImage}`} alt="User"/>
                                                 </div>
@@ -553,14 +570,16 @@ const QuesPage = () => {
                                                     </button>
                                                 )}
 
-                                                {/* Showing the post answer block */}
+                                                {/* Showing the post sub-answer block */}
                                                 <div className={`sub-ans-div ans-${ans.id}`}>
                                                     <form onSubmit={(event) => {
                                                         event.preventDefault();
                                                         postSubAns(ans.id);
                                                     }}>
                                                         <textarea className="post-ans-text form-control" id="txtarea" rows="3" value={subAnswer} onChange={handleSubAnswer} placeholder="Write your query here .."/>                                                    
-                                                        <button className="btn post-btn"><i class="fas fa-paper-plane"></i> Post</button>
+                                                        <button className="btn post-btn">
+                                                            <i class="fas fa-paper-plane"></i> Post
+                                                        </button>
                                                     </form>
                                                 </div>
                                             </div>

@@ -13,7 +13,12 @@ const Question = (props) => {
             
                 <div className="question-container">
                     <div className="user-icon">
-                        <img className="user-icon" src={`http://localhost:5000/${props.userImage}`} alt="User"/>
+                        { props.userImage ? (
+                            <img className="user-icon" src={`http://localhost:5000/${props.userImage}`} alt="User"/>
+                        ):(
+                            <AccountCircleIcon />
+                        )}
+                        
                     </div>
                     <h6 className="student-name">{props.userName}</h6>
                     <h6 className="category">{props.category}</h6>

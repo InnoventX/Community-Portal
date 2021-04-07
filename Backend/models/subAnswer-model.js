@@ -10,9 +10,8 @@ const subAnswerSchema = mongoose.Schema({
 
     parentAnswerId:{type:mongoose.Types.ObjectId , require:true, ref:'Answer'},
 
-    subAnswer:{type:String, require:true},
+    subAnswer:{type:String, require:true}
 
-    image:{ type:String }
 });
 
 module.exports = mongoose.model("Subanswer",subAnswerSchema); 
