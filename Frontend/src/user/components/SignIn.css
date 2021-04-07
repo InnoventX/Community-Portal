@@ -80,6 +80,17 @@ input.sign-in{
     border-radius: 20px;
   }
 
+  .my-form-2{
+    margin-left: 200%;
+    text-align: center;
+    margin: 7% 55% auto;
+    background-color:#0000009e;
+    backdrop-filter: blur(10px);
+    width: 350px;
+    padding: 1.5%;
+    border-radius: 20px;
+  }
+
   .form-control{
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;    

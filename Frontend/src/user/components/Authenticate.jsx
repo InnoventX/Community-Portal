@@ -280,7 +280,7 @@ function Authenticate(){
                         <h1 className="signIN-text">IMPLEMENT.</h1>
                         <h1 className="signIN-text">INNOVATE.</h1>
                     </div>
-                    <div className="my-form">
+                    <div className={ isLogin ? 'my-form' : 'my-form-2'}>
                         <img className="logo2" src={logo}/>
 
                         {/* Authentication Form */}

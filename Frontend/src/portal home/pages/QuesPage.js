@@ -257,6 +257,7 @@ const QuesPage = () => {
                 value:null,
                 isValid:false
             });
+            setAnsGiven(null);
             setShowImageUpload(false);
         }
     }
