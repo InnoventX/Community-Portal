@@ -75,6 +75,9 @@ function Authenticate(){
     // State which display Login form when set to true
     const [isLogin , setIsLogin] = useState(true);
 
+    // This state will decided to show the image section or not 
+    const [showImageUpload , setShowImageUpload] = useState(false);
+
     // Initial state of form(login)  
     const [formState, dispatch] = useReducer(formReducer,{
        inputs:{
@@ -143,7 +146,7 @@ function Authenticate(){
                   },
                   image:{ 
                       value: null,
-                      isValid: false
+                      isValid: true
                   },
                   schoolName: {
                     value: '',
@@ -246,6 +249,13 @@ function Authenticate(){
         handleSubmit(event);
     }
 
+    const showImageUploadHandler = (event) => {
+        event.preventDefault();
+        setShowImageUpload(true);
+        const btn = document.querySelector('#add-image-btn-auth');
+        btn.style.display = 'none';
+    }
+
     // To handle error
     const errorHandler = () => {
         setError(null);
@@ -292,7 +302,9 @@ function Authenticate(){
                                         errorMessage="Please enter a valid user name"
                                     />
 
-                                    <ImageUpload id="image" center onInput={handleInput}/>
+                                    {/* If the user wants to upload image in question */}
+                                    { showImageUpload && <ImageUpload id='image' onInput={handleInput} center isValid={true}/> }
+                                    <button id="add-image-btn-auth" onClick={showImageUploadHandler}>Add Image?</button>
 
                                     <span className="icon"><i class="fas fa-user"></i></span>  
                                     <Input 

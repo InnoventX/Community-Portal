@@ -68,7 +68,7 @@ const siggnup = async (req,res,next) => {
             name: req.body.name,
             email:email,
             password:password,
-            image:req.file.path,
+            image:req.file ? req.file.path : null,
             questions:[],
             answers:[],
             savedAnswers:[],

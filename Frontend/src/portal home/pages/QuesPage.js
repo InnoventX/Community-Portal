@@ -64,6 +64,8 @@ const QuesPage = () => {
         isValid:false
     });
 
+    //////////////////////////////////////////////////////////// Functions /////////////////////////////////////////////////////////////////
+
     // Showing POST ANSWER block
     const showPostSection = () => {
         // It will display the GiveAnswer block when we chick the button and hide when we again click it.
@@ -158,6 +160,8 @@ const QuesPage = () => {
         nowPostAns(event);
     }
 
+    /////////////////////////////////////////////// Functions sending request to backend API's ////////////////////////////////////////////
+
     // Using useEffect hoock which renders question and it's answers,this should only be rendered when submitAnswer changes.  
     useEffect(() => {
 
@@ -211,9 +215,6 @@ const QuesPage = () => {
                 setError(err.message);
                 setIsLoading(false);
             }
-
-            // Turning off the loading spinner
-            // setIsLoading(false);
         }
         sendRequest();
     },[submitAnswer]);
@@ -395,6 +396,8 @@ const QuesPage = () => {
         }
     }
 
+    ////////////////////////////////////////////// Return section ///////////////////////////////////////////////
+
     return(
         <React.Fragment>
             
@@ -441,7 +444,13 @@ const QuesPage = () => {
                             ): null
                         }
                             
-                        <div className="user-icon"><img className="users-icon" src={`http://localhost:5000/${question.userImage}`} alt="User"/></div>
+                        <div className="user-icon">
+                            { question.userImage ? (
+                                <img className="users-icon" src={`http://localhost:5000/${question.userImage}`} alt="User"/>
+                                ):(
+                                <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
+                            )}
+                        </div>
                         <h6 className="student-name">{question.userName} • just now</h6>
                         <h6 className="category">{question.category}</h6>
                         <h4 className="question-title">{question.title}</h4>
@@ -488,186 +497,201 @@ const QuesPage = () => {
                     {/* Showing all the answers of that question */}
                     {answers && (
                         <div className="answers-div" >
-                        {   
-                            answers.map((ans,index) => {
-                                if(!showAllAnswers && index<3){
-                                    return (
-                                        <React.Fragment>
-                                            <div className="answer-container">
-                                            
-                                                {/* Showing the update & delete button of answer if the user have given that answer */}
-                                                { auth.userId === ans.userId ? (
-                                                    <React.Fragment>
-                                                        <button className="btn delete-btn" style={{float:"right"}} name={ans.id} onClick={() => {showDeleteSection(ans.id)}}>
-                                                            <i class="fas fa-trash-alt"></i>
-                                                        </button>
-                                                        <Link to={`/update/${ans.id}`}>
-                                                            <button className="btn update-btn" style={{float:"right"}}>
-                                                                <i class="fas fa-edit"></i>
+                            {
+                                answers.map((ans,index) => {
+                                    if(!showAllAnswers && index<3){
+                                        return (
+                                            <React.Fragment>
+                                                <div className="answer-container">
+                                                
+                                                    {/* Showing the update & delete button of answer if the user have given that answer */}
+                                                    { auth.userId === ans.userId ? (
+                                                        <React.Fragment>
+                                                            <button className="btn delete-btn" style={{float:"right"}} name={ans.id} onClick={() => {showDeleteSection(ans.id)}}>
+                                                                <i class="fas fa-trash-alt"></i>
                                                             </button>
-                                                        </Link>
-                                                    </React.Fragment>
-                                                    ):null
-                                                }
-
-                                                {/* Showing the rating button to all the users who have not given this answer */}
-                                                { auth.isLogedIn ? (
-                                                    auth.userId !== ans.userId ? (
-                                                        <button className="btn rate-btn" disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}} style={{float:"right"}}>
-                                                            <img className="rate-img" src={rate}></img>
-                                                        </button>
+                                                            <Link to={`/update/${ans.id}`}>
+                                                                <button className="btn update-btn" style={{float:"right"}}>
+                                                                    <i class="fas fa-edit"></i>
+                                                                </button>
+                                                            </Link>
+                                                        </React.Fragment>
                                                         ):null
-                                                    ):(
-                                                    <a href="/authenticate">
-                                                        <button className="btn rate-btn" disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}} style={{float:"right"}}>
-                                                            <img className="rate-img" src={rate}></img>
-                                                        </button>
-                                                    </a> 
-                                                    )
-                                                }
-                                        
-                                                {/* Answer's content */}
-                                                <div className="user-icon">
-                                                    <img className="users-icon" src={`http://localhost:5000/${ans.userImage}`} alt="User"/>
-                                                </div>
-                                                <h6 className="student-name">{ans.userName} • just now</h6>
-                                                <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
-                                                { ans.image && <img className="image-container" src={`http://localhost:5000/${ans.image}`} alt="Image"/>}                                                                 
-                                                <p className="answers">{ans.answer}</p>
-                                                
+                                                    }
 
-                                                {( auth.isLogedIn && ans.subAnswers.length !== 0) ? (
-                                                    ans.subAnswers.map((subAns) => {
-                                                        return(
-                                                            <React.Fragment>
-                                                                
-                                                                <div className="subANS">
+                                                    {/* Showing the rating button to all the users who have not given this answer */}
+                                                    { auth.isLogedIn ? (
+                                                        auth.userId !== ans.userId ? (
+                                                            <button className="btn rate-btn" disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}} style={{float:"right"}}>
+                                                                <img className="rate-img" src={rate}></img>
+                                                            </button>
+                                                            ):null
+                                                        ):(
+                                                        <a href="/authenticate">
+                                                            <button className="btn rate-btn" disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}} style={{float:"right"}}>
+                                                                <img className="rate-img" src={rate}></img>
+                                                            </button>
+                                                        </a> 
+                                                        )
+                                                    }
+                                            
+                                                    {/* Answer's content */}
+                                                    <div className="user-icon">
+                                                        {ans.userImage ? (
+                                                                <img className="users-icon" src={`http://localhost:5000/${ans.userImage}`} alt="User"/>
+                                                            ):(
+                                                                <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
+                                                        )}
+                                                    </div>
+                                                    <h6 className="student-name">{ans.userName} • just now</h6>
+                                                    <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
+                                                    { ans.image && <img className="image-container" src={`http://localhost:5000/${ans.image}`} alt="Image"/>}                                                                 
+                                                    <p className="answers">{ans.answer}</p>
+                                                    
+
+                                                    {( auth.isLogedIn && ans.subAnswers.length !== 0) ? (
+                                                        ans.subAnswers.map((subAns) => {
+                                                            return(
+                                                                <React.Fragment>
                                                                     
-                                                                    <div className="user-icon">
-                                                                        <img className="users-icon" src={`http://localhost:5000/${subAns.userImage}`} alt="User"/>
+                                                                    <div className="sub-ANS"> 
+                                                                        <div className="user-icon">
+                                                                            {subAns.userImage ? (
+                                                                                    <img className="users-icon" src={`http://localhost:5000/${subAns.userImage}`} alt="User"/>
+                                                                                ):(
+                                                                                    <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
+                                                                            )}
+                                                                        </div>
+                                                                        <h6 className="student-name">{subAns.userName} • just now</h6>
+                                                                        <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
+                                                                        <p className="answers">{subAns.subAnswer}</p>
                                                                     </div>
-                                                                    <h6 className="student-name">{subAns.userName} • just now</h6>
-                                                                    <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
-                                                                    <p className="answers">{subAns.subAnswer}</p>
-                                                                </div>
 
-                                                            </React.Fragment>
-                                                        )
-                                                    })
-                                                    ):null
-                                                }
-                                                        
-                                                {/* To save the answer in users database */}
-                                                { auth.isLogedIn && ((auth.userId !== ans.userId) && (
-                                                    <button className="btn save-btn" onClick={() => {saveAnswer(ans.id)}}>
-                                                        <i class="fas fa-bookmark"></i>
-                                                    </button>
-                                                ))}
-
-                                                { auth.isLogedIn && (
-                                                    <button className="btn post-subAns-btn" style={{float:"left"}} onClick={() => {showSubAnswerDiv(ans.id)}}>
-                                                        REPLY
-                                                    </button>
-                                                )}
-
-                                                {/* Showing the post sub-answer block */}
-                                                <div className={`sub-ans-div ans-${ans.id}`}>
-                                                    <form onSubmit={(event) => {
-                                                        event.preventDefault();
-                                                        postSubAns(ans.id);
-                                                    }}>
-                                                        <textarea className="post-ans-text form-control" id="txtarea" rows="3" value={subAnswer} onChange={handleSubAnswer} placeholder="Write your query here .."/>                                                    
-                                                        <button className="btn post-btn">
-                                                            <i class="fas fa-paper-plane"></i> Post
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </React.Fragment>
-                                    )
-                                }
-                                else if(showAllAnswers){
-                                    return (
-                                        <React.Fragment>
-                                            <div className="answer-container">
-                                                {/* Showing the update & delete button if the user have given the answer */}
-                                                { auth.userId === ans.userId ? (
-                                                    <React.Fragment>
-                                                        <button className="btn delete-btn" style={{float:"right"}} name={ans.id} onClick={() => {showDeleteSection(ans.id)}}><i class="fas fa-trash-alt"></i></button>
-                                                        <Link to={`/update/${ans.id}`}>
-                                                            <button className="btn update-btn" style={{float:"right"}}><i class="fas fa-edit"></i></button>
-                                                        </Link>
-                                                    </React.Fragment>
-                                                    ):null
-                                                }
-
-                                                {/* Showing the rating button to all the users who have not given this answer */}
-                                                { auth.isLogedIn ? (
-                                                    auth.userId !== ans.userId ? (
-                                                        <button className="btn rate-btn" disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}} style={{float:"right"}}><img className="rate-img" src={rate}></img></button>
+                                                                </React.Fragment>
+                                                            )
+                                                        })
                                                         ):null
-                                                    ):(
-                                                    <a href="/authenticate">
-                                                        <button className="btn rate-btn" disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}} style={{float:"right"}}>
-                                                            <img className="rate-img" src={rate}></img>
+                                                    }
+                                                            
+                                                    {/* To save the answer in users database */}
+                                                    { auth.isLogedIn && ((auth.userId !== ans.userId) && (
+                                                        <button className="btn save-btn" onClick={() => {saveAnswer(ans.id)}}>
+                                                            <i class="fas fa-bookmark"></i>
                                                         </button>
-                                                    </a> 
-                                                    )
-                                                }
-                                        
-                                                <div className="user-icon">
-                                                    <img className="users-icon" src={`http://localhost:5000/${ans.userImage}`} alt="User"/>
-                                                </div>
-                                                <h6 className="student-name">{ans.userName} • just now</h6>
-                                                <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                                    
-                                                <p className="answers">{ans.answer}</p>
-                                                
+                                                    ))}
 
-                                                {( auth.isLogedIn && ans.subAnswers.length !== 0) ? (
-                                                    ans.subAnswers.map((subAns) => {
-                                                        return(
-                                                            <React.Fragment>
-                                                                <div className="subANS">
-                                                                    <div className="user-icon">
-                                                                        <img className="users-icon" src={`http://localhost:5000/${subAns.userImage}`} alt="User"/>
-                                                                    </div>
-                                                                    <h6 className="student-name">{subAns.userName} • just now</h6>
-                                                                    <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
-                                                                    <p className="answers">{subAns.subAnswer}</p>
-                                                                </div>
-                                                            </React.Fragment>
+                                                    { auth.isLogedIn && (
+                                                        <button className="btn post-subAns-btn" style={{float:"left"}} onClick={() => {showSubAnswerDiv(ans.id)}}>
+                                                            REPLY
+                                                        </button>
+                                                    )}
+
+                                                    {/* Showing the post sub-answer block */}
+                                                    <div className={`sub-ans-div ans-${ans.id}`}>
+                                                        <form onSubmit={(event) => {
+                                                            event.preventDefault();
+                                                            postSubAns(ans.id);
+                                                        }}>
+                                                            <textarea className="post-ans-text form-control" id="txtarea" rows="3" value={subAnswer} onChange={handleSubAnswer} placeholder="Write your query here .."/>                                                    
+                                                            <button className="btn post-btn">
+                                                                <i class="fas fa-paper-plane"></i> Post
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </React.Fragment>
+                                        )
+                                    }
+                                    else if(showAllAnswers){
+                                        return (
+                                            <React.Fragment>
+                                                <div className="answer-container">
+                                                    {/* Showing the update & delete button if the user have given the answer */}
+                                                    { auth.userId === ans.userId ? (
+                                                        <React.Fragment>
+                                                            <button className="btn delete-btn" style={{float:"right"}} name={ans.id} onClick={() => {showDeleteSection(ans.id)}}><i class="fas fa-trash-alt"></i></button>
+                                                            <Link to={`/update/${ans.id}`}>
+                                                                <button className="btn update-btn" style={{float:"right"}}><i class="fas fa-edit"></i></button>
+                                                            </Link>
+                                                        </React.Fragment>
+                                                        ):null
+                                                    }
+
+                                                    {/* Showing the rating button to all the users who have not given this answer */}
+                                                    { auth.isLogedIn ? (
+                                                        auth.userId !== ans.userId ? (
+                                                            <button className="btn rate-btn" disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}} style={{float:"right"}}><img className="rate-img" src={rate}></img></button>
+                                                            ):null
+                                                        ):(
+                                                        <a href="/authenticate">
+                                                            <button className="btn rate-btn" disabled={stopIncerement} onClick={() => {incrementRating(ans.id)}} style={{float:"right"}}>
+                                                                <img className="rate-img" src={rate}></img>
+                                                            </button>
+                                                        </a> 
                                                         )
-                                                    })
-                                                    ):null
-                                                }
+                                                    }
+                                            
+                                                    <div className="user-icon">
+                                                        {ans.userImage ? (
+                                                                <img className="users-icon" src={`http://localhost:5000/${ans.userImage}`} alt="User"/>
+                                                            ):(
+                                                                <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
+                                                        )}
+                                                    </div>
+                                                    <h6 className="student-name">{ans.userName} • just now</h6>
+                                                    <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                                    
+                                                    <p className="answers">{ans.answer}</p>
+                                                    
 
-                                                {/* To save the answer in users database */}
-                                                { auth.isLogedIn && ((auth.userId !== ans.userId) && (
-                                                    <button className="btn save-btn" onClick={() => {saveAnswer(ans.id)}}><i class="fas fa-bookmark"></i></button>
-                                                ))}
+                                                    {( auth.isLogedIn && ans.subAnswers.length !== 0) ? (
+                                                        ans.subAnswers.map((subAns) => {
+                                                            return(
+                                                                <React.Fragment>
+                                                                    <div className="sub-ANS">
+                                                                        <div className="user-icon">
+                                                                            {subAns.userImage ? (
+                                                                                    <img className="users-icon" src={`http://localhost:5000/${subAns.userImage}`} alt="User"/>
+                                                                                ):(
+                                                                                    <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
+                                                                            )}
+                                                                        </div>
+                                                                        <h6 className="student-name">{subAns.userName} • just now</h6>
+                                                                        <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
+                                                                        <p className="answers">{subAns.subAnswer}</p>
+                                                                    </div>
+                                                                </React.Fragment>
+                                                            )
+                                                        })
+                                                        ):null
+                                                    }
 
-                                                { auth.isLogedIn && (
-                                                    <button className="btn post-subAns-btn" style={{float:"left"}} onClick={() => {showSubAnswerDiv(ans.id)}}>
-                                                        REPLY
-                                                    </button>
-                                                )}
+                                                    {/* To save the answer in users database */}
+                                                    { auth.isLogedIn && ((auth.userId !== ans.userId) && (
+                                                        <button className="btn save-btn" onClick={() => {saveAnswer(ans.id)}}><i class="fas fa-bookmark"></i></button>
+                                                    ))}
 
-                                                {/* Showing the post answer block */}
-                                                <div className={`sub-ans-div ans-${ans.id}`}>
-                                                    <form onSubmit={(event) => {
-                                                        event.preventDefault();
-                                                        postSubAns(ans.id);
-                                                    }}>
-                                                        <textarea className="post-ans-text flow-control" rows="3" value={subAnswer} onChange={handleSubAnswer} placeholder="     Write your query here .."/>
-                                                        <button className="btn post-btn"><i class="fas fa-paper-plane"></i> Post</button>
-                                                    </form>
+                                                    { auth.isLogedIn && (
+                                                        <button className="btn post-subAns-btn" style={{float:"left"}} onClick={() => {showSubAnswerDiv(ans.id)}}>
+                                                            REPLY
+                                                        </button>
+                                                    )}
+
+                                                    {/* Showing the post answer block */}
+                                                    <div className={`sub-ans-div ans-${ans.id}`}>
+                                                        <form onSubmit={(event) => {
+                                                            event.preventDefault();
+                                                            postSubAns(ans.id);
+                                                        }}>
+                                                            <textarea className="post-ans-text flow-control" rows="3" value={subAnswer} onChange={handleSubAnswer} placeholder="     Write your query here .."/>
+                                                            <button className="btn post-btn"><i class="fas fa-paper-plane"></i> Post</button>
+                                                        </form>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </React.Fragment>
-                                    )
-                                }   
-                            })
-                        }
+                                            </React.Fragment>
+                                        )
+                                    }   
+                                })
+                            }
                         </div>
                     )}
 
