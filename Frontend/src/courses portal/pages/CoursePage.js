@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useParams, Link} from 'react-router-dom';
 
 import myCourses from "./courses";
 import "./CoursePage.css";
@@ -47,7 +47,9 @@ const CoursePage = () => {
                                                     topic.subtopics.map(subTopic => {
                                                         return(
                                                             <React.Fragment>
-                                                                <p>{subTopic.subTopicName}</p>
+                                                                <Link to={`/subtopic/${subTopic.subTopicName}`} style={{textDecoration:"none"}}>
+                                                                    <p>{subTopic.subTopicName}</p>
+                                                                </Link>
                                                             </React.Fragment>
                                                         )
                                                     })

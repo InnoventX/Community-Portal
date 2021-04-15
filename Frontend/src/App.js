@@ -18,6 +18,7 @@ import Reset from "./user/components/Reset";
 import NewPassword from "./user/components/NewPassword";
 import HomePage from "./courses portal/pages/HomePage";
 import CoursePage from "./courses portal/pages/CoursePage";
+import SubTopic from "./courses portal/pages/SubTopic";
  
 function App() {
 
@@ -79,6 +80,10 @@ function App() {
 
           <Route path="/course/:courseId" exact>
             <CoursePage />
+          </Route>
+
+          <Route path="/subTopic/:subtopic">
+            <SubTopic />
           </Route>
 
           <Redirect to="/" /> 
