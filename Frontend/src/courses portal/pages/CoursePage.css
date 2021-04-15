@@ -1,0 +1,43 @@
+.course{
+    color:white;
+    margin-top:3%;
+    margin-left: 2%;
+}
+
+.description-container{
+    background-color:#363636;
+    padding:1%;
+    margin:1%;
+    width:50%;
+}
+
+.course-content{
+    background-color:#363636;
+    width:83%;
+    padding:1%;
+    margin:1% auto;
+}
+
+.topics-container{
+    background-color:white;
+    color:black;
+    width:85%;
+    padding:1%;
+    margin:1% auto;
+}
+
+.subtopic-container{
+    background-color:rgb(155, 151, 151);
+    overflow: hidden;
+    line-height: 50px;
+    transition: all .5s ease-in-out;
+    height: 0;
+}
+
+.subtopic-container:target{
+    height: 100%;
+}
+
+.arrow{
+    display: inline;
+}

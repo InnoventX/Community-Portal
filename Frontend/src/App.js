@@ -16,7 +16,9 @@ import UserAnswers from "./portal home/pages/UserAnswers";
 import SavedAnswers from "./portal home/pages/SavedAnswers";
 import Reset from "./user/components/Reset";
 import NewPassword from "./user/components/NewPassword";
-
+import HomePage from "./courses portal/pages/HomePage";
+import CoursePage from "./courses portal/pages/CoursePage";
+ 
 function App() {
 
   // State for Login
@@ -69,6 +71,14 @@ function App() {
           <Route path="/questions/:catID" exact>
             <PortalNavbar />
             <CatQuestions />
+          </Route>
+
+          <Route path="/courses" exact>
+            <HomePage />
+          </Route>
+
+          <Route path="/course/:courseId" exact>
+            <CoursePage />
           </Route>
 
           <Redirect to="/" /> 
@@ -131,6 +141,14 @@ function App() {
           <Route path="/:userId/savedAnswers" exact>
             <PortalNavbar />
             <SavedAnswers />
+          </Route>
+
+          <Route path="/courses" exact>
+            <HomePage />
+          </Route>
+
+          <Route path="/course/:courseId" exact>
+            <CoursePage />
           </Route>
 
           <Redirect to="/" />
