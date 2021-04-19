@@ -10,6 +10,8 @@ const cookieParser = require('cookie-parser');
 const questionRoutes = require('./routes/question-routes');
 const answerRoutes = require("./routes/answer-routes");
 const userRoutes = require("./routes/user-routes");
+const courseRoutes = require("./routes/course-routes");
+const sectionRoutes = require("./routes/section-routes");
 const subAnswerRoutes = require("./routes/subAnswer-routes");
 const HttpError = require("./util/http-error-message");
 
@@ -37,6 +39,10 @@ app.use('/api/question',questionRoutes);
 app.use('/api/answer',answerRoutes);
 
 app.use('/api/subAnswer',subAnswerRoutes);
+
+app.use('/api/course' ,courseRoutes);
+
+app.use('/api/section' ,sectionRoutes);
 
 // If any of the routes were not found
 app.use((req,res,next) => {

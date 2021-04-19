@@ -7,7 +7,7 @@ const User = require("../models/user-model");
 const mongoose = require('mongoose');
 const {validationResult} = require('express-validator');
 
-// Function used for sorting the ansers according to their rating
+// Function used for sorting the answers according to their rating
 const compare = (a , b) => {
 
     // If B has higher rating then SORT

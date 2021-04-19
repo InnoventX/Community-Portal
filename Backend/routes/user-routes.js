@@ -41,6 +41,8 @@ router.get("/:userId",userControllers.getUserById);
 
 router.get("/:userId/questions", userControllers.getQuestionByUserId);
 
+router.get("/:userId/courses", userControllers.getCourseByUserId);
+
 router.get("/:userId/answers", userControllers.getAnswersByUserId);
 
 router.get("/:userId/savedAnswers",userControllers.getSavedAnswers);

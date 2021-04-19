@@ -12,10 +12,9 @@
 }
 
 .user-icon{
-  display: inline-block;
+  display: inline-flex;
   border-radius: 50%;
   width: 20%;
-  height: 15%;
   object-fit: cover;
 }
 

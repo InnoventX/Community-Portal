@@ -1,7 +1,94 @@
 .course-container{
-    background-color: rgb(236, 225, 225);
+    background-color: #363636;
     border-radius:5px;
     margin:4%;
     padding: 1%;
-    color:black;
+    color:white;
 }
+
+.shadows {
+    box-shadow: 0 1px 1px rgba(0,0,0,0.15), 
+              0 2px 2px rgba(0,0,0,0.15), 
+              0 4px 4px rgba(0,0,0,0.15), 
+              0 8px 8px rgba(0,0,0,0.15);
+}
+
+.course-name {
+    font-size: 2.4rem;
+    font-style: italic;
+    margin-bottom: 0%;
+}
+
+.rating {
+    color: rgb(255, 252, 252);
+    font-size: 0.9rem;
+}
+
+.prices {
+    display: inline-block;
+    margin-right: 2%;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: rgb(111, 172, 252);
+}
+
+/* .enroll-btn {
+    background-color: blue;
+    float: right;
+    padding: 0.5%;
+    box-shadow: 0 3px 3px rgba(0,0,0,0.2);
+} */
+
+#testbutton {
+    width: 10%;
+    height:50px;
+    border-radius:180px;
+    position:relative;
+    left:calc(50% - 75px);
+    top:calc(50% - 25px);
+    background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+    cursor:pointer;
+    line-height:12px;
+    margin-left: 35%;
+  }
+  
+  #testbutton:before {
+    content:'';
+    z-index:1;
+    position:absolute;
+    display:block;
+    width:80%;
+    height:70%;
+    top:15%;
+    left:10%;
+    transition: 0.3s opacity ease-in-out;
+    filter:blur(15px);
+    opacity:0;
+    background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+  }
+  
+  #testbutton:hover:before {
+    opacity:1;
+    transition: 0.3s opacity ease-in-out;
+    filter:blur(25px);
+    background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);  
+  }
+  
+  #testbutton:after {
+    content:'Enroll';
+    text-align:center;
+    line-height:40px;
+    font-size:18px;
+    color:rgba(235,235,235,1);
+    font-weight:bold;
+    z-index:5;
+    position:absolute;
+    display:block;
+    border-radius:180px;
+    width:92%;
+    height:80%;
+    top:10%;
+    left:4%;  
+    background-color:rgb(19, 20, 22);
+  }

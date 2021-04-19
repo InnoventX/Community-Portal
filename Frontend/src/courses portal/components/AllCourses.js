@@ -10,11 +10,12 @@ const AllCourses = (props) => {
                 courses.map(course => {
                     return(
                         <Course
-                            key={course.id}
                             id={course.id}
-                            name={course.name} 
+                            name={course.name}
+                            description={course.desc} 
                             rating={course.rating}
                             price={course.price}
+                            totalTime={course.totalTime}
                         />
                     )
                 })

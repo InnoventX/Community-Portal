@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const User = require("../models/user-model");
 const Code = require("../models/code-model");
 const Question = require('../models/question-model');
+const Course = require('../models/course-model');
 // Own Error Class
 const HttpError = require("../util/http-error-message");
 // For validiting the inputs comming to the post api
@@ -172,6 +173,29 @@ const getQuestionByUserId = async (req,res,next) => {
     }
 
     res.json({questions : userFound.questions.map((ques) => ques.toObject({getters:true}))});
+}
+
+const getCourseByUserId = async (req, res,next) => {
+    
+    const userId =  req.params.userId
+
+    let userFound;
+    try {
+        userFound = await User.findById(userId).populate('courses')
+    }catch(err) {
+        console.log(err);
+        next(new HttpError("Something went wrong", 500));
+    }
+
+    if(!userFound){
+        next(new HttpError('User not found',500));
+    }
+    else if(userFound.courses.length === 0){
+        return res.json({message:"No courses found"});
+    }
+
+    res.json({courses : userFound.courses.map((ques) => ques.toObject({getters:true}))});
+
 }
 
 const getAnswersByUserId = async (req,res,next) => {
@@ -402,4 +426,5 @@ exports.getSavedAnswers = getSavedAnswers;
 exports.postReset = postReset;
 exports.newpassword = newpassword;
 exports.getUserById = getUserById;
+exports.getCourseByUserId = getCourseByUserId;
 

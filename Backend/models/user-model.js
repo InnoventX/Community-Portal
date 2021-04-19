@@ -14,6 +14,10 @@ const userSchema = mongoose.Schema({
     questions:[
         { type:mongoose.Types.ObjectId , required:true , ref:'Question'}
     ],
+
+    courses:[
+        { type:mongoose.Types.ObjectId , required:true , ref:'Course'}
+    ],
     
     answers:[
         { type:mongoose.Types.ObjectId , required:true , ref:'Answer' }
