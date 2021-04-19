@@ -101,13 +101,6 @@ const getCourseById = async (req, res, next) => {
 }
 
 const enrollCourse = async (req, res, next) => {
-    
-    // Validating the input give by the body
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-        console.log(error.message);
-        throw new HttpError('Invalid input.Please enter again', 422);
-    }
 
     const userId = req.body.userId;
     const courseId = req.params.courseId
@@ -120,12 +113,17 @@ const enrollCourse = async (req, res, next) => {
         course = await Course.findById(courseId);
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Throwing error if the user not found
     if(!userFound){
-        next(new HttpError('Invalid userId!',500));
+        return next(new HttpError('Invalid userId!',500));
+    }
+
+    const courseAddedInUser = {
+        courseName: course.name,
+        lastSeenSectionId: course.topics[0].subTopics[0]._id
     }
 
     try{
@@ -138,17 +136,17 @@ const enrollCourse = async (req, res, next) => {
 
     // Adding this question into the user's data 
         userFound.courses.push(course);
+        userFound.myCoursesData.push(courseAddedInUser);
         await userFound.save({session:sess});
 
         sess.commitTransaction();
 
     }catch(err){
         console.log(err);
-        next(new HttpError('Data is not Saved',500));
+        return next(new HttpError('Data is not Saved',500));
     } 
     
-
-    res.json({course:course.toObject({getters:true})});
+    res.json({user:userFound.toObject({getters:true})});
 
 }
 

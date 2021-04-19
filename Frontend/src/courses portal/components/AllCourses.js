@@ -16,6 +16,7 @@ const AllCourses = (props) => {
                             rating={course.rating}
                             price={course.price}
                             totalTime={course.totalTime}
+                            lastSeenSectionId={course.lastSeenSectionId ? course.lastSeenSectionId : null}
                         />
                     )
                 })

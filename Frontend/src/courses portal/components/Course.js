@@ -12,9 +12,17 @@ const Course = (props) => {
                 <p>{props.description[0].para}</p>
                 <h6 className="rating">{props.rating}<img className="ratings-img" src={ratings}></img></h6>
                 <p className="prices">₹ {props.price}</p>
-                <Link to={`/course/${props.id}`} style={{textDecoration:"none"}}>
-                    <button id="testbutton" className="btn"></button>
-                </Link>
+
+                { props.lastSeenSectionId ? (
+                    <Link to={`/subTopic/${props.lastSeenSectionId}`} style={{textDecoration:"none"}}>
+                        <button id="testbutton" className="btn"></button>
+                    </Link>
+                ): (
+                    <Link to={`/course/${props.id}`} style={{textDecoration:"none"}}>
+                        <button id="testbutton" className="btn"></button>
+                    </Link>
+                )}
+                
             </div>            
         </React.Fragment>
     )

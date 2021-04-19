@@ -19,6 +19,9 @@ import NewPassword from "./user/components/NewPassword";
 import HomePage from "./courses portal/pages/HomePage";
 import CoursePage from "./courses portal/pages/CoursePage";
 import SubTopic from "./courses portal/pages/SubTopic";
+import FirstSubTopic from "./courses portal/pages/FirstSubTopic";
+import UserCourses from "./courses portal/pages/UserCourses";
+
  
 function App() {
 
@@ -156,6 +159,18 @@ function App() {
             <CoursePage />
           </Route>
 
+          <Route path="/subTopic/:subtopic">
+            <SubTopic />
+          </Route>
+
+          <Route path="/first/subTopic/:subtopic">
+            <FirstSubTopic />
+          </Route>
+
+          <Route path="/:userId/courses">
+            <UserCourses />
+          </Route>
+        
           <Redirect to="/" />
         </Switch>
     )

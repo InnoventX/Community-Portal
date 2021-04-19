@@ -1,15 +1,21 @@
-import React,{useState,useEffect} from 'react';
-import {useParams, Link} from 'react-router-dom';
+import React,{useState,useEffect,useContext} from 'react';
+import {useParams, Link, useHistory} from 'react-router-dom';
 
 import myCourses from "./courses";
 import "./CoursePage.css";
+import {AuthContext} from "../../shared/context/AuthContext";
 import ratings from '../../photos/ratings.svg';
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 
+
 const CoursePage = () => {
     const courseId = useParams().courseId;
+
+    const auth = useContext(AuthContext);
+
+    const history = useHistory();
 
     // State for  loading spinner
     const [isLoading , setIsLoading] = useState(false);
@@ -19,6 +25,11 @@ const CoursePage = () => {
 
     const [course , setCourse] = useState();
     
+    // Setting error to null after we click the screen
+    const errorHandler = () => {
+        setError(null);
+    }
+
     useEffect(() => {
         const sendRequest = async () => {
             try{
@@ -42,11 +53,32 @@ const CoursePage = () => {
         sendRequest();
     },[])
 
-    // Setting error to null after we click the screen
-    const errorHandler = () => {
-        setError(null);
-    }
+    const enrollCourseHandler = async () => {
+        try{
+            setIsLoading(true);
+            const response = await fetch(`http://localhost:5000/api/course/enrollcourse/${course.id}`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId:auth.userId
+                })
+            });
 
+            const responseData = await response.json();
+
+            if(responseData.message){
+                throw new Error(responseData.message);
+            }
+
+            // history.push(`/subTopic/${course.topics[0].subTopics[0].id}`);
+        }catch(err){
+            console.log(err);
+            setError(err.message || 'Something went wrong, please try again');
+        }
+        setIsLoading(false);
+    }
 
     return(
         <React.Fragment>
@@ -70,7 +102,23 @@ const CoursePage = () => {
                         
                         <div className="course-subDIV">
                             <p className="price">₹{course.price}</p>
-                            <button className="btn btn-outline-dark enroll-btn"><i style={{fontSize:"1.4rem"}} class="far fa-plus-square"></i> Enroll Now</button>
+
+                            {
+                                auth.isLogedIn ? (
+                                    <Link to={`/first/subTopic/${course.topics[0].subTopics[0]._id}`}>
+                                        <button className="btn btn-outline-dark enroll-btn" onClick={enrollCourseHandler}>
+                                            <i style={{fontSize:"1.4rem"}} class="far fa-plus-square"></i> Enroll Now
+                                        </button>
+                                    </Link>
+                                ):(
+                                    <a href="/authenticate" style={{textDecoration:"none"}}>
+                                        <button className="btn btn-outline-dark enroll-btn">
+                                            <i style={{fontSize:"1.4rem"}} class="far fa-plus-square"></i> Enroll Now
+                                        </button>
+                                    </a>
+                                )
+                            }
+                            
                             <div className="course-features">
                                 <p><i class="fas fa-video"></i> 40 hours on-demand video</p>
                             </div>
@@ -110,14 +158,10 @@ const CoursePage = () => {
                                                     {
                                                         topic.subTopics.map(subTopic => {
                                                             return(
-                                                                <React.Fragment>
-                                                                    
+                                                                <React.Fragment>    
                                                                         <div class="accordion-body">
-                                                                            <Link to={`/subtopic/${subTopic.id}`} style={{textDecoration:"none"}}>
-                                                                                <p style={{marginBottom:'0%'}}>{subTopic.sectionName}</p>
-                                                                            </Link>
-                                                                        </div>
-                                                                                                                                
+                                                                            <p style={{marginBottom:'0%'}}>{subTopic.sectionName}</p>
+                                                                        </div>                                                
                                                                 </React.Fragment>
                                                             )
                                                         })

@@ -18,6 +18,11 @@ const userSchema = mongoose.Schema({
     courses:[
         { type:mongoose.Types.ObjectId , required:true , ref:'Course'}
     ],
+
+    myCoursesData:[{
+        courseName:{ type:String , required:true },
+        lastSeenSectionId:{ type:String, required:true }
+    }],
     
     answers:[
         { type:mongoose.Types.ObjectId , required:true , ref:'Answer' }

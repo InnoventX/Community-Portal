@@ -7,7 +7,7 @@ import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 
-const SubTopic = () => {
+const FirstSubTopic = () => {
 
     const subTopicId = useParams().subtopic;
 
@@ -28,7 +28,7 @@ const SubTopic = () => {
             try{
                 setIsLoading(true);
             
-                const response = await fetch(`http://localhost:5000/api/section/${subTopicId}/${auth.userId}`);
+                const response = await fetch(`http://localhost:5000/api/section/first/${subTopicId}`);
                 const responseData = await response.json();
 
                 if(responseData.message){
@@ -127,4 +127,4 @@ const SubTopic = () => {
     )
 }
 
-export default SubTopic;
+export default FirstSubTopic;

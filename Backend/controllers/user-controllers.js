@@ -194,7 +194,18 @@ const getCourseByUserId = async (req, res,next) => {
         return res.json({message:"No courses found"});
     }
 
-    res.json({courses : userFound.courses.map((ques) => ques.toObject({getters:true}))});
+    // const myCourses = userFound.courses.map((course,index) => {
+    //     return({
+    //         ...course,
+    //         lastSeenSectionId: userFound.myCoursesData[index].lastSeenSectionId
+    //     })
+    // })
+
+    // res.json({courses : myCourses});
+    res.json({
+        courses : userFound.courses.map((c) => c.toObject({getters:true})),
+        myCoursesData: userFound.myCoursesData.map((c) => c.toObject({getters:true}))
+    });
 
 }
 

@@ -9,6 +9,8 @@ const HttpError = require("../util/http-error-message");
 const User = require("../models/user-model");
 const fileUpload = require("../middlewares/file-upload");
 
-router.get("/:sectionId", sectionController.getSubtopicById);
+router.get("/first/:sectionId", sectionController.getFirstSubtopicById);
+
+router.get("/:sectionId/:userId", sectionController.getSubtopicById);
 
 module.exports = router;
