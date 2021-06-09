@@ -24,7 +24,11 @@ const UserCourses = () => {
             try{
                 setIsLoading(true);
             
-                const response = await fetch(`http://localhost:5000/api/user/${auth.userId}/courses`);
+                const response = await fetch(`http://localhost:5000/api/user/${auth.userId}/courses`,{
+                    headers:{
+                        'Authorization':'Bearer ' + auth.token
+                    }
+                });
                 const responseData = await response.json();
 
                 if(responseData.message && responseData.message!=="No Course found"){

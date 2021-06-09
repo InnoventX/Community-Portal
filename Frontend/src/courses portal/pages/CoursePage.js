@@ -35,7 +35,11 @@ const CoursePage = () => {
             try{
                 setIsLoading(true);
             
-                const response = await fetch(`http://localhost:5000/api/course/${courseId}`);
+                const response = await fetch(`http://localhost:5000/api/course/${courseId}`,{
+                    headers:{
+                        'Authorization':'Bearer ' + auth.token
+                    }
+                });
                 const responseData = await response.json();
 
                 if(responseData.message){
@@ -59,7 +63,8 @@ const CoursePage = () => {
             const response = await fetch(`http://localhost:5000/api/course/enrollcourse/${course.id}`,{
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization':'Bearer ' + auth.token
                 },
                 body: JSON.stringify({
                     userId:auth.userId

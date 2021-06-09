@@ -197,7 +197,7 @@ function Authenticate(){
                     }
 
                     // Getting userId in Frontend
-                    auth.login(responseData.user.id);
+                    auth.login(responseData.user.id, responseData.token);
                 }catch(err){
                     console.log(err);
 
@@ -230,8 +230,8 @@ function Authenticate(){
                     if(responseData.message){
                         throw Error(responseData.message);
                     }
-
-                    auth.login(responseData.user.id);
+                    
+                    auth.login(responseData.user.id, responseData.token);
                 }catch(err){
                     console.log(err);
                     setError(err.message || 'Something went wrong, please try again.');

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {useParams,Link} from 'react-router-dom';
 
 import "./UserAnswers.css";
@@ -8,12 +8,15 @@ import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import ratings from '../../photos/ratings.svg';
-
+import {AuthContext} from "../../shared/context/AuthContext";
 
 const UserAnswers = () => {
 
     // Getting userId from the route
     const userId = useParams().userId;
+
+    // For components which shoul be rendered when the user is authenticated
+    const auth = useContext(AuthContext);
 
     // State for storing all the answers and respective question
     const [quesAns , setQuesAns] = useState();
@@ -34,7 +37,11 @@ const UserAnswers = () => {
             try{
                 // Turning on the loading spinner
                 setIsLoading(true);
-                const response = await fetch(`http://localhost:5000/api/user/${userId}/answers`);
+                const response = await fetch(`http://localhost:5000/api/user/${userId}/answers`,{
+                    headers:{
+                        'Authorization':'Bearer ' + auth.token
+                    }
+                });
                 const responseData = await response.json();
 
                 // Throwing error comming from backend
@@ -80,13 +87,21 @@ const UserAnswers = () => {
                             quesAns.map(qa => {
                                 return(
                                     <div className="container">
-                                        <div className="user-icon"><AccountCircleIcon style={{fontSize:"3.3rem"}}/></div>
+                                        { qa.userImage ? (
+                                            <img className="user-icon" style={{height:"2.8rem"}} src={`http://localhost:5000/${qa.userImage}`} alt="User"/>
+                                        ):(
+                                            <div className="user-icon"><AccountCircleIcon style={{fontSize:"3.3rem"}}/></div>
+                                        )}
                                         <h6 className="student-name">{qa.question.userName} • just now</h6>
                                         <Link style={{textDecoration:"none"}} to={`/ques/${qa.question._id}`}>
                                             <h4 className="question-title">{qa.question.title}</h4>
                                         </Link>
                                         <div className="answer-container-save">
-                                            <div className="user-icon"><AccountCircleIcon style={{fontSize:"3.3rem"}}/></div>
+                                            { qa.userImage ? (
+                                                <img className="user-icon" style={{height:"2.8rem"}} src={`http://localhost:5000/${qa.userImage}`} alt="User"/>
+                                            ):(
+                                                <div className="user-icon"><AccountCircleIcon style={{fontSize:"3.3rem"}}/></div>
+                                            )}
                                             <h6 className="student-name" >{qa.ans.userName}<p className="student-tag">'s answer</p></h6>   
                                             <h6 className="category">{qa.ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                 
                                             

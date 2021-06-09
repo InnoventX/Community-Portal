@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react';
+import React,{useState, useEffect, useContext} from 'react';
 import {useParams, useHistory} from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
@@ -9,11 +9,15 @@ import {useForm} from "../../shared/hoocks/form-hook";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import {AuthContext} from "../../shared/context/AuthContext";
 
 const UpdateQues = (props) => {
 
     // Using useHistory hook to go to the question page after updation
     const history = useHistory();
+
+    // For components which shoul be rendered when the user is authenticated
+    const auth = useContext(AuthContext);
 
     // Taking quesId from the route
     const quesId = useParams().quesId;
@@ -51,7 +55,11 @@ const UpdateQues = (props) => {
                 setIsLoading(true);
 
                 // Sending get request for question
-                const response = await fetch(`http://localhost:5000/api/question/${quesId}`);
+                const response = await fetch(`http://localhost:5000/api/question/${quesId}`,{
+                    headers:{
+                        'Authorization':'Bearer ' + auth.token
+                    }
+                });
                 const responseData = await response.json();
                 if(responseData.message){
                     throw new Error(responseData.message);
@@ -101,7 +109,8 @@ const UpdateQues = (props) => {
             const response = await fetch(`http://localhost:5000/api/question/${quesId}`,{
                 method: 'PATCH',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization':'Bearer ' + auth.token
                 },
                 body: JSON.stringify({
                     title:formState.inputs.title.value,

@@ -7,7 +7,7 @@ import PortalNavbar from './shared/components/PortalNavbar';
 import PortalHome from "./portal home/pages/PortalHome";
 import QuesPage from "./portal home/pages/QuesPage";
 import CatQuestions from "./portal home/pages/CatQuestions";
-import UserQuestions from "./portal home/components/UserQuestions";
+import UserQuestions from "./portal home/pages/UserQuestions";
 import NewQuestion from "./portal home/pages/NewQuestion";
 import {AuthContext} from "./shared/context/AuthContext";
 import UpdateQues from "./portal home/pages/UpdateQues";
@@ -27,16 +27,18 @@ function App() {
 
   // State for Login
   const [isLogedIn, setIsLogedIn] = useState(false);
-
+  const [token, setToken] = useState(null);
   // State for userId comming from BACKEND
   const [userId , setUserId] = useState(null);
 
-  const login = useCallback((uid) => {
+  const login = useCallback((uid,token) => {
+    setToken(token);
     setIsLogedIn(true);
     setUserId(uid);
   },[]);
 
   const logout = useCallback((uid) => {
+    setToken(null);
     setIsLogedIn(false);
     setUserId(null);
   },[]);
@@ -180,6 +182,7 @@ function App() {
   return (
     <AuthContext.Provider value={{
       isLogedIn:isLogedIn,
+      token:token,
       userId:userId,
       login:login,
       logout:logout

@@ -28,7 +28,11 @@ const FirstSubTopic = () => {
             try{
                 setIsLoading(true);
             
-                const response = await fetch(`http://localhost:5000/api/section/first/${subTopicId}`);
+                const response = await fetch(`http://localhost:5000/api/section/first/${subTopicId}`,{
+                    headers:{
+                        'Authorization':'Bearer ' + auth.token
+                    }
+                });
                 const responseData = await response.json();
 
                 if(responseData.message){
