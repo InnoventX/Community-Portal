@@ -8,14 +8,37 @@ const userSchema = mongoose.Schema({
     email:{ type:String , required:true , unique:true },
     
     password:{ type:String , required:true , minlength:6 },
+
+    image:{ type:String },
     
     questions:[
         { type:mongoose.Types.ObjectId , required:true , ref:'Question'}
     ],
+
+    courses:[
+        { type:mongoose.Types.ObjectId , required:true , ref:'Course'}
+    ],
+
+    myCoursesData:[{
+        courseName:{ type:String , required:true },
+        lastSeenSectionId:{ type:String, required:true }
+    }],
     
     answers:[
         { type:mongoose.Types.ObjectId , required:true , ref:'Answer' }
-    ]
+    ],
+
+    savedAnswers:[
+        { type:mongoose.Types.ObjectId , required:true , ref:'Answer' }
+    ],
+
+    resetToken: { type: String },
+    
+    resetExpire: { type: Date },
+
+    schoolName:{ type:String, required:true },
+    
+    code: { type: String, required:true }
 });
 
 userSchema.plugin(mongooseUniqueValidator);

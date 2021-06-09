@@ -1,0 +1,38 @@
+{
+    "name": "arduino",
+    "topics": [{
+            "name": "Introduction",
+            "subTopics": [{
+                    "name": "Intro to Robotics",
+                    "videoLink": "https://xyz.com",
+                    "time": 30
+                },
+                {
+                    "name": "Sensor",
+                    "videoLink": "https://abc.com",
+                    "time": 30
+                }
+            ],
+            "sectionTime": 60
+        },
+        {
+            "name": "Robotics Advance",
+            "subTopics": [{
+                    "name": "Motors",
+                    "videoLink": "https://xyz.com",
+                    "time": 30
+                },
+                {
+                    "name": "LCD",
+                    "videoLink": "https://abc.com",
+                    "time": 20
+                }
+            ],
+            "sectionTime": 50
+        }
+    ],
+    "desc": ["hello", "world"],
+    "price": 100,
+    "totalTime": 50,
+    "userWhoHasBought": []
+}

@@ -1,12 +1,13 @@
+const fs =  require('fs');
+
 const HttpError = require('../util/http-error-message');
 const Answer = require('../models/answer-model');
 const Question = require('../models/question-model');
 const User = require("../models/user-model");
 const mongoose = require('mongoose');
 const {validationResult} = require('express-validator');
-const { Http } = require('@material-ui/icons');
 
-// Function used for sorting the ansers according to their rating
+// Function used for sorting the answers according to their rating
 const compare = (a , b) => {
 
     // If B has higher rating then SORT
@@ -49,7 +50,12 @@ const getAnswersByQuestionId = async (req,res,next) => {
     questionFound.answers.sort(compare);
 
     // Sending the question and answers as response
-    res.json({question:questionFound.toObject({getters:true}),answers:questionFound.answers.map((ans) => ans.toObject({getters:true}))});
+    res.json(
+        {
+            question:questionFound.toObject({getters:true}),
+            answers:questionFound.answers.map((ans) => ans.toObject({getters:true}))
+        }
+    );
     
 }
 
@@ -100,9 +106,12 @@ const giveAnswer = async (req,res,next) => {
     const newAnswer = new Answer({
         userId,
         userName:userFound.name,
+        userImage:userFound.image,
         answer,
         rating:rating || 0,
-        questionId:questionId
+        image:req.file ? req.file.path : null,
+        questionId:questionId,
+        subAnswers:[]
     });
 
     // Now storing the answer
@@ -244,6 +253,8 @@ const deleteAnswer = async (req,res,next) => {
         next(new HttpError("Question of this qnswer was not found",500));
     }
 
+    const answerImage = answerFound.image;
+
     // Finding the user who has given this answer
     let answerGivenBy;
     try{
@@ -278,6 +289,12 @@ const deleteAnswer = async (req,res,next) => {
     }catch(err){
         console.log(err);
         next(new HttpError('Not able to delete.Please try again',500));
+    }
+
+    if(answerImage){
+        fs.unlink(answerImage , (err) => {
+            console.log(err);
+        });
     }
 
     res.json({message:'Deleted successfully'});

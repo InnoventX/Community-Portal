@@ -1,0 +1,110 @@
+.course{
+    color:white;
+    margin-top:3%;
+    margin-left: 2%;
+}
+
+.course-heading {
+    background-color: #799EE3;
+    padding: 1%;
+    width: 98%;
+    border-radius: 8px;
+}
+
+.description-container{
+    background-color:#363636;
+    padding:2%;
+    margin:3% 1%;
+    width:50%;
+    border-radius: 15px;
+    box-shadow: 0 3px 3px rgba(0,0,0,0.2);
+}
+
+.learn-desription {
+    margin-left: 6%;
+}
+
+.course-content{
+    background-color:#363636;
+    width:98%;
+    padding:2%;
+    margin:1% auto;
+    box-shadow: 0 3px 3px rgba(0,0,0,0.2);
+}
+
+.lec-length {
+    color: rgb(153, 153, 153);
+    font-weight: 700;
+    display: inline-block;
+}
+
+.topics-container{
+    background-color:white;
+    color:black;
+    width:85%;
+    padding:1%;
+    margin:1% auto;
+}
+
+.course-name {
+    font-weight: 700;
+}
+
+.time {
+    color: rgb(79, 79, 79);
+    font-weight: 700;
+    display: inline-block;
+}
+
+.price {
+    margin-left: 38%;
+    color: rgb(0, 0, 0);
+    margin-bottom: 0%;
+    display: inline-block;
+    margin-right: 2%;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+.rating {
+    color: rgb(255, 255, 255);
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.course-subDIV {
+    width: 25%;
+    height: 42%;
+    color: black;
+    padding: 1% 2%;
+    position: absolute;
+    background-color: white;
+    margin-left: 65%;
+    border-radius: 15px;
+    box-shadow: 0 3px 3px rgba(0,0,0,0.2);
+}
+
+.enroll-btn {
+    font-size: 1.2rem;
+    display: block;
+    width: 100%;
+    margin-top: 5%;
+}
+
+.course-features {
+    margin-top: 6%;
+    font-weight: 600;
+    color: rgb(79, 79, 79);
+}
+
+.accordion {
+    background-color: white;
+    border-radius: 8px;
+    color: black;
+}
+
+.accordion-header {
+    font-weight: 600;
+}
+

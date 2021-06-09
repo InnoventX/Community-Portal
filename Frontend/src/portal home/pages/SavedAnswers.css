@@ -1,0 +1,39 @@
+.user-icon{
+  position: absolute;
+  display: inline-block;
+}
+
+.student-name{
+  position: relative;
+  display: inline-block;
+}
+
+.question-title{
+  margin-top: 2%;
+}
+
+.question-container{
+  background-color: #363636;
+  font-family: 'Montserrat', sans-serif;
+  border-radius: 20px;
+  padding:1%;
+  margin:2% 8%;
+  color:white;
+}
+
+.answer-container-save{
+  font-family: 'Montserrat', sans-serif;
+  border-radius: 20px;
+  padding:1%;
+  margin:1% 1%;
+  color:white; 
+  border-style: solid;
+  border-color: #02696f;
+  
+}
+
+
+.answers{
+    margin-top: 2%;
+    margin-left: 2%;
+}

@@ -1,0 +1,109 @@
+.ask-question-container{
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 20px;
+    padding:1%;
+    margin:2% 8%;
+    color:white;
+    border: 2px solid #585858;
+}
+
+.user-icon{
+    position: absolute;
+    display: inline-block;
+    margin: 0% 0%;
+}
+
+.student-name{
+    position: relative;
+    display: inline-block;
+}
+
+.que-title-text{
+    position: relative;
+    display: inline-block;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    width: 100%;
+    background-color: #363636;
+    color: white;
+    margin-top: 3%;
+    margin-left: 0%;
+    margin-bottom: 1%;
+  }
+
+.que-body-container{
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 20px;
+    width: 84%;
+    margin:2% 8%;
+    color:white;
+    margin-left: 0%;
+}
+
+.que-body-text{
+    position: relative;
+    display: inline-block;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background-color: #363636;
+    color: white;
+    width: 100%;
+    margin-left: 0%;
+    margin-bottom: 1%;
+}
+
+.submit-btn-div {
+    padding-bottom: 5%;
+    margin-right: 8%;
+}
+
+.ask-submit-btn{
+    border-color:#EE6F57;
+    background-color: #EE6F57;
+    color: white;
+    border-radius: 28px;
+    width: 12%;
+    float: right;    
+    font-size: 1.2rem;
+}
+
+.ask-submit-btn:hover {
+    background-color: #e45538;
+}
+
+.ask-submit-btn:focus {
+    box-shadow: 0 0 0 0.15rem transparent;
+}
+
+
+
+.submit-img{
+    width: 20%;
+    height: 20%;
+    padding-right: 2%;
+}
+
+select{
+    position: relative; 
+    display: block; 
+    width: 20em; 
+    height: 3em; 
+    line-height: 3; 
+    background: #F8B500; 
+    border-radius: .25em; 
+}
+
+.cat{
+    position: relative; 
+    display: block; 
+    width: 20em; 
+    height: 3em; 
+    line-height: 3; 
+    background: #363636; 
+    border-radius: .25em; 
+    margin-left: 0%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
