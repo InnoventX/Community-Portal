@@ -21,31 +21,16 @@ import CoursePage from "./courses portal/pages/CoursePage";
 import SubTopic from "./courses portal/pages/SubTopic";
 import FirstSubTopic from "./courses portal/pages/FirstSubTopic";
 import UserCourses from "./courses portal/pages/UserCourses";
+import {useAuth} from "./shared/hoocks/auth-hook";
 
  
 function App() {
 
-  // State for Login
-  const [isLogedIn, setIsLogedIn] = useState(false);
-  const [token, setToken] = useState(null);
-  // State for userId comming from BACKEND
-  const [userId , setUserId] = useState(null);
-
-  const login = useCallback((uid,token) => {
-    setToken(token);
-    setIsLogedIn(true);
-    setUserId(uid);
-  },[]);
-
-  const logout = useCallback((uid) => {
-    setToken(null);
-    setIsLogedIn(false);
-    setUserId(null);
-  },[]);
+  const {token,userId,login,logout} = useAuth();
 
   let routes;
 
-  if(!isLogedIn){
+  if(!token){
     routes = (
       <Switch>
           {/*  Home Page  */}
@@ -181,7 +166,7 @@ function App() {
 
   return (
     <AuthContext.Provider value={{
-      isLogedIn:isLogedIn,
+      isLogedIn:!!token,
       token:token,
       userId:userId,
       login:login,
