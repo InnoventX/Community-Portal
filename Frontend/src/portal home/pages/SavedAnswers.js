@@ -37,7 +37,7 @@ const SavedAnswers = () => {
             try{
                 // Turning on the loading spinner
                 setIsLoading(true);
-                const response = await fetch(`http://localhost:5000/api/user/${userId}/savedAnswers`,{
+                const response = await fetch(`http://localhost:5000/api/user/${auth.userId}/savedAnswers`,{
                     headers:{
                         'Authorization':'Bearer ' + auth.token
                     }
