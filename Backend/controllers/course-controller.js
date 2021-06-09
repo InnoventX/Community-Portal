@@ -69,7 +69,7 @@ const getAllCourse = async (req, res, next) => {
         courses = await Course.find();
     }catch(err) {
         console.log(err);
-        next(new HttpError('Something went wrong', 500));
+        return next(new HttpError('Something went wrong', 500));
     }
 
     if(!courses || courses.length === 0) {
@@ -89,11 +89,11 @@ const getCourseById = async (req, res, next) => {
         courseFound = await Course.findById(courseId);
     }catch(err) {
         console.log(err);
-        next(new HttpError("something went wrong", 500));
+        return next(new HttpError("something went wrong", 500));
     }
 
     if(!courseFound) {
-        next(new HttpError("Course not Found!!!", 500));
+        return next(new HttpError("Course not Found!!!", 500));
     }
 
     res.json({course:courseFound.toObject({getters: true})});

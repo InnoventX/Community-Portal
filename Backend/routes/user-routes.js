@@ -7,6 +7,7 @@ const Question = require('../models/question-model');
 const HttpError = require("../util/http-error-message");
 const User = require("../models/user-model");
 const fileUpload = require("../middlewares/file-upload");
+const authCheck = require("../middlewares/auth-check");
 
 router.post("/signup",
             fileUpload.single('image'),
@@ -36,6 +37,8 @@ router.post("/login",
 router.post("/reset-password", userControllers.postReset);
 
 router.post("/new-password", userControllers.newpassword);
+
+router.use(authCheck);
 
 router.get("/:userId",userControllers.getUserById);
 

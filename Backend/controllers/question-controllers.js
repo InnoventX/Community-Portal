@@ -16,7 +16,7 @@ const getAllQuestions =async (req,res,next) => {
         questions = await Question.find();
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // If there are no question in out database
@@ -42,12 +42,12 @@ const getQuestionById = async (req,res,next) => {
         questionFound = await Question.findById(questionId);
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Throwing error if the question is not found
     if(!questionFound){
-        next(new HttpError('Question not found',500));
+        return next(new HttpError('Question not found',500));
     }
     
     res.json({question:questionFound.toObject({getters:true})});
@@ -65,7 +65,7 @@ const getQuestionsByCategory = async (req,res,next) => {
         questionsFound = await Question.find({ category : category });
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Sending the message if the questions were not found
@@ -85,7 +85,7 @@ const newQuestion = async (req,res,next) => {
     const error = validationResult(req);
     if(!error.isEmpty()){
         console.log(error.message);
-        throw new HttpError('Invalid input.Please enter again',422);
+        return next(new HttpError('Invalid input.Please enter again',422));
     }
 
     // Taking the data from the body
@@ -97,12 +97,12 @@ const newQuestion = async (req,res,next) => {
         userFound = await User.findById(userId);
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Throwing error if the user not found
     if(!userFound){
-        next(new HttpError('Invalid userId!',500));
+        return next(new HttpError('Invalid userId!',500));
     }
 
     // Making the Question object
@@ -136,7 +136,7 @@ const newQuestion = async (req,res,next) => {
 
     }catch(err){
         console.log(err);
-        next(new HttpError('Data is not Saved',500));
+        return next(new HttpError('Data is not Saved',500));
     } 
 
     res.json({question:newQuestion.toObject({getters:true})});
@@ -148,7 +148,7 @@ const updateQuestion = async (req,res,next) => {
     const error = validationResult(req);
     if(!error.isEmpty()){
         console.log(error.message);
-        next(new HttpError('Invalid input.Please enter again',422));
+        return next(new HttpError('Invalid input.Please enter again',422));
     }
 
     // Taking questionId from the route
@@ -163,12 +163,12 @@ const updateQuestion = async (req,res,next) => {
         questionFound = await Question.findById(questionId);
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Throwing the error if the question is not found
     if(!questionId){
-        next(new HttpError('Question not found',500));
+        return next(new HttpError('Question not found',500));
     }
 
     // Updating the data to question
@@ -182,7 +182,7 @@ const updateQuestion = async (req,res,next) => {
         await questionFound.save();
     }catch(err){
         console.log(err);
-        next(new HttpError("Updation falied",500));
+        return next(new HttpError("Updation falied",500));
     }
     
     res.json({question:questionFound.toObject({getters:true})});
@@ -200,12 +200,12 @@ const deleteQuestion = async (req,res,next) => {
         questionFound = await Question.findById(questionId).populate('answers');
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Throwing error if question not found
     if(!questionFound){
-        next(new HttpError('Question not found',500));
+        return next(new HttpError('Question not found',500));
     }
 
     const imagePath = questionFound.image;
@@ -216,7 +216,7 @@ const deleteQuestion = async (req,res,next) => {
         creator = await User.findById(questionFound.userId);
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Removing all the answers of that question
@@ -227,7 +227,7 @@ const deleteQuestion = async (req,res,next) => {
                 answerFound = await Answer.findById(ans).populate('userId');
             }catch(err){
                 console.log(err);
-                next(new HttpError("Something went wrong",500));
+                return next(new HttpError("Something went wrong",500));
             }
     
             // Removing the answer from the user data and deleting the answer itself
@@ -245,7 +245,7 @@ const deleteQuestion = async (req,res,next) => {
                 session.commitTransaction();
             }catch(err){
                 console.log(err);
-                next(new HttpError("Answers of that questions were not deleted",500));
+                return next(new HttpError("Answers of that questions were not deleted",500));
             }
         
     });
@@ -265,7 +265,7 @@ const deleteQuestion = async (req,res,next) => {
         sess.commitTransaction();
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     fs.unlink(imagePath , (err) => {
