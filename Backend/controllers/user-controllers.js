@@ -1,5 +1,6 @@
 // Using bcrypt for encrypting passwords
 const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
 
 // User Model
 const User = require("../models/user-model");
@@ -28,7 +29,7 @@ const siggnup = async (req,res,next) => {
     const error = validationResult(req);
     if(!error.isEmpty()){
         console.log(error.message);
-        next(new HttpError('Invalid input.Please enter again',422));
+        return next(new HttpError('Invalid input.Please enter again',422));
     }
 
     // Generating salt to encrypting the password
@@ -45,11 +46,11 @@ const siggnup = async (req,res,next) => {
         existingUser = await User.findOne({email:email});
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     if(existingUser){
-        next(new HttpError('User already exists.Please Login!',500));
+        return next(new HttpError('User already exists.Please Login!',500));
     }
 
     const code = req.body.code;
@@ -59,11 +60,11 @@ const siggnup = async (req,res,next) => {
         codeFound = await Code.findOne({code: code});
     }catch(err){
         console.log(err);
-        next(new HttpError('something went wrong try again',500));
+        return next(new HttpError('something went wrong try again',500));
     }
 
     if(!codeFound){
-        next(new HttpError('No such code found.Please enter a valid code',500));
+        return next(new HttpError('No such code found.Please enter a valid code',500));
     }else{
         const newUser = new User({
             name: req.body.name,
@@ -83,10 +84,23 @@ const siggnup = async (req,res,next) => {
         }catch(err){
             console.log(err);
             // Sending the error message
-            next(new HttpError('User not saved',500));
+            return next(new HttpError('User not saved',500));
         }
+
+        let token;
+        try{
+            token=jwt.sign(
+                { userId:newUser.id, email:newUser.email },
+                'InnoventxRocks',
+                {expiresIn:'1h'}
+            );
+        }catch(err){
+            console.log(err);
+            return next(new HttpError('Something went wrong.Token not created',500));
+        }
+
         // Sending user in Response
-        res.json({user:newUser.toObject({getters:true})});
+        res.json({user:newUser.toObject({getters:true}), token:token});
     }
 }
 
@@ -96,7 +110,7 @@ const login = async (req,res,next) => {
     const error = validationResult(req);
     if(!error.isEmpty()){
         console.log(error.message);
-        next(new HttpError('Invalid input.Please enter again',422));
+        return next(new HttpError('Invalid input.Please enter again',422));
     }
 
     // Taking email from frontend 
@@ -108,7 +122,7 @@ const login = async (req,res,next) => {
         userFound = await User.findOne( { email } );
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Throwing error if the user doesnot exists
@@ -124,8 +138,20 @@ const login = async (req,res,next) => {
         }
     }
 
+    let token;
+    try{
+        token= jwt.sign(
+            {userId:userFound.id, email:userFound.email},
+            'InnoventxRocks',
+            { expiresIn:'1h' }
+        );
+    }catch(err){
+        console.log(err);
+        return next(new HttpError('Something went wrong.Token not created'));
+    }
+
     // Sending the user as Response
-    res.json({user:userFound.toObject({getters:true})});
+    res.json({user:userFound.toObject({getters:true}), token:token});
 }
 
 const saveAnswer = async (req,res,next) => {
@@ -142,7 +168,7 @@ const saveAnswer = async (req,res,next) => {
         await userFound.save();
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     res.json({user:userFound});
@@ -161,7 +187,7 @@ const getQuestionByUserId = async (req,res,next) => {
         userFound = await User.findById(userId).populate('questions');
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Throwing error if the user doesnot exixts
@@ -184,11 +210,11 @@ const getCourseByUserId = async (req, res,next) => {
         userFound = await User.findById(userId).populate('courses')
     }catch(err) {
         console.log(err);
-        next(new HttpError("Something went wrong", 500));
+        return next(new HttpError("Something went wrong", 500));
     }
 
     if(!userFound){
-        next(new HttpError('User not found',500));
+        return next(new HttpError('User not found',500));
     }
     else if(userFound.courses.length === 0){
         return res.json({message:"No courses found"});
@@ -220,7 +246,7 @@ const getAnswersByUserId = async (req,res,next) => {
         userFound = await User.findById(userId).populate('answers');
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Throwing error if the user doesnot exixts
@@ -232,14 +258,15 @@ const getAnswersByUserId = async (req,res,next) => {
         // Getting the questions of those answers which was given by user
         let array = [];
         userFound.answers.forEach( async (ans,index) => {
+            let userImage=userFound.image;
             let question;
             try{
                 question = await Question.findById(ans.questionId);
             }catch(err){
                 console.log(err);
-                next(new HttpError('Something went wrong',500));
+                return next(new HttpError('Something went wrong',500));
             }
-            array.push({question,ans});
+            array.push({question,ans,userImage});
 
             if(index === (userFound.answers.length-1)){
                 res.json({quesAns:array});
@@ -261,28 +288,29 @@ const getSavedAnswers = async (req,res,next) => {
         userFound = await User.findById(userId).populate('savedAnswers');
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Throwing error if the user doesnot exixts
     if(!userFound){
-        res.json({message:"User not found."});
+        return res.json({message:"User not found."});
     }else if(userFound.savedAnswers.length === 0){
-        res.json({message:"No answers were saved by the user."});
+        return res.json({message:"No answers were saved by the user."});
     }else{
         userFound.savedAnswers.reverse();
 
         // Getting the questions of those answers which was given by user
         let array = [];
         userFound.savedAnswers.forEach( async (ans,index) => {
+            let userImage=userFound.image;
             let question;
             try{
                 question = await Question.findById(ans.questionId);
             }catch(err){
                 console.log(err);
-                next(new HttpError('Something went wrong',500));
+                return next(new HttpError('Something went wrong',500));
             }
-            array.push({question,ans});
+            array.push({question,ans,userImage});
 
             if(index === (userFound.savedAnswers.length-1)){
                 res.json({quesAns:array});
@@ -299,11 +327,11 @@ const getUserById = async (req,res,next) => {
         userFound = await User.findById(userId);
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     if(!userFound){
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     res.json({user:userFound.toObject({getters:true})});
@@ -314,7 +342,7 @@ const postReset = (req, res, next) => {
     crypto.randomBytes(32, (err, buffer) => {
         if (err) {
             console.log(err);
-            next(new HttpError('Something went wrong', 500));
+            return next(new HttpError('Something went wrong', 500));
         }
         const token = buffer.toString('hex');
         User.findOne({ email: req.body.email })
@@ -339,8 +367,6 @@ const postReset = (req, res, next) => {
                 });
             })
             res.json({message: "check your email!!"})
-
-
     });
 };
 
@@ -363,6 +389,7 @@ const newpassword =  (req, res, next) => {
             })
         }).catch(err=>{
             console.log(err);
+            return next(new HttpError('Something went wrong',500));
     })
 }
 

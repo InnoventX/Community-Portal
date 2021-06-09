@@ -16,11 +16,11 @@ const newSubAnswer = async (req,res,next) => {
         userFound = await User.findById(userId); 
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     if(!userFound){
-        next(new HttpError("User not found",500));
+        return next(new HttpError("User not found",500));
     }
 
     let parentAnswer;
@@ -28,7 +28,7 @@ const newSubAnswer = async (req,res,next) => {
         parentAnswer = await Answer.findById(parentAnswerId);
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     const newSubAnswer = new Subanswer({
@@ -52,7 +52,7 @@ const newSubAnswer = async (req,res,next) => {
         sess.commitTransaction();
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong.Sub-Answer is not saved',500));
+        return next(new HttpError('Something went wrong.Sub-Answer is not saved',500));
     }
 
     res.json({subAnswer:newSubAnswer.toObject({getters:true})});
@@ -67,13 +67,13 @@ const getSubAnswersByAnswerId = async (req,res,next) => {
         answerFound = await Answer.findById(answerId).populate("subAnswers"); 
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong.Answer not found',500));
+        return next(new HttpError('Something went wrong.Answer not found',500));
     }
 
     if(!answerFound){
-        next(new HttpError('Answer not found',500));
+        return next(new HttpError('Answer not found',500));
     }else if(answerFound.subAnswers.length === 0){
-        next(new HttpError('No sub-answers',500));
+        return next(new HttpError('No sub-answers',500));
     }
 
     res.json({subAnswers:answerFound.subAnswers.map(ans => ans.toObject({getters:true}))});

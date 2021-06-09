@@ -32,12 +32,12 @@ const getAnswersByQuestionId = async (req,res,next) => {
         questionFound = await Question.findById(questionId).populate('answers');
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Throwing the error if the question is not found
     if(!questionFound){
-        next(new HttpError("Question not found",500));
+        return next(new HttpError("Question not found",500));
     }
     else if (questionFound.answers.length===0){
         return res.json({question:questionFound.toObject({getters:true}),message:"No answers found of that question"});
@@ -65,7 +65,7 @@ const giveAnswer = async (req,res,next) => {
     const error = validationResult(req);
     if(!error.isEmpty()){
         console.log(error.message);
-        next(new HttpError('Invalid input.Please enter again',422));
+        return next(new HttpError('Invalid input.Please enter again',422));
     }
 
     // Taking questionId from the route
@@ -80,12 +80,12 @@ const giveAnswer = async (req,res,next) => {
         questionFound = await Question.findById(questionId);
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Throwing error if the question was not found
     if(!questionFound){
-        next(new HttpError("Question not found",500));
+        return next(new HttpError("Question not found",500));
     }
 
     // Finding User by ID
@@ -94,12 +94,12 @@ const giveAnswer = async (req,res,next) => {
         userFound = await User.findById(userId);
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Throwing error if the user was not found
     if(!userFound){
-        next(new HttpError("User not found",500));
+        return next(new HttpError("User not found",500));
     }
 
     // Making the answer instance
@@ -133,7 +133,7 @@ const giveAnswer = async (req,res,next) => {
         sess.commitTransaction();
     }catch(err){
         console.log(err);
-        next(new HttpError(err.message || 'Answer not saved',500));
+        return next(new HttpError(err.message || 'Answer not saved',500));
     }
     
     // Sending the answer as response
@@ -151,7 +151,7 @@ const getAnswerById = async (req,res,next) => {
         answerFound = await Answer.findById(answerId);
     }catch(err){
         console.log(err);
-        next(new Http('Something went worng',500));
+        return next(new Http('Something went worng',500));
     }
 
     res.json({answer:answerFound.toObject({getters:true})});
@@ -163,7 +163,7 @@ const updateAnswer = async (req,res,next) => {
     const error = validationResult(req);
     if(!error.isEmpty()){
         console.log(error.message);
-        next(new HttpError('Invalid input.Please enter again',422));
+        return next(new HttpError('Invalid input.Please enter again',422));
     }
 
     // Taking answer ID from th route
@@ -177,12 +177,12 @@ const updateAnswer = async (req,res,next) => {
         answerFound = await Answer.findById(answerId);
     }catch(err){
         console.log(err);
-        next(new Http('Something went worng',500));
+        return next(new Http('Something went worng',500));
     }
     
     // Throwing the error if the answer is not found
     if(!answerFound){
-        next(new HttpError('Answer not found',500));
+        return next(new HttpError('Answer not found',500));
     }
 
     // Updating the answer 
@@ -193,7 +193,7 @@ const updateAnswer = async (req,res,next) => {
         await answerFound.save();
     }catch(err){
         console.log(err);
-        next(new HttpError('Updation failed',500));
+        return next(new HttpError('Updation failed',500));
     }
 
     res.json({answer:answerFound.toObject({getters:true})});
@@ -210,12 +210,12 @@ const incrementRating = async (req,res,next) => {
         answerFound = await Answer.findById(answerId);
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Throwing error if the answer is not found
     if(!answerFound){
-        next(new HttpError("Answer not found",500));
+        return next(new HttpError("Answer not found",500));
     }
 
     // Incrementing the rating by 1
@@ -225,7 +225,7 @@ const incrementRating = async (req,res,next) => {
         await answerFound.save();
     }catch(err){
         console.log(err);
-        next(new HttpError('Rating was not incremented',500));
+        return next(new HttpError('Rating was not incremented',500));
     }
 
     res.json({answer:answerFound.toObject({getters:true})});
@@ -243,14 +243,14 @@ const deleteAnswer = async (req,res,next) => {
         answerFound = await Answer.findById(answerId).populate('questionId');
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Throwing error if the answer is not found
     if(!answerFound){
-        next(new HttpError('Answer not found',500));
+        return next(new HttpError('Answer not found',500));
     }else if(!answerFound.questionId){
-        next(new HttpError("Question of this qnswer was not found",500));
+        return next(new HttpError("Question of this qnswer was not found",500));
     }
 
     const answerImage = answerFound.image;
@@ -261,12 +261,12 @@ const deleteAnswer = async (req,res,next) => {
         answerGivenBy =  await User.findById(answerFound.userId);
     }catch(err){
         console.log(err);
-        next(new HttpError('Something went wrong',500));
+        return next(new HttpError('Something went wrong',500));
     }
 
     // Throwing error if the user is not found
     if(!answerGivenBy){
-        next(new Http("User was not found who has given the answer"));
+        return next(new Http("User was not found who has given the answer"));
     }
 
     // Removing the answer and it's id from the question and user's array
@@ -288,7 +288,7 @@ const deleteAnswer = async (req,res,next) => {
         
     }catch(err){
         console.log(err);
-        next(new HttpError('Not able to delete.Please try again',500));
+        return next(new HttpError('Not able to delete.Please try again',500));
     }
 
     if(answerImage){

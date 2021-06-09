@@ -9,11 +9,14 @@ const Answer = require('../models/answer-model');
 const Question = require('../models/question-model');
 const User = require("../models/user-model");
 const fileUpload = require("../middlewares/file-upload");
+const authCheck = require("../middlewares/auth-check");
 
 // It will order the answers by RATING
 router.get("/:questionId/" , answerControllers.getAnswersByQuestionId);
 
 router.get("/getAnswer/:answerId",answerControllers.getAnswerById);
+
+router.use(authCheck);
 
 router.post("/:questionId/",
             fileUpload.single('image'),

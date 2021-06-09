@@ -8,9 +8,12 @@ const HttpError = require('../util/http-error-message');
 const Answer = require('../models/answer-model');
 const Question = require('../models/question-model');
 const User = require("../models/user-model");
-
-router.post("/:answerId/newSubAnswer",subAnswerControllers.newSubAnswer);
+const authCheck = require("../middlewares/auth-check");
 
 router.get("/:answerId",subAnswerControllers.getSubAnswersByAnswerId);
+
+router.use(authCheck);
+
+router.post("/:answerId/newSubAnswer",subAnswerControllers.newSubAnswer);
 
 module.exports = router;
