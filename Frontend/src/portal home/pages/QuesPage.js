@@ -1,4 +1,6 @@
-import React,{useState, useContext, useEffect} from 'react';
+import React,{useState, useContext, useEffect, useRef} from 'react';
+import TinyMCE from 'react-tinymce';
+import { Editor } from '@tinymce/tinymce-react';
 import {useParams, Link , useHistory} from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
@@ -19,6 +21,8 @@ import ImageUpload from "../../shared/components/ImageUpload";
 
 
 const QuesPage = () => {
+
+    const editorRef = useRef(null);
 
     // Using history to get redirected to "/" route if the question is deleted
     const history = useHistory();
@@ -80,7 +84,8 @@ const QuesPage = () => {
 
     // Updating the ANSWER state
     const handleGivenAns = (event) => {
-        const ans = event.target.value;
+        const ans = event.target.getContent();
+        console.log(ans);
         setAnsGiven(ans);
     }
 
@@ -225,14 +230,18 @@ const QuesPage = () => {
         event.preventDefault();
 
         // If the submit button is clicked
-        if(sholudSubmitAnswer){
+        if(sholudSubmitAnswer && editorRef.current){
+            let ans=editorRef.current.getContent();
+            ans=ans.split(">")[1];
+            ans=ans.split("<")[0];
+
             // Posting the answer using backend api
             try{
 
                 // Using formData to also send the image 
                 const formData = new FormData();
                 formData.append('userId',auth.userId);
-                formData.append('answer',ansGiven);
+                formData.append('answer',ans);
                 formData.append('image',answerImage.value);
 
                 const response = await fetch(`http://localhost:5000/api/answer/${quesId}/`,{
@@ -397,6 +406,15 @@ const QuesPage = () => {
         }
     }
 
+
+    const log = () => {
+        if (editorRef.current) {
+            let ans=editorRef.current.getContent();
+            ans=ans.split(">")[1];
+            ans=ans.split("<")[0];
+        }
+    };
+
     ////////////////////////////////////////////// Return section ///////////////////////////////////////////////
 
     return(
@@ -483,7 +501,26 @@ const QuesPage = () => {
                             { showImageUpload && <ImageUpload id='image' onInput={imageInputHandler} center isValid={true}/> }
                             <button id="add-image-btn" onClick={showImageUploadHandler}>Add Image?</button>
                             
-                            <textarea className="post-ans-text form-control" rows="3" value={ansGiven} onChange={handleGivenAns} placeholder="   Type your answer here..."/>
+                            {/* <textarea className="post-ans-text form-control" rows="3" value={ansGiven} onChange={handleGivenAns} placeholder="   Type your answer here..."/> */}
+                            <Editor
+                                onInit={(evt, editor) => editorRef.current = editor}
+                                initialValue=""
+                                init={{
+                                height: 500,
+                                menubar: false,
+                                plugins: [
+                                    'advlist autolink lists link image charmap print preview anchor',
+                                    'searchreplace visualblocks code fullscreen',
+                                    'insertdatetime media table paste code help wordcount'
+                                ],
+                                toolbar: 'undo redo | formatselect | ' +
+                                'bold italic backcolor | alignleft aligncenter ' +
+                                'alignright alignjustify | bullist numlist outdent indent | ' +
+                                'removeformat | help',
+                                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                                }}
+                            />
+
                             <button className="btn post-btn" onClick={submitNewAnswer}><i class="fas fa-paper-plane"></i> Post</button>
                         </form>
                     </div>
@@ -539,14 +576,20 @@ const QuesPage = () => {
                                                     {/* Answer's content */}
                                                     <div className="user-icon">
                                                         {ans.userImage ? (
-                                                                <img className="users-icon" src={`http://localhost:5000/${ans.userImage}`} alt="User"/>
+                                                                <div clssName="item__image">
+                                                                    <img className="users-icon" src={`http://localhost:5000/${ans.userImage}`} alt="User"/>
+                                                                </div>
                                                             ):(
                                                                 <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
                                                         )}
                                                     </div>
                                                     <h6 className="student-name">{ans.userName} • just now</h6>
                                                     <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
-                                                    { ans.image && <img className="image-container" src={`http://localhost:5000/${ans.image}`} alt="Image"/>}                                                                 
+                                                    { ans.image && (
+                                                        <div clssName="item__image">
+                                                            <img className="image-container" src={`http://localhost:5000/${ans.image}`} alt="Image"/>
+                                                        </div>
+                                                    )}                                                                 
                                                     <p className="answers">{ans.answer}</p>
                                                     
 
@@ -558,7 +601,9 @@ const QuesPage = () => {
                                                                     <div className="sub-ANS"> 
                                                                         <div className="user-icon">
                                                                             {subAns.userImage ? (
-                                                                                    <img className="users-icon" src={`http://localhost:5000/${subAns.userImage}`} alt="User"/>
+                                                                                    <div clssName="item__image">
+                                                                                        <img className="users-icon" src={`http://localhost:5000/${subAns.userImage}`} alt="User"/>
+                                                                                    </div>
                                                                                 ):(
                                                                                     <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
                                                                             )}
@@ -634,13 +679,20 @@ const QuesPage = () => {
                                             
                                                     <div className="user-icon">
                                                         {ans.userImage ? (
-                                                                <img className="users-icon" src={`http://localhost:5000/${ans.userImage}`} alt="User"/>
+                                                                <div className="item__image">
+                                                                    <img className="users-icon" src={`http://localhost:5000/${ans.userImage}`} alt="User"/>
+                                                                </div>
                                                             ):(
                                                                 <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
                                                         )}
                                                     </div>
                                                     <h6 className="student-name">{ans.userName} • just now</h6>
                                                     <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                                    
+                                                    { ans.image && (
+                                                        <div clssName="item__image">
+                                                            <img className="image-container" src={`http://localhost:5000/${ans.image}`} alt="Image"/>
+                                                        </div>
+                                                    )}
                                                     <p className="answers">{ans.answer}</p>
                                                     
 
@@ -651,7 +703,9 @@ const QuesPage = () => {
                                                                     <div className="sub-ANS">
                                                                         <div className="user-icon">
                                                                             {subAns.userImage ? (
-                                                                                    <img className="users-icon" src={`http://localhost:5000/${subAns.userImage}`} alt="User"/>
+                                                                                    <div className="item__image">
+                                                                                        <img className="users-icon" src={`http://localhost:5000/${subAns.userImage}`} alt="User"/>
+                                                                                    </div>
                                                                                 ):(
                                                                                     <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
                                                                             )}
