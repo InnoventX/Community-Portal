@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useContext } from 'react';
 import {useParams} from 'react-router-dom';
 
 import "./UserQuestions.css";
-import QuesList from './QuesList';
-import Categories from './Categories';
+import QuesList from '../components/QuesList';
+import Categories from '../components/Categories';
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import {AuthContext} from "../../shared/context/AuthContext";
 
 const UserQuestions = () => {
+
     const userId = useParams().userId;
+
+    const auth = useContext(AuthContext);
 
     // State for storing all the questions of the given category
     const [userQuestions , setUserQuestions] = useState();
@@ -30,7 +34,11 @@ const UserQuestions = () => {
             try{
                 // Turning on the loading spinner
                 setIsLoading(true);
-                const response = await fetch(`http://localhost:5000/api/user/${userId}/questions`);
+                const response = await fetch(`http://localhost:5000/api/user/${userId}/questions`,{
+                    headers:{
+                        'Authorization':'Bearer ' + auth.token
+                    }
+                });
                 const responseData = await response.json();
 
                 // Throwing error comming from backend

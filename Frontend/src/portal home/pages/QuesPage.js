@@ -246,6 +246,9 @@ const QuesPage = () => {
 
                 const response = await fetch(`http://localhost:5000/api/answer/${quesId}/`,{
                     method:'POST',
+                    headers:{
+                        'Authorization':'Bearer ' + auth.token
+                    },
                     body: formData
                 });
                 const responseData = await response.json();
@@ -277,7 +280,10 @@ const QuesPage = () => {
         // Sending Request to delete the question 
         try{
             const response = await fetch(`http://localhost:5000/api/question/${quesId}/`,{
-                method:'DELETE'
+                method:'DELETE',
+                headers:{
+                    'Authorization':'Bearer ' + auth.token
+                }
             });
             const responseData = await response.json();
 
@@ -305,7 +311,10 @@ const QuesPage = () => {
         // Sending the delete request
         try{
             const response = await fetch(`http://localhost:5000/api/answer/${answerId}`,{
-                method:'DELETE'
+                method:'DELETE',
+                headers:{
+                    'Authorization':'Bearer ' + auth.token
+                }
             });
             const responseData = await response.json();
             console.log(responseData.message);
@@ -335,7 +344,10 @@ const QuesPage = () => {
         // Sending update request to increment rating
         try{
             const response = await fetch(`http://localhost:5000/api/answer/rating/${answerId}`,{
-                method:'PATCH'        
+                method:'PATCH',
+                headers:{
+                    'Authorization':'Bearer ' + auth.token
+                }        
             });
             const responseData = await response.json();
 
@@ -361,7 +373,10 @@ const QuesPage = () => {
     
         try{
             const response = await fetch(`http://localhost:5000/api/user/${userId}/save/${answerId}`,{
-                method:'PATCH'
+                method:'PATCH',
+                headers:{
+                    'Authorization':'Bearer ' + auth.token
+                }
             });
             const responseData = await response.json();
     
@@ -384,7 +399,8 @@ const QuesPage = () => {
             const response = await fetch(`http://localhost:5000/api/subAnswer/${answerId}/newSubAnswer`,{
                 method:'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization':'Bearer ' + auth.token
                 },
                 body: JSON.stringify({
                     userId:userId,

@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react';
+import React,{useState, useEffect, useContext} from 'react';
 import {useParams, useHistory} from 'react-router-dom';
 
 import "./UpdateAnswer.css";
@@ -8,11 +8,15 @@ import {useForm} from "../../shared/hoocks/form-hook";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import Backdrop from "../../shared/components/UIElements/Backdrop";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import {AuthContext} from "../../shared/context/AuthContext";
 
 const UpdateAnswer = (props) => {
 
     // Using useHistory hook to go to the question page after updation
     const history = useHistory();
+
+    // For components which shoul be rendered when the user is authenticated
+    const auth = useContext(AuthContext);
 
     // Taking answerId from the route
     const answerId = useParams().answerId;
@@ -40,7 +44,11 @@ const UpdateAnswer = (props) => {
                 setIsLoading(true);
 
                 // Sending get request for answer data
-                const response = await fetch(`http://localhost:5000/api/answer/getAnswer/${answerId}`);
+                const response = await fetch(`http://localhost:5000/api/answer/getAnswer/${answerId}`,{
+                    headers:{
+                        'Authorization':'Bearer ' + auth.token
+                    }
+                });
                 const responseData = await response.json();
                 if(responseData.message){
                     throw new Error(responseData.message);
@@ -80,7 +88,8 @@ const UpdateAnswer = (props) => {
             const response = await fetch(`http://localhost:5000/api/answer/${answerId}`,{
                 method: 'PATCH',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization':'Bearer ' + auth.token
                 },
                 body: JSON.stringify({
                     answer:formState.inputs.answer.value
