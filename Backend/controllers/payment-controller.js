@@ -47,13 +47,8 @@ const payment = async(req, res, next) => {
             },
         }
     });
-    console.log(charge);
-
-    if (charge) {
-        user.paid = true;
-        await user.save();
-        res.send({ id: user.id })
-    }
+    user.paid = true;
+    await user.save();
 
     res.send({ id: user.id })
 }
@@ -62,9 +57,10 @@ const userPaymentInfo = async(req, res, next) => {
     const { name, surname, email } = req.body;
 
     const existUser = await Payment.findOne({ email: email, paid: true });
-
+    let exist = false;
     if (existUser) {
-        return next(new HttpError('User is already register', 404));
+        exist = true;
+        res.send({ message: "User is already registered" });
     }
 
     let newUser = new Payment({ name, surname, email });
@@ -75,22 +71,29 @@ const userPaymentInfo = async(req, res, next) => {
 
 
     } catch (error) {
-        return next(new HttpError('Something went wrong', 500));
+        return next(new HttpError(error.message, 500));
     }
-    // * send link in the email 
-    let mailOptions = {
-        from: "jdbhavsar213@gmail.com",
-        to: `${newUser.email}`,
-        subject: "Payment Link",
-        text: `Following is the link: https://localhost:5000/${newUser.id}`
-    };
-    transporter.sendMail(mailOptions, (err, info) => {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("Email sent:" + info.response);
+    // * send link in the email
+    try {
+        let mailOptions = {
+            from: "jdbhavsar213@gmail.com",
+            to: `${newUser.email}`,
+            subject: "Payment Link",
+            text: `Following is the link: http://localhost:3000/form/${newUser.id}`
+        };
+        if (!exist) {
+            transporter.sendMail(mailOptions, (err, info) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("Email sent:" + info.response);
+                }
+            });
         }
-    });
+    } catch (error) {
+        console.log(error);
+        return next(new HttpError(error.message, 500));
+    }
 
     res.json({ success: "user added successfully", id: newUser.id });
 }
