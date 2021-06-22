@@ -73,7 +73,7 @@ const ImageUpload = (props) => {
                 </div>
 
                 {/* Show the input tag if the button is clicked */}
-                <button onClick={pickImageHandler}>Pick Image</button>
+                <button class="btn btn-warning"onClick={pickImageHandler}>Pick Image</button>
             </div>
         </React.Fragment>
     )
