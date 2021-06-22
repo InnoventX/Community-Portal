@@ -515,7 +515,7 @@ const QuesPage = () => {
 
                             {/* If the user wants to upload image in answer */}
                             { showImageUpload && <ImageUpload id='image' onInput={imageInputHandler} center isValid={true}/> }
-                            <button id="add-image-btn" onClick={showImageUploadHandler}>Add Image?</button>
+                            <button id="add-image-btn" style={{margin:"1% 6%"}} class="btn btn-warning"onClick={showImageUploadHandler}>Add Image?</button>
                             
                             {/* <textarea className="post-ans-text form-control" rows="3" value={ansGiven} onChange={handleGivenAns} placeholder="   Type your answer here..."/> */}
                             <Editor

@@ -189,7 +189,7 @@ const NewQuestion = () => {
 
                     {/* If the user wants to upload image in question */}
                     { showImageUpload && <ImageUpload id='image' onInput={handleInput} center isValid={true}/> }
-                    <button id="add-image-btn" onClick={showImageUploadHandler}>Add Image?</button>
+                    <button id="add-image-btn" class="add-image-btn btn btn-warning" onClick={showImageUploadHandler}>Add Image?</button>
 
                     {/* Input for wholeQuestion of question */}
                     <div className="que-body-container">

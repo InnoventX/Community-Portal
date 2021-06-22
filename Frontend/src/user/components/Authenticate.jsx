@@ -304,7 +304,7 @@ function Authenticate(){
 
                                     {/* If the user wants to upload image in question */}
                                     { showImageUpload && <ImageUpload id='image' onInput={handleInput} center isValid={true}/> }
-                                    <button id="add-image-btn-auth" onClick={showImageUploadHandler}>Add Image?</button>
+                                    <button id="add-image-btn-auth" style={{width:"84%",margin:"1% 12%"}}class="btn btn-warning" onClick={showImageUploadHandler}>Upload User Image</button>
 
                                     <span className="icon"><i class="fas fa-user"></i></span>  
                                     <Input 
