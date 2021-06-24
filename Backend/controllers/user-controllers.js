@@ -91,7 +91,7 @@ const siggnup = async (req,res,next) => {
         try{
             token=jwt.sign(
                 { userId:newUser.id, email:newUser.email },
-                'InnoventxRocks',
+                process.env.JWT_SECRET,
                 {expiresIn:'1h'}
             );
         }catch(err){
@@ -142,7 +142,7 @@ const login = async (req,res,next) => {
     try{
         token= jwt.sign(
             {userId:userFound.id, email:userFound.email},
-            'InnoventxRocks',
+            process.env.JWT_SECRET,
             { expiresIn:'1h' }
         );
     }catch(err){

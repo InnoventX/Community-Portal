@@ -108,6 +108,12 @@ function PortalNavbar(){
                                     <i class="fas fa-plus-circle"></i> ASK
                                 </NavLink>
                             </li>
+                            
+                            <li className="nav-item">
+                                <button onClick={auth.logout} style={{textDecoration:"none"}} className="nav-link logout-btn">
+                                     LOGOUT
+                                </button>
+                            </li>
 
                             <li className="nav-item">
                                 <NavLink to="/" className="PROFILE"><AccountCircleIcon style={{fontSize:"2.7rem",marginLeft:"90%", marginTop:"12%"}} /></NavLink>

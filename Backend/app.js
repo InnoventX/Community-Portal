@@ -6,6 +6,7 @@ const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+require('dotenv').config();
 
 const questionRoutes = require('./routes/question-routes');
 const answerRoutes = require("./routes/answer-routes");
@@ -13,7 +14,6 @@ const userRoutes = require("./routes/user-routes");
 const courseRoutes = require("./routes/course-routes");
 const sectionRoutes = require("./routes/section-routes");
 const subAnswerRoutes = require("./routes/subAnswer-routes");
-const paymentsRoutes = require("./routes/payents-routes");
 const HttpError = require("./util/http-error-message");
 
 app.use(express.json());
@@ -47,8 +47,6 @@ app.use('/api/section', sectionRoutes);
 
 app.use('/api/section', sectionRoutes);
 
-app.use('/api/payments', paymentsRoutes);
-
 // If any of the routes were not found
 app.use((req, res, next) => {
     next(new HttpError("Could not find the route!", 404));
@@ -66,9 +64,8 @@ app.use((error, req, res, next) => {
     res.json({ message: error.message || "Something went wrong" });
 })
 
-
 mongoose
-    .connect("mongodb+srv://innoventx:innoventx123@cluster0.humw3.mongodb.net/portal?retryWrites=true&w=majority", { useUnifiedTopology: true, useNewUrlParser: true })
+    .connect(process.env.DATABASE_URL, { useUnifiedTopology: true, useNewUrlParser: true })
     .then(() => {
         app.listen(5000, function() {
             console.log("Server listening on Port 5000");

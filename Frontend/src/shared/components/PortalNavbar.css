@@ -8,6 +8,11 @@
   margin-right: 5%;
 }
 
+.logout-btn{
+  background-color:#FC7600;
+  color:black;
+}
+
 .navbar-brand{
   font-family: 'Berlin Sans FB';
   font-size: 1.7rem;
