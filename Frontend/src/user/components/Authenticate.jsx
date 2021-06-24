@@ -177,7 +177,7 @@ function Authenticate(){
                     setIsLoading(true);
 
                     // Getting the data from api
-                    const response = await fetch("${process.env.REACT_APP_BACKEND_URL}/user/login",{
+                    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/login`,{
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -195,7 +195,7 @@ function Authenticate(){
                     if(responseData.message){
                         throw Error(responseData.message);
                     }
-
+                    console.log(responseData);
                     // Getting userId in Frontend
                     auth.login(responseData.user.id, responseData.token);
                 }catch(err){
@@ -220,7 +220,7 @@ function Authenticate(){
                     formData.append('email',formState.inputs.email.value);
                     formData.append('password',formState.inputs.password.value);
 
-                    const response = await fetch("${process.env.REACT_APP_BACKEND_URL}/user/signup",{
+                    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/signup`,{
                         method: 'POST',
                         body:formData
                     });
