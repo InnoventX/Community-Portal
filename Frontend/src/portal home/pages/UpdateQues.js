@@ -55,7 +55,7 @@ const UpdateQues = (props) => {
                 setIsLoading(true);
 
                 // Sending get request for question
-                const response = await fetch(`http://localhost:5000/api/question/${quesId}`,{
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/question/${quesId}`,{
                     headers:{
                         'Authorization':'Bearer ' + auth.token
                     }
@@ -106,7 +106,7 @@ const UpdateQues = (props) => {
 
         // Sending the Patch request with old question details to update the question 
         try{
-            const response = await fetch(`http://localhost:5000/api/question/${quesId}`,{
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/question/${quesId}`,{
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',

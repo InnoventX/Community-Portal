@@ -178,7 +178,7 @@ const QuesPage = () => {
                 setIsLoading(true);
 
                 // Getting question & all the answers of that perticular question
-                const response = await fetch(`http://localhost:5000/api/answer/${quesId}`);
+                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `/answer/${quesId}`);
                 const responseData = await response.json();
 
                 if(responseData.message && responseData.message!=="No answers found of that question"){
@@ -192,7 +192,7 @@ const QuesPage = () => {
                 if(responseData.answers){
                     responseData.answers.forEach(async (ans,index) => {
                         if(ans.subAnswers.length !== 0){
-                            const getSubAnswers = await fetch(`http://localhost:5000/api/subAnswer/${ans.id}`);
+                            const getSubAnswers = await fetch(process.env.REACT_APP_BACKEND_URL + `/subAnswer/${ans.id}`);
                             const getSubAnswersData = await getSubAnswers.json();
                             
                             if(getSubAnswersData.message){
@@ -244,7 +244,7 @@ const QuesPage = () => {
                 formData.append('answer',ans);
                 formData.append('image',answerImage.value);
 
-                const response = await fetch(`http://localhost:5000/api/answer/${quesId}/`,{
+                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `/api/answer/${quesId}/`,{
                     method:'POST',
                     headers:{
                         'Authorization':'Bearer ' + auth.token
@@ -279,7 +279,7 @@ const QuesPage = () => {
 
         // Sending Request to delete the question 
         try{
-            const response = await fetch(`http://localhost:5000/api/question/${quesId}/`,{
+            const response = await fetch(process.env.REACT_APP_BACKEND_URL + `/question/${quesId}/`,{
                 method:'DELETE',
                 headers:{
                     'Authorization':'Bearer ' + auth.token
@@ -310,7 +310,7 @@ const QuesPage = () => {
 
         // Sending the delete request
         try{
-            const response = await fetch(`http://localhost:5000/api/answer/${answerId}`,{
+            const response = await fetch(process.env.REACT_APP_BACKEND_URL + `/answer/${answerId}`,{
                 method:'DELETE',
                 headers:{
                     'Authorization':'Bearer ' + auth.token
@@ -343,7 +343,7 @@ const QuesPage = () => {
         
         // Sending update request to increment rating
         try{
-            const response = await fetch(`http://localhost:5000/api/answer/rating/${answerId}`,{
+            const response = await fetch(process.env.REACT_APP_BACKEND_URL + `/answer/rating/${answerId}`,{
                 method:'PATCH',
                 headers:{
                     'Authorization':'Bearer ' + auth.token
@@ -372,7 +372,7 @@ const QuesPage = () => {
         const userId = auth.userId;
     
         try{
-            const response = await fetch(`http://localhost:5000/api/user/${userId}/save/${answerId}`,{
+            const response = await fetch(process.env.REACT_APP_BACKEND_URL + `/user/${userId}/save/${answerId}`,{
                 method:'PATCH',
                 headers:{
                     'Authorization':'Bearer ' + auth.token
@@ -396,7 +396,7 @@ const QuesPage = () => {
         // console.log(subAnswer , answerId);
         const userId = auth.userId;
         try{
-            const response = await fetch(`http://localhost:5000/api/subAnswer/${answerId}/newSubAnswer`,{
+            const response = await fetch(process.env.REACT_APP_BACKEND_URL + `/subAnswer/${answerId}/newSubAnswer`,{
                 method:'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -481,7 +481,7 @@ const QuesPage = () => {
                             
                         <div className="user-icon">
                             { question.userImage ? (
-                                <img className="users-icon" src={`http://localhost:5000/${question.userImage}`} alt="User"/>
+                                <img className="users-icon" src={`${process.env.REACT_APP_ASSET_URL}/${question.userImage}`} alt="User"/>
                                 ):(
                                 <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
                             )}
@@ -490,7 +490,7 @@ const QuesPage = () => {
                         <h6 className="category">{question.category}</h6>
                         <h4 className="question-title">{question.title}</h4>
                         {/* Rendering the image if the question contains an image */}
-                        { question.image && <img className="image-container" src={`http://localhost:5000/${question.image}`} alt="Image"/>}
+                        { question.image && <img className="image-container" src={`${process.env.REACT_APP_ASSET_URL}/${question.image}`} alt="Image"/>}
                         <p>{question.wholeQuestion}</p>
 
                         {/* Give answers options if the user is authenticated */}
@@ -593,7 +593,7 @@ const QuesPage = () => {
                                                     <div className="user-icon">
                                                         {ans.userImage ? (
                                                                 <div clssName="item__image">
-                                                                    <img className="users-icon" src={`http://localhost:5000/${ans.userImage}`} alt="User"/>
+                                                                    <img className="users-icon" src={`${process.env.REACT_APP_ASSET_URL}/${ans.userImage}`} alt="User"/>
                                                                 </div>
                                                             ):(
                                                                 <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
@@ -603,7 +603,7 @@ const QuesPage = () => {
                                                     <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>
                                                     { ans.image && (
                                                         <div clssName="item__image">
-                                                            <img className="image-container" src={`http://localhost:5000/${ans.image}`} alt="Image"/>
+                                                            <img className="image-container" src={`${process.env.REACT_APP_ASSET_URL}/${ans.image}`} alt="Image"/>
                                                         </div>
                                                     )}                                                                 
                                                     <p className="answers">{ans.answer}</p>
@@ -618,7 +618,7 @@ const QuesPage = () => {
                                                                         <div className="user-icon">
                                                                             {subAns.userImage ? (
                                                                                     <div clssName="item__image">
-                                                                                        <img className="users-icon" src={`http://localhost:5000/${subAns.userImage}`} alt="User"/>
+                                                                                        <img className="users-icon" src={`${process.env.REACT_APP_ASSET_URL}/${subAns.userImage}`} alt="User"/>
                                                                                     </div>
                                                                                 ):(
                                                                                     <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
@@ -696,7 +696,7 @@ const QuesPage = () => {
                                                     <div className="user-icon">
                                                         {ans.userImage ? (
                                                                 <div className="item__image">
-                                                                    <img className="users-icon" src={`http://localhost:5000/${ans.userImage}`} alt="User"/>
+                                                                    <img className="users-icon" src={`${process.env.REACT_APP_ASSET_URL}/${ans.userImage}`} alt="User"/>
                                                                 </div>
                                                             ):(
                                                                 <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
@@ -706,7 +706,7 @@ const QuesPage = () => {
                                                     <h6 className="category">{ans.rating}<img className="ratings-img" src={ratings}></img></h6>                                                                                    
                                                     { ans.image && (
                                                         <div clssName="item__image">
-                                                            <img className="image-container" src={`http://localhost:5000/${ans.image}`} alt="Image"/>
+                                                            <img className="image-container" src={`${process.env.REACT_APP_ASSET_URL}/${ans.image}`} alt="Image"/>
                                                         </div>
                                                     )}
                                                     <p className="answers">{ans.answer}</p>
@@ -720,7 +720,7 @@ const QuesPage = () => {
                                                                         <div className="user-icon">
                                                                             {subAns.userImage ? (
                                                                                     <div className="item__image">
-                                                                                        <img className="users-icon" src={`http://localhost:5000/${subAns.userImage}`} alt="User"/>
+                                                                                        <img className="users-icon" src={`${process.env.REACT_APP_ASSET_URL}/${subAns.userImage}`} alt="User"/>
                                                                                     </div>
                                                                                 ):(
                                                                                     <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>

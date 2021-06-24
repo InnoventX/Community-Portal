@@ -10,7 +10,7 @@ const Reset  = ()=>{
             M.toast({html: "invalid email",classes:"#c62828 red darken-3"})
             return
         }
-        fetch('http://localhost:5000/api/user/reset-password',{
+        fetch('${process.env.REACT_APP_BACKEND_URL}/user/reset-password',{
             method:"post",
             headers:{
                 "Content-Type":"application/json"

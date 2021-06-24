@@ -177,7 +177,7 @@ function Authenticate(){
                     setIsLoading(true);
 
                     // Getting the data from api
-                    const response = await fetch("http://localhost:5000/api/user/login",{
+                    const response = await fetch("${process.env.REACT_APP_BACKEND_URL}/user/login",{
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -220,7 +220,7 @@ function Authenticate(){
                     formData.append('email',formState.inputs.email.value);
                     formData.append('password',formState.inputs.password.value);
 
-                    const response = await fetch("http://localhost:5000/api/user/signup",{
+                    const response = await fetch("${process.env.REACT_APP_BACKEND_URL}/user/signup",{
                         method: 'POST',
                         body:formData
                     });

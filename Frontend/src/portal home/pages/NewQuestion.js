@@ -60,7 +60,7 @@ const NewQuestion = () => {
         const sendRequest = async () => {
             try{
                 setIsLoading(true);
-                const response = await fetch(`http://localhost:5000/api/user/${auth.userId}`,{
+                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `/user/${auth.userId}`,{
                     headers:{
                         'Authorization':'Bearer ' + auth.token
                     }
@@ -96,7 +96,7 @@ const NewQuestion = () => {
                 formData.append('wholeQuestion',formState.inputs.wholeQuestion.value);
                 formData.append('image',formState.inputs.image.value);
 
-                const response = await fetch("http://localhost:5000/api/question/",{
+                const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/question/",{
                     method:'POST',
                     headers:{
                         'Authorization':'Bearer ' + auth.token

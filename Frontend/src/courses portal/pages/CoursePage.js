@@ -35,7 +35,7 @@ const CoursePage = () => {
             try{
                 setIsLoading(true);
             
-                const response = await fetch(`http://localhost:5000/api/course/${courseId}`,{
+                const response = await fetch( process.env.REACT_APP_BACKEND_URL+ `/course/${courseId}`,{
                     headers:{
                         'Authorization':'Bearer ' + auth.token
                     }
@@ -60,7 +60,7 @@ const CoursePage = () => {
     const enrollCourseHandler = async () => {
         try{
             setIsLoading(true);
-            const response = await fetch(`http://localhost:5000/api/course/enrollcourse/${course.id}`,{
+            const response = await fetch( process.env.REACT_APP_BACKEND_URL + `/course/enrollcourse/${course.id}`,{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

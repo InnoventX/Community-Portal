@@ -29,7 +29,7 @@ function PortalHome(){
 
             // Getting all the questions from the api
             try{
-                const response = await fetch("http://localhost:5000/api/question");
+                const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/question");
 
                 const responseData = await response.json();
 
