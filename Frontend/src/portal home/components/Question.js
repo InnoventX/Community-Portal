@@ -14,7 +14,7 @@ const Question = (props) => {
                 <div className="question-container">
                     <div className="user-icon">
                         { props.userImage ? (
-                            <img className="user-icon" style={{height:"2.8rem"}} src={`http://localhost:5000/${props.userImage}`} alt="User"/>
+                            <img className="user-icon" style={{height:"2.8rem"}} src={process.env.REACT_APP_ASSET_URL + `/${props.userImage}`} alt="User"/>
                         ):(
                             <AccountCircleIcon className="user-icon" style={{fontSize:"1.8rem"}}/>
                         )}

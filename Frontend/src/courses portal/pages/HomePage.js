@@ -21,7 +21,7 @@ const HomePage = () => {
             try{
                 setIsLoading(true);
             
-                const response = await fetch("http://localhost:5000/api/course/");
+                const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/course/");
                 const responseData = await response.json();
 
                 if(responseData.message && responseData.message!=="No Course found"){

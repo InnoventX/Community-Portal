@@ -67,7 +67,7 @@ app.use((error, req, res, next) => {
 mongoose
     .connect(process.env.DATABASE_URL, { useUnifiedTopology: true, useNewUrlParser: true })
     .then(() => {
-        app.listen(5000, function() {
+        app.listen(process.env.PORT || 5000, function() {
             console.log("Server listening on Port 5000");
         });
     })

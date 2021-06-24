@@ -7,7 +7,7 @@ const NewPassword  = ()=>{
     const {token} = useParams()
     console.log(token)
     const PostData = ()=>{
-        fetch("http://localhost:5000/api/user/new-password",{
+        fetch("${process.env.REACT_APP_BACKEND_URL}/user/new-password",{
             method:"post",
             headers:{
                 "Content-Type":"application/json"

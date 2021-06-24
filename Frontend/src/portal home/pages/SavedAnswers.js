@@ -37,7 +37,7 @@ const SavedAnswers = () => {
             try{
                 // Turning on the loading spinner
                 setIsLoading(true);
-                const response = await fetch(`http://localhost:5000/api/user/${auth.userId}/savedAnswers`,{
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/${auth.userId}/savedAnswers`,{
                     headers:{
                         'Authorization':'Bearer ' + auth.token
                     }
@@ -88,7 +88,7 @@ const SavedAnswers = () => {
                                 return(
                                     <div className="container">
                                         { qa.userImage ? (
-                                            <img className="user-icon" style={{height:"2.8rem"}} src={`http://localhost:5000/${qa.userImage}`} alt="User"/>
+                                            <img className="user-icon" style={{height:"2.8rem"}} src={`${process.env.REACT_APP_ASSET_URL}/${qa.userImage}`} alt="User"/>
                                         ):(
                                             <div className="user-icon"><AccountCircleIcon style={{fontSize:"3.3rem"}}/></div>
                                         )}
@@ -98,7 +98,7 @@ const SavedAnswers = () => {
                                         </Link>
                                         <div className="answer-container-save">
                                             { qa.userImage ? (
-                                                <img className="user-icon" style={{height:"2.8rem"}} src={`http://localhost:5000/${qa.userImage}`} alt="User"/>
+                                                <img className="user-icon" style={{height:"2.8rem"}} src={`${process.env.REACT_APP_ASSET_URL}/${qa.userImage}`} alt="User"/>
                                             ):(
                                                 <div className="user-icon"><AccountCircleIcon style={{fontSize:"3.3rem"}}/></div>
                                             )}

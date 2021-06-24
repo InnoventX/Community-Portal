@@ -44,7 +44,7 @@ const UpdateAnswer = (props) => {
                 setIsLoading(true);
 
                 // Sending get request for answer data
-                const response = await fetch(`http://localhost:5000/api/answer/getAnswer/${answerId}`,{
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/answer/getAnswer/${answerId}`,{
                     headers:{
                         'Authorization':'Bearer ' + auth.token
                     }
@@ -85,7 +85,7 @@ const UpdateAnswer = (props) => {
      
         // Sending the Patch request with old answer details to update the answer 
         try{
-            const response = await fetch(`http://localhost:5000/api/answer/${answerId}`,{
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/answer/${answerId}`,{
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',

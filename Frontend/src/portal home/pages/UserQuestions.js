@@ -34,7 +34,7 @@ const UserQuestions = () => {
             try{
                 // Turning on the loading spinner
                 setIsLoading(true);
-                const response = await fetch(`http://localhost:5000/api/user/${userId}/questions`,{
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/${userId}/questions`,{
                     headers:{
                         'Authorization':'Bearer ' + auth.token
                     }

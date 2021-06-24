@@ -24,7 +24,7 @@ const UserCourses = () => {
             try{
                 setIsLoading(true);
             
-                const response = await fetch(`http://localhost:5000/api/user/${auth.userId}/courses`,{
+                const response = await fetch(process.env.REACT_APP_BACKEND_URL+ `/user/${auth.userId}/courses`,{
                     headers:{
                         'Authorization':'Bearer ' + auth.token
                     }

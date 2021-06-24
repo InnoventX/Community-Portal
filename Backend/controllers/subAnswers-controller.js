@@ -2,7 +2,7 @@ const HttpError = require('../util/http-error-message');
 const Answer = require('../models/answer-model');
 const Question = require('../models/question-model');
 const User = require("../models/user-model");
-const Subanswer = require("../models/subAnswer-model");
+const Subanswer = require("../models/subanswer-model");
 const mongoose = require('mongoose');
 const { validationResult } = require('express-validator');
 

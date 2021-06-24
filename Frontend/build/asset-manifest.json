@@ -1,0 +1,34 @@
+{
+  "files": {
+    "main.css": "/static/css/main.98122ff0.chunk.css",
+    "main.js": "/static/js/main.8cb12838.chunk.js",
+    "main.js.map": "/static/js/main.8cb12838.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.8c0ef1e9.js",
+    "runtime-main.js.map": "/static/js/runtime-main.8c0ef1e9.js.map",
+    "static/js/2.89b62db4.chunk.js": "/static/js/2.89b62db4.chunk.js",
+    "static/js/2.89b62db4.chunk.js.map": "/static/js/2.89b62db4.chunk.js.map",
+    "static/js/3.cb588468.chunk.js": "/static/js/3.cb588468.chunk.js",
+    "static/js/3.cb588468.chunk.js.map": "/static/js/3.cb588468.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.98122ff0.chunk.css.map": "/static/css/main.98122ff0.chunk.css.map",
+    "static/js/2.89b62db4.chunk.js.LICENSE.txt": "/static/js/2.89b62db4.chunk.js.LICENSE.txt",
+    "static/media/SignIn.css": "/static/media/SignIN-bg.9a4b72bc.svg",
+    "static/media/add-answer.e837c3a0.svg": "/static/media/add-answer.e837c3a0.svg",
+    "static/media/answer.6ae7d385.svg": "/static/media/answer.6ae7d385.svg",
+    "static/media/ask-add.32aeeb7f.svg": "/static/media/ask-add.32aeeb7f.svg",
+    "static/media/delete.f94bcb48.svg": "/static/media/delete.f94bcb48.svg",
+    "static/media/logo.d1776b8b.svg": "/static/media/logo.d1776b8b.svg",
+    "static/media/post.a8847852.svg": "/static/media/post.a8847852.svg",
+    "static/media/rate.ea905ce2.svg": "/static/media/rate.ea905ce2.svg",
+    "static/media/ratings.95755d40.svg": "/static/media/ratings.95755d40.svg",
+    "static/media/LoadingSpinner.css": "/static/media/round-logo.25defde7.svg",
+    "static/media/show-more.6998221a.svg": "/static/media/show-more.6998221a.svg",
+    "static/media/update.bac8f66c.svg": "/static/media/update.bac8f66c.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.8c0ef1e9.js",
+    "static/js/2.89b62db4.chunk.js",
+    "static/css/main.98122ff0.chunk.css",
+    "static/js/main.8cb12838.chunk.js"
+  ]
+}

@@ -28,7 +28,7 @@ const SubTopic = () => {
             try{
                 setIsLoading(true);
             
-                const response = await fetch(`http://localhost:5000/api/section/${subTopicId}/${auth.userId}`,{
+                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `/section/${subTopicId}/${auth.userId}`,{
                     headers:{
                         'Authorization':'Bearer ' + auth.token
                     }
