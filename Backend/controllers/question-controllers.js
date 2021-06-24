@@ -104,10 +104,11 @@ const newQuestion = async(req, res, next) => {
     if (!userFound) {
         return next(new HttpError('Invalid userId!', 500));
     }
-    getFirstSubtopicById
+    
     // Making the Question object
     const newQuestion = new Question({
         userId,
+        userEmail:userFound.email,
         userName: userFound.name,
         userImage: userFound.image,
         title,

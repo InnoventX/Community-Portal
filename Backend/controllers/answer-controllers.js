@@ -1,4 +1,5 @@
 const fs =  require('fs');
+const nodemailer = require("nodemailer");
 
 const HttpError = require('../util/http-error-message');
 const Answer = require('../models/answer-model');
@@ -58,6 +59,14 @@ const getAnswersByQuestionId = async (req,res,next) => {
     );
     
 }
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAILID,
+        pass: process.env.EMAILPASS
+    }
+});
 
 const giveAnswer = async (req,res,next) => {
 
@@ -135,6 +144,23 @@ const giveAnswer = async (req,res,next) => {
         console.log(err);
         return next(new HttpError(err.message || 'Answer not saved',500));
     }
+
+    let mailOptions = {
+        from: process.enc.EMAILID,
+        to: `${questionFound.userEmail}`,
+        subject: "Answer given for the query",
+        text: `${userFound.name} has given answer to your query.
+
+Please check the portal for the answer.
+`
+    };
+    transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+            console.log(err);
+        } else {
+            // console.log("Email sent:" + info.response);
+        }
+    });
     
     // Sending the answer as response
     res.json({answer:newAnswer.toObject({getters:true})});

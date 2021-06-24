@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const questionSchema = mongoose.Schema({
     userId:{ type:mongoose.Types.ObjectId , required:true , ref:'User'},
 
+    userEmail:{ type:String , required:true },
+
     userName:{type:String , require:true },
 
     userImage:{type:String , require:true},
